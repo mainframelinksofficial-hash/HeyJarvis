@@ -31,6 +31,9 @@
 		0023 /* WidgetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024 /* WidgetDataManager.swift */; };
 		0024 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025 /* WeatherManager.swift */; };
 		0025 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1026 /* WatchSessionManager.swift */; };
+		0026 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027 /* HomeManager.swift */; };
+		0027 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1028 /* MediaManager.swift */; };
+		0028 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1029 /* EventManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		1024 /* WidgetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataManager.swift; sourceTree = "<group>"; };
 		1025 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		1026 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchSessionManager.swift"; sourceTree = "<group>"; };
+		1027 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
+		1028 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
+		1029 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,6 +108,9 @@
 				1024 /* WidgetDataManager.swift */,
 				1025 /* WeatherManager.swift */,
 				1026 /* WatchSessionManager.swift */,
+				1027 /* HomeManager.swift */,
+				1028 /* MediaManager.swift */,
+				1029 /* EventManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -240,6 +249,9 @@
 				0023 /* WidgetDataManager.swift in Sources */,
 				0024 /* WeatherManager.swift in Sources */,
 				0025 /* WatchSessionManager.swift in Sources */,
+				0026 /* HomeManager.swift in Sources */,
+				0027 /* MediaManager.swift in Sources */,
+				0028 /* EventManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

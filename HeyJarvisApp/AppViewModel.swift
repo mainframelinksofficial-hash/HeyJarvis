@@ -28,6 +28,9 @@ class AppViewModel: ObservableObject {
     private var workflowController: MetaWorkflowController
     private var ttsManager: TextToSpeechManager
     private var jarvisAI: JarvisAI
+    private var homeManager: HomeManager
+    private var mediaManager: MediaManager
+    private var eventManager: EventManager
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -35,6 +38,9 @@ class AppViewModel: ObservableObject {
         self.workflowController = MetaWorkflowController()
         self.ttsManager = TextToSpeechManager()
         self.jarvisAI = JarvisAI()
+        self.homeManager = HomeManager.shared
+        self.mediaManager = MediaManager.shared
+        self.eventManager = EventManager.shared
         
         setupWakeWordDetector()
         setupBackgroundMode()
@@ -308,6 +314,50 @@ class AppViewModel: ObservableObject {
             
             do {
                 switch commandType {
+                case .playMusic:
+                    let lower = text.lowercased()
+                    if lower.contains("pause") || lower.contains("stop") {
+                        response = MediaManager.shared.pauseMusic()
+                    } else if lower.contains("skip") || lower.contains("next") {
+                        response = MediaManager.shared.skipTrack()
+                    } else {
+                        response = MediaManager.shared.playMusic()
+                    }
+                    
+                case .homeControl:
+                    let lower = text.lowercased()
+                    if lower.contains("on") || lower.contains("illuminate") {
+                        response = HomeManager.shared.toggleLights(on: true)
+                    } else if lower.contains("off") || lower.contains("kill") {
+                        response = HomeManager.shared.toggleLights(on: false)
+                    } else {
+                        response = HomeManager.shared.checkLightStatus()
+                    }
+                    
+                case .calendar:
+                    let granted = await EventManager.shared.requestAccess()
+                    if granted {
+                        response = EventManager.shared.getTodaysEvents()
+                    } else {
+                        response = "I require access to your calendar to proceed, sir."
+                    }
+                    
+                case .setReminder:
+                    let granted = await EventManager.shared.requestAccess()
+                    if granted {
+                        let title = text.replacingOccurrences(of: "remind me to", with: "")
+                                       .replacingOccurrences(of: "set reminder", with: "")
+                                       .replacingOccurrences(of: "remind me", with: "")
+                                       .trimmingCharacters(in: .whitespaces)
+                        let reminderTitle = title.isEmpty ? "Reminder" : title
+                        response = await EventManager.shared.addReminder(title: reminderTitle)
+                    } else {
+                        response = "I require access to your reminders to proceed, sir."
+                    }
+                    
+                case .setTimer:
+                     response = "Timer set for 5 minutes, sir. (Timer logic is simulated for this version)"
+                    
                 case .takePhoto:
                     if glassesConnected {
                         let glassesSuccess = await MetaGlassesManager.shared.triggerGlassesPhoto()

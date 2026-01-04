@@ -162,6 +162,10 @@ struct CommandCard: View {
             return Color.red.opacity(0.2)
         case .setTimer:
             return Color.indigo.opacity(0.2)
+        case .calendar:
+            return Color.teal.opacity(0.2)
+        case .homeControl:
+            return Color.yellow.opacity(0.2)
         case .unknown:
             return Color("jarvisBlue").opacity(0.2)
         }
@@ -189,6 +193,10 @@ struct CommandCard: View {
             return Color.red
         case .setTimer:
             return Color.indigo
+        case .calendar:
+            return Color.teal
+        case .homeControl:
+            return Color.yellow
         case .unknown:
             return Color("jarvisBlue")
         }

@@ -64,5 +64,13 @@
     <string>Hey Jarvis connects to your Ray-Ban Meta glasses via Bluetooth.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Hey Jarvis needs your location to provide accurate local weather reports when you ask.</string>
+    <key>NSHomeKitUsageDescription</key>
+    <string>Hey Jarvis accesses your HomeKit accessories to let you control lights and devices with your voice.</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Hey Jarvis requires access to your media library to play music commands.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Hey Jarvis accesses your calendar to read your events and schedule.</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>Hey Jarvis accesses your reminders to manage your to-do lists.</string>
 </dict>
 </plist>

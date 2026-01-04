@@ -22,6 +22,8 @@ enum CommandType: String, CaseIterable {
     case sendMessage = "message"
     case setReminder = "reminder"
     case setTimer = "timer"
+    case calendar = "calendar"
+    case homeControl = "home"
     case unknown = "unknown"
     
     var icon: String {
@@ -38,6 +40,8 @@ enum CommandType: String, CaseIterable {
         case .sendMessage: return "message.fill"
         case .setReminder: return "bell.fill"
         case .setTimer: return "timer"
+        case .calendar: return "calendar"
+        case .homeControl: return "lightbulb.fill"
         case .unknown: return "brain.head.profile"
         }
     }
@@ -56,6 +60,8 @@ enum CommandType: String, CaseIterable {
         case .sendMessage: return "Message"
         case .setReminder: return "Reminder"
         case .setTimer: return "Timer"
+        case .calendar: return "Calendar"
+        case .homeControl: return "Home"
         case .unknown: return "AI Chat"
         }
     }
@@ -74,6 +80,8 @@ enum CommandType: String, CaseIterable {
         case .sendMessage: return "I'll need your device's permission to send messages, sir."
         case .setReminder: return "Reminder set, sir. I'll notify you at the appropriate time."
         case .setTimer: return "Timer started, sir. I'll alert you when it's complete."
+        case .calendar: return "Checking your calendar now, sir."
+        case .homeControl: return "Accessing smart home controls, sir."
         case .unknown: return "I didn't quite catch that, sir. Could you repeat your request?"
         }
     }
@@ -92,6 +100,8 @@ enum CommandType: String, CaseIterable {
         case .sendMessage: return "Message sending is not available, sir."
         case .setReminder: return "I couldn't set that reminder, sir."
         case .setTimer: return "I couldn't set that timer, sir."
+        case .calendar: return "I couldn't access your calendar, sir."
+        case .homeControl: return "HomeKit devices are not responding, sir."
         case .unknown: return "I'm afraid I couldn't process that request, sir."
         }
     }
