@@ -230,6 +230,10 @@ class JarvisAI {
             return success ? "Reminder set, sir." : "I couldn't set that reminder, sir."
         case .setTimer:
             return success ? "Timer started, sir." : "I couldn't set that timer, sir."
+        case .calendar:
+            return success ? "Calendar checked, sir." : "I couldn't access your calendar, sir."
+        case .homeControl:
+            return success ? "Home command executed, sir." : "I couldn't control your home devices, sir."
         case .unknown:
             return "I didn't quite catch that, sir. Could you repeat your request?"
         }

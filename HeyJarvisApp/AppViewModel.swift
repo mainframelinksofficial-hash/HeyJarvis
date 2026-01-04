@@ -398,17 +398,8 @@ class AppViewModel: ObservableObject {
                 case .setVolume:
                     response = "Volume control requires direct system access, sir. Please use your device's volume buttons."
                     
-                case .playMusic:
-                    response = "I don't have access to your music library, sir. Shall I open the Music app for you?"
-                    
                 case .sendMessage:
                     response = "Message functionality requires additional permissions, sir. This feature is currently being developed."
-                    
-                case .setReminder:
-                    response = "I've noted your reminder request, sir. However, I don't yet have access to your calendar. This feature is coming soon."
-                    
-                case .setTimer:
-                    response = "Timer functionality requires system timer access, sir. This feature is in development."
                     
                 case .unknown:
                     break
