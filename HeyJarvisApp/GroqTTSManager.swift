@@ -10,7 +10,7 @@ import Foundation
 class GroqTTSManager {
     private let apiEndpoint = "https://api.groq.com/openai/v1/audio/speech"
     private let model = "canopylabs/orpheus-v1-english"
-    private let voice = "daniel"  // Male voice, works well for JARVIS
+    private let voice = "troy"  // Best male voice for expressive JARVIS
     
     private var apiKey: String? {
         guard let plistPath = Bundle.main.path(forResource: "JarvisVoiceSettings", ofType: "plist"),
