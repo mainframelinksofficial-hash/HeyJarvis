@@ -23,6 +23,7 @@
 		0014 /* MetaGlassesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015 /* MetaGlassesManager.swift */; };
 		0015 /* JarvisLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1016 /* JarvisLiveActivity.swift */; };
 		0016 /* TTSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1017 /* TTSError.swift */; };
+		0017 /* JarvisAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1018 /* JarvisAI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		1015 /* MetaGlassesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaGlassesManager.swift; sourceTree = "<group>"; };
 		1016 /* JarvisLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisLiveActivity.swift; sourceTree = "<group>"; };
 		1017 /* TTSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSError.swift; sourceTree = "<group>"; };
+		1018 /* JarvisAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisAI.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 				1009 /* GroqTTSManager.swift */,
 				1015 /* MetaGlassesManager.swift */,
 				1016 /* JarvisLiveActivity.swift */,
+				1018 /* JarvisAI.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -205,6 +208,7 @@
 				0014 /* MetaGlassesManager.swift in Sources */,
 				0015 /* JarvisLiveActivity.swift in Sources */,
 				0016 /* TTSError.swift in Sources */,
+				0017 /* JarvisAI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

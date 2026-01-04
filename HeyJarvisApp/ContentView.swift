@@ -31,14 +31,16 @@ struct ContentView: View {
                 Spacer()
                 
                 StatusView(state: viewModel.appState)
-                    .padding(.vertical, 30)
+                    .padding(.vertical, 20)
                 
                 transcriptionView
+                
+                jarvisResponseView
                 
                 Spacer()
                 
                 CommandHistoryView(commands: viewModel.commandHistory)
-                    .frame(maxHeight: 200)
+                    .frame(maxHeight: 180)
                 
                 controlButtons
                     .padding(.bottom, 30)
@@ -154,7 +156,53 @@ struct ContentView: View {
                     .padding(.horizontal, 20)
             }
         }
-        .frame(height: 60)
+        .frame(height: 50)
+    }
+    
+    private var jarvisResponseView: some View {
+        VStack(spacing: 8) {
+            if !viewModel.jarvisResponse.isEmpty {
+                HStack(alignment: .top, spacing: 12) {
+                    // JARVIS avatar
+                    ZStack {
+                        Circle()
+                            .fill(Color("jarvisBlue").opacity(0.3))
+                            .frame(width: 36, height: 36)
+                        
+                        Image(systemName: "brain.head.profile")
+                            .font(.system(size: 16))
+                            .foregroundColor(Color("jarvisBlue"))
+                    }
+                    
+                    // Speech bubble
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("JARVIS")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(Color("jarvisBlue"))
+                        
+                        Text(viewModel.jarvisResponse)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.white.opacity(0.9))
+                            .lineLimit(4)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .padding(12)
+                    .background(Color("accentDark"))
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color("jarvisBlue").opacity(0.3), lineWidth: 1)
+                    )
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 4)
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                .animation(.easeInOut(duration: 0.3), value: viewModel.jarvisResponse)
+            }
+        }
+        .frame(minHeight: 80)
+        .padding(.vertical, 8)
     }
     
     private var controlButtons: some View {

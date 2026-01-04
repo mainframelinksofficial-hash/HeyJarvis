@@ -19,17 +19,20 @@ class AppViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isBackgroundModeEnabled: Bool = false
     @Published var glassesConnected: Bool = false
+    @Published var jarvisResponse: String = ""
     
     private var wakeWordDetector: WakeWordDetector?
     private var commandManager: CommandManager
     private var workflowController: MetaWorkflowController
     private var ttsManager: TextToSpeechManager
+    private var jarvisAI: JarvisAI
     private var cancellables = Set<AnyCancellable>()
     
     init() {
         self.commandManager = CommandManager()
         self.workflowController = MetaWorkflowController()
         self.ttsManager = TextToSpeechManager()
+        self.jarvisAI = JarvisAI()
         
         setupWakeWordDetector()
         setupBackgroundMode()
@@ -65,10 +68,8 @@ class AppViewModel: ObservableObject {
     }
     
     private func setupBackgroundMode() {
-        // Configure audio session for background
         BackgroundAudioManager.shared.configureForBackground()
         
-        // Observe app lifecycle
         NotificationCenter.default.addObserver(
             forName: UIApplication.didEnterBackgroundNotification,
             object: nil,
@@ -92,7 +93,7 @@ class AppViewModel: ObservableObject {
         glassesManager.onGlassesConnected = { [weak self] in
             Task { @MainActor in
                 self?.glassesConnected = true
-                self?.ttsManager.speak("Meta glasses connected, sir.")
+                self?.speakJarvis("Meta glasses connected and operational, sir. All systems are online.")
                 LiveActivityManager.shared.updateLiveActivity(
                     isListening: true,
                     lastCommand: "Glasses connected"
@@ -130,7 +131,6 @@ class AppViewModel: ObservableObject {
     }
     
     private func handleEnterForeground() {
-        // Restart listening if needed
         if appState == .listening {
             try? wakeWordDetector?.startListening()
         }
@@ -143,18 +143,17 @@ class AppViewModel: ObservableObject {
                 isPermissionGranted = granted
                 
                 if granted {
-                    // Configure for background
                     BackgroundAudioManager.shared.configureForBackground()
                     
                     try wakeWordDetector?.startListening()
                     appState = .listening
                     isBackgroundModeEnabled = true
                     
-                    // Start Live Activity
                     LiveActivityManager.shared.startLiveActivity()
-                    
-                    // Start searching for Meta glasses
                     MetaGlassesManager.shared.startSearching()
+                    
+                    // JARVIS greeting
+                    speakJarvis("JARVIS online, sir. All systems operational. How may I assist you?")
                     
                 } else {
                     errorMessage = "Microphone or speech recognition permission denied"
@@ -166,34 +165,25 @@ class AppViewModel: ObservableObject {
     }
     
     func stopListening() {
-        wakeWordDetector?.stopListening()
-        appState = .idle
-        isBackgroundModeEnabled = false
-        
-        // Stop Live Activity
-        LiveActivityManager.shared.stopLiveActivity()
-        
-        // Stop searching for glasses
-        MetaGlassesManager.shared.stopSearching()
+        speakJarvis("Going offline, sir. It was a pleasure serving you.") { [weak self] in
+            self?.wakeWordDetector?.stopListening()
+            self?.appState = .idle
+            self?.isBackgroundModeEnabled = false
+            LiveActivityManager.shared.stopLiveActivity()
+            MetaGlassesManager.shared.stopSearching()
+        }
     }
     
     private func handleWakeWordDetected() {
         appState = .wakeDetected
         
-        // Update Live Activity
         LiveActivityManager.shared.updateLiveActivity(
             isListening: true,
             lastCommand: "Wake word detected!"
         )
         
-        ttsManager.speak("Yes, sir?") { [weak self] in
+        speakJarvis("At your service, sir.") { [weak self] in
             Task { @MainActor in
-                self?.appState = .listening
-            }
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            if self?.appState == .listening {
                 self?.appState = .listening
             }
         }
@@ -202,7 +192,6 @@ class AppViewModel: ObservableObject {
     private func handleCommandReceived(_ commandText: String) {
         appState = .processing
         
-        // Update Live Activity
         LiveActivityManager.shared.updateLiveActivity(
             isListening: false,
             lastCommand: commandText
@@ -212,7 +201,38 @@ class AppViewModel: ObservableObject {
         let command = Command(text: commandText, type: commandType)
         commandHistory.insert(command, at: 0)
         
-        executeCommand(type: commandType, at: 0)
+        if commandType == .unknown {
+            // Use JARVIS AI for conversational response
+            handleConversation(commandText, at: 0)
+        } else {
+            // Execute known command
+            executeCommand(type: commandType, at: 0)
+        }
+    }
+    
+    private func handleConversation(_ message: String, at index: Int) {
+        Task {
+            do {
+                let response = try await jarvisAI.chat(message: message)
+                
+                await MainActor.run {
+                    self.jarvisResponse = response
+                    if index < self.commandHistory.count {
+                        self.commandHistory[index].status = .success
+                    }
+                    self.speakJarvis(response)
+                }
+            } catch {
+                await MainActor.run {
+                    let fallbackResponse = "I'm afraid I encountered a difficulty, sir. Perhaps we could try again?"
+                    self.jarvisResponse = fallbackResponse
+                    if index < self.commandHistory.count {
+                        self.commandHistory[index].status = .failed
+                    }
+                    self.speakJarvis(fallbackResponse)
+                }
+            }
+        }
     }
     
     private func executeCommand(type commandType: CommandType, at index: Int) {
@@ -220,7 +240,6 @@ class AppViewModel: ObservableObject {
             do {
                 switch commandType {
                 case .takePhoto:
-                    // Try glasses first, then phone
                     if glassesConnected {
                         let success = await MetaGlassesManager.shared.triggerGlassesPhoto()
                         if !success {
@@ -239,29 +258,32 @@ class AppViewModel: ObservableObject {
                 
                 await MainActor.run {
                     if index < self.commandHistory.count {
-                        self.commandHistory[index].status = commandType == .unknown ? .failed : .success
+                        self.commandHistory[index].status = .success
                     }
-                    self.speakResponse(for: commandType, success: commandType != .unknown)
+                    let response = self.jarvisAI.getCommandResponse(for: commandType, success: true)
+                    self.jarvisResponse = response
+                    self.speakJarvis(response)
                 }
             } catch {
                 await MainActor.run {
                     if index < self.commandHistory.count {
                         self.commandHistory[index].status = .failed
                     }
-                    self.speakResponse(for: commandType, success: false)
+                    let response = self.jarvisAI.getCommandResponse(for: commandType, success: false)
+                    self.jarvisResponse = response
+                    self.speakJarvis(response)
                 }
             }
         }
     }
     
-    private func speakResponse(for commandType: CommandType, success: Bool) {
+    private func speakJarvis(_ text: String, completion: (() -> Void)? = nil) {
         appState = .speaking
-        let text = success ? commandType.responseText : commandType.failureText
+        jarvisResponse = text
         
-        // Update Live Activity
         LiveActivityManager.shared.updateLiveActivity(
             isListening: false,
-            lastCommand: text
+            lastCommand: String(text.prefix(50)) + (text.count > 50 ? "..." : "")
         )
         
         ttsManager.speak(text) { [weak self] in
@@ -271,12 +293,14 @@ class AppViewModel: ObservableObject {
                     isListening: true,
                     lastCommand: "Listening..."
                 )
+                completion?()
             }
         }
     }
     
     func clearHistory() {
         commandHistory.removeAll()
+        jarvisAI.resetConversation()
     }
     
     func connectGlasses() {
