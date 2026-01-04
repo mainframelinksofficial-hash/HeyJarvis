@@ -234,6 +234,8 @@ class JarvisAI {
             return success ? "Calendar checked, sir." : "I couldn't access your calendar, sir."
         case .homeControl:
             return success ? "Home command executed, sir." : "I couldn't control your home devices, sir."
+        case .dailyBriefing:
+            return success ? "Briefing complete, sir." : "I couldn't compile your briefing, sir."
         case .unknown:
             return "I didn't quite catch that, sir. Could you repeat your request?"
         }

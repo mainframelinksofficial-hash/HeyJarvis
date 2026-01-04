@@ -320,6 +320,9 @@ class AppViewModel: ObservableObject {
                         response = MediaManager.shared.pauseMusic()
                     } else if lower.contains("skip") || lower.contains("next") {
                         response = MediaManager.shared.skipTrack()
+                    } else if lower.contains("spotify") {
+                        // Open Spotify app
+                        response = MediaManager.shared.openSpotify()
                     } else {
                         response = MediaManager.shared.playMusic()
                     }
@@ -330,6 +333,17 @@ class AppViewModel: ObservableObject {
                         response = HomeManager.shared.toggleLights(on: true)
                     } else if lower.contains("off") || lower.contains("kill") {
                         response = HomeManager.shared.toggleLights(on: false)
+                    } else if lower.contains("scene") || lower.contains("activate") || lower.contains("mode") {
+                        // Extract scene name and activate it
+                        let sceneName = lower.replacingOccurrences(of: "activate", with: "")
+                                            .replacingOccurrences(of: "scene", with: "")
+                                            .replacingOccurrences(of: "mode", with: "")
+                                            .trimmingCharacters(in: .whitespaces)
+                        if sceneName.isEmpty {
+                            response = HomeManager.shared.listScenes()
+                        } else {
+                            response = HomeManager.shared.activateScene(named: sceneName)
+                        }
                     } else {
                         response = HomeManager.shared.checkLightStatus()
                     }
@@ -356,7 +370,8 @@ class AppViewModel: ObservableObject {
                     }
                     
                 case .setTimer:
-                     response = "Timer set for 5 minutes, sir. (Timer logic is simulated for this version)"
+                    // Real timer using TimerManager
+                    response = TimerManager.shared.setTimer(from: text)
                     
                 case .takePhoto:
                     if glassesConnected {
@@ -400,6 +415,10 @@ class AppViewModel: ObservableObject {
                     
                 case .sendMessage:
                     response = "Message functionality requires additional permissions, sir. This feature is currently being developed."
+                    
+                case .dailyBriefing:
+                    // Get combined briefing from BriefingManager
+                    response = await BriefingManager.shared.getDailyBriefing()
                     
                 case .unknown:
                     break

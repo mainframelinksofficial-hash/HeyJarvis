@@ -7,11 +7,14 @@
 
 import MediaPlayer
 import Foundation
+import UIKit
 
 class MediaManager: ObservableObject {
     static let shared = MediaManager()
     
     private let player = MPMusicPlayerController.systemMusicPlayer
+    
+    // MARK: - Apple Music Controls
     
     func playMusic() -> String {
         if player.playbackState == .playing {
@@ -41,16 +44,6 @@ class MediaManager: ObservableObject {
         return "Replaying previous track."
     }
     
-    func setVolume(_ level: Float) {
-        // Note: MPVolumeView is required for slider, but direct setting is deprecated/restricted.
-        // We generally can't set system volume effortlessly without UI.
-        // However, we can use the systemMusicPlayer volume *if* deprecated API allows, 
-        // or just acknowledge limit.
-        // For modern iOS, we usually just tell the user to use buttons.
-        // But we can try systemMusicPlayer.volume (deprecated in 11.3) or leave it.
-        // Best practice: Just advise.
-    }
-    
     func getNowPlaying() -> String {
         if let item = player.nowPlayingItem {
             let title = item.title ?? "Unknown Title"
@@ -63,6 +56,64 @@ class MediaManager: ObservableObject {
     func requestAuthorization() {
         MPMediaLibrary.requestAuthorization { status in
             // Handle status
+        }
+    }
+    
+    // MARK: - Spotify Integration
+    //
+    // HOW IT WORKS:
+    // We use URL schemes to open Spotify app directly.
+    // This doesn't require Spotify SDK or developer account!
+    // The Spotify app handles everything once opened.
+    //
+    
+    /// Check if Spotify is installed
+    var isSpotifyInstalled: Bool {
+        return UIApplication.shared.canOpenURL(URL(string: "spotify:")!)
+    }
+    
+    /// Open Spotify and start playing
+    func openSpotify() -> String {
+        guard let url = URL(string: "spotify:") else {
+            return "Could not create Spotify URL."
+        }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+            return "Opening Spotify, sir."
+        } else {
+            return "Spotify doesn't appear to be installed, sir."
+        }
+    }
+    
+    /// Search for music in Spotify
+    /// Example: "Play AC/DC on Spotify"
+    func searchSpotify(query: String) -> String {
+        let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
+        guard let url = URL(string: "spotify:search:\(encoded)") else {
+            return "Could not create search URL."
+        }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+            return "Searching Spotify for \(query), sir."
+        } else {
+            return "Spotify doesn't appear to be installed, sir."
+        }
+    }
+    
+    /// Play a specific Spotify playlist/album/track by URI
+    /// Example URI: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+    func playSpotifyURI(_ uri: String) -> String {
+        guard let url = URL(string: uri) else {
+            return "Invalid Spotify URI."
+        }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+            return "Opening in Spotify, sir."
+        } else {
+            return "Spotify doesn't appear to be installed, sir."
         }
     }
 }

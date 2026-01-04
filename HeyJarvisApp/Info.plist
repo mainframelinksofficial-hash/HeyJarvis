@@ -72,5 +72,9 @@
     <string>Hey Jarvis accesses your calendar to read your events and schedule.</string>
     <key>NSRemindersUsageDescription</key>
     <string>Hey Jarvis accesses your reminders to manage your to-do lists.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>spotify</string>
+    </array>
 </dict>
 </plist>

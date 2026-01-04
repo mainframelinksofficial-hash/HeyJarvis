@@ -80,4 +80,49 @@ class HomeManager: NSObject, HMHomeManagerDelegate, ObservableObject {
         
         return "\(onLights) of \(totalLights) lights are currently active."
     }
+    
+    // MARK: - Scenes
+    
+    /// Activate a HomeKit scene by name
+    /// Example: "movie mode", "goodnight", "away"
+    func activateScene(named sceneName: String) -> String {
+        guard let home = homeManager.primaryHome else {
+            return "I cannot access your primary residence, sir."
+        }
+        
+        let lowercasedName = sceneName.lowercased()
+        
+        // Find matching scene (actionSet in HomeKit terminology)
+        for actionSet in home.actionSets {
+            if actionSet.name.lowercased().contains(lowercasedName) {
+                home.executeActionSet(actionSet) { error in
+                    if let error = error {
+                        print("Error executing scene: \(error)")
+                    }
+                }
+                return "Activating \(actionSet.name), sir."
+            }
+        }
+        
+        // No matching scene found
+        let availableScenes = home.actionSets.map { $0.name }.joined(separator: ", ")
+        if availableScenes.isEmpty {
+            return "No scenes are configured in your home, sir."
+        }
+        return "I couldn't find a scene matching '\(sceneName)'. Available scenes: \(availableScenes)."
+    }
+    
+    /// List all available scenes
+    func listScenes() -> String {
+        guard let home = homeManager.primaryHome else {
+            return "HomeKit data unavailable."
+        }
+        
+        let scenes = home.actionSets.map { $0.name }
+        if scenes.isEmpty {
+            return "No scenes are configured, sir."
+        }
+        
+        return "Available scenes: \(scenes.joined(separator: ", "))."
+    }
 }

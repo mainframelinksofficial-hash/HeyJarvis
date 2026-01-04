@@ -24,6 +24,7 @@ enum CommandType: String, CaseIterable {
     case setTimer = "timer"
     case calendar = "calendar"
     case homeControl = "home"
+    case dailyBriefing = "briefing"
     case unknown = "unknown"
     
     var icon: String {
@@ -42,6 +43,7 @@ enum CommandType: String, CaseIterable {
         case .setTimer: return "timer"
         case .calendar: return "calendar"
         case .homeControl: return "lightbulb.fill"
+        case .dailyBriefing: return "sun.horizon.fill"
         case .unknown: return "brain.head.profile"
         }
     }
@@ -62,6 +64,7 @@ enum CommandType: String, CaseIterable {
         case .setTimer: return "Timer"
         case .calendar: return "Calendar"
         case .homeControl: return "Home"
+        case .dailyBriefing: return "Briefing"
         case .unknown: return "AI Chat"
         }
     }
@@ -82,6 +85,7 @@ enum CommandType: String, CaseIterable {
         case .setTimer: return "Timer started, sir. I'll alert you when it's complete."
         case .calendar: return "Checking your calendar now, sir."
         case .homeControl: return "Accessing smart home controls, sir."
+        case .dailyBriefing: return "" // Handled dynamically
         case .unknown: return "I didn't quite catch that, sir. Could you repeat your request?"
         }
     }
@@ -102,6 +106,7 @@ enum CommandType: String, CaseIterable {
         case .setTimer: return "I couldn't set that timer, sir."
         case .calendar: return "I couldn't access your calendar, sir."
         case .homeControl: return "HomeKit devices are not responding, sir."
+        case .dailyBriefing: return "I couldn't compile your daily briefing, sir."
         case .unknown: return "I'm afraid I couldn't process that request, sir."
         }
     }

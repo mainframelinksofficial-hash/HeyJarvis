@@ -35,7 +35,7 @@ class CommandManager {
         (["volume", "louder", "quieter", "turn up", "turn down", "mute", "unmute"], .setVolume),
         
         // Music commands
-        (["play music", "play some music", "start music", "play a song", "play my music", "pause music", "stop music", "skip song", "next song"], .playMusic),
+        (["play music", "play some music", "start music", "play a song", "play my music", "pause music", "stop music", "skip song", "next song", "spotify", "open spotify"], .playMusic),
         
         // Message commands
         (["send message", "text message", "send a text", "message to"], .sendMessage),
@@ -50,7 +50,10 @@ class CommandManager {
         (["calendar", "schedule", "events", "what am i doing", "what's next", "appointments"], .calendar),
         
         // Home commands
-        (["lights", "turn on", "turn off", "homekit", "smart home", "scene", "illuminate"], .homeControl),
+        (["lights", "turn on", "turn off", "homekit", "smart home", "scene", "illuminate", "activate"], .homeControl),
+        
+        // Daily Briefing commands
+        (["good morning", "daily briefing", "morning briefing", "what's new", "catch me up", "status report"], .dailyBriefing),
     ]
     
     func parseCommand(_ text: String) -> CommandType {

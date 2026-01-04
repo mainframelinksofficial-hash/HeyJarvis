@@ -34,6 +34,8 @@
 		0026 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027 /* HomeManager.swift */; };
 		0027 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1028 /* MediaManager.swift */; };
 		0028 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1029 /* EventManager.swift */; };
+		0029 /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1030 /* TimerManager.swift */; };
+		0030 /* BriefingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1031 /* BriefingManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +68,8 @@
 		1027 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
 		1028 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
 		1029 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		1030 /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
+		1031 /* BriefingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefingManager.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -111,6 +115,8 @@
 				1027 /* HomeManager.swift */,
 				1028 /* MediaManager.swift */,
 				1029 /* EventManager.swift */,
+				1030 /* TimerManager.swift */,
+				1031 /* BriefingManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -252,6 +258,8 @@
 				0026 /* HomeManager.swift in Sources */,
 				0027 /* MediaManager.swift in Sources */,
 				0028 /* EventManager.swift in Sources */,
+				0029 /* TimerManager.swift in Sources */,
+				0030 /* BriefingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
