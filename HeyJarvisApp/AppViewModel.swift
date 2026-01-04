@@ -326,9 +326,8 @@ class AppViewModel: ObservableObject {
                     if index < self.commandHistory.count {
                         self.commandHistory[index].status = success ? .success : .failed
                     }
-                }
-                if !response.isEmpty {
-                    await speak(response)
+                    self.jarvisResponse = response
+                    self.speakJarvis(response)
                 }
                 return
             }
