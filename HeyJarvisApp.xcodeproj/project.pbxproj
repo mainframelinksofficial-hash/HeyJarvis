@@ -39,6 +39,7 @@
 		0031 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032 /* HealthManager.swift */; };
 		0032 /* AppLauncherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1033 /* AppLauncherManager.swift */; };
 		0033 /* BackgroundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1034 /* BackgroundManager.swift */; };
+		0034 /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035 /* OfflineManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		1032 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		1033 /* AppLauncherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncherManager.swift; sourceTree = "<group>"; };
 		1034 /* BackgroundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundManager.swift; sourceTree = "<group>"; };
+		1035 /* OfflineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineManager.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -126,6 +128,7 @@
 				1032 /* HealthManager.swift */,
 				1033 /* AppLauncherManager.swift */,
 				1034 /* BackgroundManager.swift */,
+				1035 /* OfflineManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -272,6 +275,7 @@
 				0031 /* HealthManager.swift in Sources */,
 				0032 /* AppLauncherManager.swift in Sources */,
 				0033 /* BackgroundManager.swift in Sources */,
+				0034 /* OfflineManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

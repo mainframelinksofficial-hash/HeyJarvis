@@ -312,6 +312,27 @@ class AppViewModel: ObservableObject {
             var success = true
             var response = ""
             
+            // Check for offline-capable commands first
+            if !OfflineManager.shared.isOnline {
+                if let offlineResponse = OfflineManager.shared.getOfflineResponse(for: commandType, text: text) {
+                    response = offlineResponse
+                } else {
+                    response = OfflineManager.shared.getOfflineMessage()
+                    success = false
+                }
+                
+                // Update UI and speak
+                await MainActor.run {
+                    if index < self.commandHistory.count {
+                        self.commandHistory[index].status = success ? .success : .failed
+                    }
+                }
+                if !response.isEmpty {
+                    await speak(response)
+                }
+                return
+            }
+            
             do {
                 switch commandType {
                 case .playMusic:
