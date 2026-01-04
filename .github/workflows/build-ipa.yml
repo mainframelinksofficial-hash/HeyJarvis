@@ -26,6 +26,18 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
+      - name: Inject API Key
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -n "$GROQ_API_KEY" ]; then
+            echo "Injecting Groq API key..."
+            sed -i '' "s/YOUR_GROQ_API_KEY_HERE/$GROQ_API_KEY/g" HeyJarvisApp/Resources/JarvisVoiceSettings.plist
+            echo "API key injected successfully"
+          else
+            echo "No GROQ_API_KEY secret found, using placeholder"
+          fi
+
       - name: Build for iOS Simulator
         run: |
           xcodebuild clean build \
