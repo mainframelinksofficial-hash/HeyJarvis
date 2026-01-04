@@ -25,6 +25,9 @@ enum CommandType: String, CaseIterable {
     case calendar = "calendar"
     case homeControl = "home"
     case dailyBriefing = "briefing"
+    case fitness = "fitness"
+    case openApp = "app"
+    case navigate = "navigate"
     case unknown = "unknown"
     
     var icon: String {
@@ -44,6 +47,9 @@ enum CommandType: String, CaseIterable {
         case .calendar: return "calendar"
         case .homeControl: return "lightbulb.fill"
         case .dailyBriefing: return "sun.horizon.fill"
+        case .fitness: return "figure.run"
+        case .openApp: return "app.badge"
+        case .navigate: return "location.fill"
         case .unknown: return "brain.head.profile"
         }
     }
@@ -65,6 +71,9 @@ enum CommandType: String, CaseIterable {
         case .calendar: return "Calendar"
         case .homeControl: return "Home"
         case .dailyBriefing: return "Briefing"
+        case .fitness: return "Fitness"
+        case .openApp: return "App"
+        case .navigate: return "Navigate"
         case .unknown: return "AI Chat"
         }
     }
@@ -86,6 +95,9 @@ enum CommandType: String, CaseIterable {
         case .calendar: return "Checking your calendar now, sir."
         case .homeControl: return "Accessing smart home controls, sir."
         case .dailyBriefing: return "" // Handled dynamically
+        case .fitness: return "" // Handled dynamically
+        case .openApp: return "" // Handled dynamically
+        case .navigate: return "" // Handled dynamically
         case .unknown: return "I didn't quite catch that, sir. Could you repeat your request?"
         }
     }
@@ -107,6 +119,9 @@ enum CommandType: String, CaseIterable {
         case .calendar: return "I couldn't access your calendar, sir."
         case .homeControl: return "HomeKit devices are not responding, sir."
         case .dailyBriefing: return "I couldn't compile your daily briefing, sir."
+        case .fitness: return "I couldn't access your health data, sir."
+        case .openApp: return "I couldn't open that app, sir."
+        case .navigate: return "I couldn't start navigation, sir."
         case .unknown: return "I'm afraid I couldn't process that request, sir."
         }
     }

@@ -168,6 +168,12 @@ struct CommandCard: View {
             return Color.yellow.opacity(0.2)
         case .dailyBriefing:
             return Color.orange.opacity(0.2)
+        case .fitness:
+            return Color.green.opacity(0.2)
+        case .openApp:
+            return Color.purple.opacity(0.2)
+        case .navigate:
+            return Color.blue.opacity(0.2)
         case .unknown:
             return Color("jarvisBlue").opacity(0.2)
         }
@@ -201,6 +207,12 @@ struct CommandCard: View {
             return Color.yellow
         case .dailyBriefing:
             return Color.orange
+        case .fitness:
+            return Color.green
+        case .openApp:
+            return Color.purple
+        case .navigate:
+            return Color.blue
         case .unknown:
             return Color("jarvisBlue")
         }

@@ -420,6 +420,33 @@ class AppViewModel: ObservableObject {
                     // Get combined briefing from BriefingManager
                     response = await BriefingManager.shared.getDailyBriefing()
                     
+                case .fitness:
+                    // Get fitness data from HealthManager
+                    let lower = text.lowercased()
+                    if lower.contains("heart") {
+                        response = await HealthManager.shared.getLatestHeartRate()
+                    } else {
+                        response = await HealthManager.shared.getTodaySteps()
+                    }
+                    
+                case .openApp:
+                    // Open third-party apps
+                    response = AppLauncherManager.shared.launchApp(from: text)
+                    
+                case .navigate:
+                    // Navigation
+                    let destination = text.lowercased()
+                        .replacingOccurrences(of: "navigate to", with: "")
+                        .replacingOccurrences(of: "take me to", with: "")
+                        .replacingOccurrences(of: "directions to", with: "")
+                        .replacingOccurrences(of: "drive to", with: "")
+                        .trimmingCharacters(in: .whitespaces)
+                    if destination.isEmpty {
+                        response = "Where would you like to go, sir?"
+                    } else {
+                        response = AppLauncherManager.shared.navigateTo(destination: destination)
+                    }
+                    
                 case .unknown:
                     break
                 }

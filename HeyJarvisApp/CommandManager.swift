@@ -54,6 +54,15 @@ class CommandManager {
         
         // Daily Briefing commands
         (["good morning", "daily briefing", "morning briefing", "what's new", "catch me up", "status report"], .dailyBriefing),
+        
+        // Fitness commands
+        (["steps", "step count", "heart rate", "fitness", "activity", "how many steps", "health"], .fitness),
+        
+        // App launcher commands
+        (["open", "launch", "start", "uber", "lyft", "youtube", "netflix", "instagram", "twitter", "whatsapp", "telegram"], .openApp),
+        
+        // Navigation commands
+        (["navigate", "directions", "take me to", "how do i get to", "drive to", "walk to"], .navigate),
     ]
     
     func parseCommand(_ text: String) -> CommandType {

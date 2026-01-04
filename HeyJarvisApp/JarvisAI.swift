@@ -236,6 +236,12 @@ class JarvisAI {
             return success ? "Home command executed, sir." : "I couldn't control your home devices, sir."
         case .dailyBriefing:
             return success ? "Briefing complete, sir." : "I couldn't compile your briefing, sir."
+        case .fitness:
+            return success ? "Fitness data retrieved, sir." : "I couldn't access your health data, sir."
+        case .openApp:
+            return success ? "App launched, sir." : "I couldn't open that app, sir."
+        case .navigate:
+            return success ? "Navigation started, sir." : "I couldn't start navigation, sir."
         case .unknown:
             return "I didn't quite catch that, sir. Could you repeat your request?"
         }
