@@ -8,6 +8,9 @@
 import Foundation
 import WatchConnectivity
 import Combine
+#if os(iOS)
+import UIKit
+#endif
 
 class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
     static let shared = WatchSessionManager()
@@ -65,10 +68,12 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
                 self.onCommandReceived?(command)
                 
                 // Vibrate to confirm receipt
-                if settings.hapticFeedbackEnabled {
+                #if os(iOS)
+                if self.settings.hapticFeedbackEnabled {
                     let generator = UIImpactFeedbackGenerator(style: .medium)
                     generator.impactOccurred()
                 }
+                #endif
             }
         }
     }
