@@ -67,7 +67,7 @@ enum CommandType: String, CaseIterable {
         case .recordNote: return "Note recorded successfully, sir."
         case .getTime: return "" // Handled dynamically
         case .getDate: return "" // Handled dynamically
-        case .getWeather: return "I'm afraid I don't have access to weather data at the moment, sir."
+        case .getWeather: return "" // Handled dynamically
         case .setBrightness: return "Adjusting display brightness now, sir."
         case .setVolume: return "Volume adjusted as requested, sir."
         case .playMusic: return "Playing music for you now, sir."

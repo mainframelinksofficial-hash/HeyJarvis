@@ -315,7 +315,7 @@ class AppViewModel: ObservableObject {
                     response = "Today is \(dateString), sir."
                     
                 case .getWeather:
-                    response = "I'm afraid I don't have access to weather services at the moment, sir. Might I suggest checking your device's weather application?"
+                    response = await WeatherManager.shared.getWeatherResponse()
                     
                 case .setBrightness:
                     response = "I'm sorry, sir, but iOS doesn't permit third-party applications to adjust screen brightness directly. You'll need to use Control Center."
