@@ -1,27 +1,33 @@
 //
-//  OpenAITTSManager.swift
+//  GroqTTSManager.swift
 //  HeyJarvisApp
 //
-//  OpenAI Text-to-Speech API integration
+//  Groq Text-to-Speech API integration
 //
 
 import Foundation
 
-class OpenAITTSManager {
-    private let apiEndpoint = "https://api.openai.com/v1/audio/speech"
-    private let model = "gpt-4o-mini-tts"
-    private let voice = "onyx"
+class GroqTTSManager {
+    private let apiEndpoint = "https://api.groq.com/openai/v1/audio/speech"
+    private let model = "playai-tts"
+    private let voice = "Arista-PlayAI"  // English voice option
     
     private var apiKey: String? {
+        // First try Groq key, then fall back to OpenAI key field for backwards compatibility
         guard let plistPath = Bundle.main.path(forResource: "JarvisVoiceSettings", ofType: "plist"),
               let plistData = FileManager.default.contents(atPath: plistPath),
-              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any],
-              let key = plist["OpenAIAPIKey"] as? String,
-              !key.isEmpty,
-              key != "sk-your-key-here" else {
+              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
             return nil
         }
-        return key
+        
+        // Try Groq key first
+        if let groqKey = plist["GroqAPIKey"] as? String,
+           !groqKey.isEmpty,
+           groqKey != "gsk_your-key-here" {
+            return groqKey
+        }
+        
+        return nil
     }
     
     func synthesize(text: String) async throws -> Data {
@@ -42,7 +48,7 @@ class OpenAITTSManager {
             "model": model,
             "input": text,
             "voice": voice,
-            "response_format": "mp3"
+            "response_format": "wav"
         ]
         
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -63,25 +69,5 @@ class OpenAITTSManager {
         }
         
         return data
-    }
-}
-
-enum TTSError: LocalizedError {
-    case noAPIKey
-    case invalidURL
-    case invalidResponse
-    case apiError(String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .noAPIKey:
-            return "No OpenAI API key configured"
-        case .invalidURL:
-            return "Invalid API URL"
-        case .invalidResponse:
-            return "Invalid response from server"
-        case .apiError(let message):
-            return "API error: \(message)"
-        }
     }
 }

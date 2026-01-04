@@ -2,36 +2,39 @@
 //  TextToSpeechManager.swift
 //  HeyJarvisApp
 //
-//  TTS facade with OpenAI primary and AVSpeech fallback
+//  TTS facade with Groq primary and AVSpeech fallback
 //
 
 import Foundation
 import AVFoundation
 
 class TextToSpeechManager: NSObject {
-    private let openAIManager: OpenAITTSManager
+    private let groqManager: GroqTTSManager
     private let speechSynthesizer: AVSpeechSynthesizer
     private var audioPlayer: AVAudioPlayer?
     private var completionHandler: (() -> Void)?
+    private var currentText: String = ""
     
     override init() {
-        self.openAIManager = OpenAITTSManager()
+        self.groqManager = GroqTTSManager()
         self.speechSynthesizer = AVSpeechSynthesizer()
         super.init()
         self.speechSynthesizer.delegate = self
     }
     
-    private var currentText: String = ""
-    
     func speak(_ text: String, completion: (() -> Void)? = nil) {
         completionHandler = completion
         currentText = text
         
+        // Route audio to Meta glasses if connected
+        MetaGlassesManager.shared.routeAudioToGlasses()
+        
         Task {
             do {
-                let audioData = try await openAIManager.synthesize(text: text)
+                let audioData = try await groqManager.synthesize(text: text)
                 await playAudio(data: audioData)
             } catch {
+                print("Groq TTS failed: \(error), falling back to AVSpeech")
                 await fallbackToAVSpeech(text: text)
             }
         }
@@ -41,7 +44,7 @@ class TextToSpeechManager: NSObject {
     private func playAudio(data: Data) async {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback, mode: .default)
+            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true)
             
             audioPlayer = try AVAudioPlayer(data: data)
@@ -60,6 +63,7 @@ class TextToSpeechManager: NSObject {
     private func fallbackToAVSpeechSync(text: String) {
         let utterance = AVSpeechUtterance(string: text)
         
+        // Use formal British voice for JARVIS character
         if let britishVoice = AVSpeechSynthesisVoice(language: "en-GB") {
             utterance.voice = britishVoice
         } else {

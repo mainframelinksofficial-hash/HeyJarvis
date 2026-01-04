@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  HeyJarvisApp
 //
-//  Main UI with Stark Industries theme
+//  Main UI with Stark Industries theme and Meta glasses integration
 //
 
 import SwiftUI
@@ -10,6 +10,7 @@ import AVKit
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: AppViewModel
+    @StateObject private var glassesManager = MetaGlassesManager.shared
     @State private var showVideoPlayer = false
     @State private var playerItem: AVPlayerItem?
     
@@ -25,17 +26,19 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 headerView
                 
+                glassesStatusView
+                
                 Spacer()
                 
                 StatusView(state: viewModel.appState)
-                    .padding(.vertical, 40)
+                    .padding(.vertical, 30)
                 
                 transcriptionView
                 
                 Spacer()
                 
                 CommandHistoryView(commands: viewModel.commandHistory)
-                    .frame(maxHeight: 250)
+                    .frame(maxHeight: 200)
                 
                 controlButtons
                     .padding(.bottom, 30)
@@ -89,6 +92,51 @@ struct ContentView: View {
             }
         }
         .padding(.top, 20)
+    }
+    
+    private var glassesStatusView: some View {
+        HStack(spacing: 12) {
+            // Glasses connection indicator
+            HStack(spacing: 8) {
+                Image(systemName: glassesManager.isGlassesConnected ? "eyeglasses" : "eyeglasses")
+                    .font(.system(size: 16))
+                    .foregroundColor(glassesManager.isGlassesConnected ? Color("successGreen") : Color("dimText"))
+                
+                Text(glassesManager.connectionState.rawValue)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(glassesManager.isGlassesConnected ? Color("successGreen") : Color("dimText"))
+                
+                if glassesManager.isGlassesConnected && glassesManager.batteryLevel > 0 {
+                    Text("\(glassesManager.batteryLevel)%")
+                        .font(.system(size: 11))
+                        .foregroundColor(Color("dimText"))
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(Color.white.opacity(0.1))
+            .cornerRadius(20)
+            
+            Spacer()
+            
+            // Background mode indicator
+            if viewModel.isBackgroundModeEnabled {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(Color("successGreen"))
+                        .frame(width: 8, height: 8)
+                    
+                    Text("Always On")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color("successGreen"))
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(Color("successGreen").opacity(0.2))
+                .cornerRadius(15)
+            }
+        }
+        .padding(.top, 12)
     }
     
     private var transcriptionView: some View {
@@ -155,50 +203,117 @@ struct ContentView: View {
 
 struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
+    @StateObject private var glassesManager = MetaGlassesManager.shared
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color("primaryDark").ignoresSafeArea()
                 
-                VStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("OpenAI API Key")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color("dimText"))
-                        
-                        Text("Configure your API key in JarvisVoiceSettings.plist")
-                            .font(.system(size: 13))
-                            .foregroundColor(.white.opacity(0.6))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color("accentDark"))
-                    .cornerRadius(12)
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Voice Commands")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color("dimText"))
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            commandRow(icon: "camera.fill", command: "\"Take a photo\"")
-                            commandRow(icon: "play.rectangle.fill", command: "\"Show last video\"")
-                            commandRow(icon: "mic.fill", command: "\"Record note\"")
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Meta Glasses Section
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Meta Ray-Ban Glasses")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color("dimText"))
+                            
+                            HStack {
+                                Image(systemName: "eyeglasses")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(glassesManager.isGlassesConnected ? Color("successGreen") : Color("jarvisBlue"))
+                                
+                                VStack(alignment: .leading) {
+                                    Text(glassesManager.connectionState.rawValue)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.white)
+                                    
+                                    if glassesManager.batteryLevel > 0 {
+                                        Text("Battery: \(glassesManager.batteryLevel)%")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(Color("dimText"))
+                                    }
+                                }
+                                
+                                Spacer()
+                                
+                                Button {
+                                    if glassesManager.isGlassesConnected {
+                                        glassesManager.disconnect()
+                                    } else {
+                                        glassesManager.startSearching()
+                                    }
+                                } label: {
+                                    Text(glassesManager.isGlassesConnected ? "Disconnect" : "Connect")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 16)
+                                        .padding(.vertical, 8)
+                                        .background(Color("jarvisBlue"))
+                                        .cornerRadius(15)
+                                }
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color("accentDark"))
+                        .cornerRadius(12)
+                        
+                        // API Configuration
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Groq API (TTS)")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color("dimText"))
+                            
+                            Text("Using Groq's fast PlayAI TTS for JARVIS voice. API key configured in JarvisVoiceSettings.plist")
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color("accentDark"))
+                        .cornerRadius(12)
+                        
+                        // Voice Commands
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Voice Commands")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color("dimText"))
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                commandRow(icon: "camera.fill", command: "\"Take a photo\"")
+                                commandRow(icon: "play.rectangle.fill", command: "\"Show last video\"")
+                                commandRow(icon: "mic.fill", command: "\"Record note\"")
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color("accentDark"))
+                        .cornerRadius(12)
+                        
+                        // Background Mode Info
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Always-On Listening")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(Color("dimText"))
+                            
+                            Text("The app continues listening for \"Hey Jarvis\" even when minimized. Look for the Live Activity indicator on your Lock Screen.")
+                                .font(.system(size: 13))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color("accentDark"))
+                        .cornerRadius(12)
+                        
+                        Spacer(minLength: 20)
+                        
+                        Text("Hey Jarvis v2.0 • com.AI.Jarvis")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color("dimText"))
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color("accentDark"))
-                    .cornerRadius(12)
-                    
-                    Spacer()
-                    
-                    Text("Hey Jarvis v1.0")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color("dimText"))
                 }
-                .padding()
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

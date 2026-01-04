@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import AVFoundation
 
 @MainActor
 class AppViewModel: ObservableObject {
@@ -16,6 +17,8 @@ class AppViewModel: ObservableObject {
     @Published var isPermissionGranted: Bool = false
     @Published var showSettings: Bool = false
     @Published var errorMessage: String?
+    @Published var isBackgroundModeEnabled: Bool = false
+    @Published var glassesConnected: Bool = false
     
     private var wakeWordDetector: WakeWordDetector?
     private var commandManager: CommandManager
@@ -29,6 +32,8 @@ class AppViewModel: ObservableObject {
         self.ttsManager = TextToSpeechManager()
         
         setupWakeWordDetector()
+        setupBackgroundMode()
+        setupMetaGlasses()
     }
     
     private func setupWakeWordDetector() {
@@ -59,6 +64,78 @@ class AppViewModel: ObservableObject {
         }
     }
     
+    private func setupBackgroundMode() {
+        // Configure audio session for background
+        BackgroundAudioManager.shared.configureForBackground()
+        
+        // Observe app lifecycle
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleEnterBackground()
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleEnterForeground()
+        }
+    }
+    
+    private func setupMetaGlasses() {
+        let glassesManager = MetaGlassesManager.shared
+        
+        glassesManager.onGlassesConnected = { [weak self] in
+            Task { @MainActor in
+                self?.glassesConnected = true
+                self?.ttsManager.speak("Meta glasses connected, sir.")
+                LiveActivityManager.shared.updateLiveActivity(
+                    isListening: true,
+                    lastCommand: "Glasses connected"
+                )
+            }
+        }
+        
+        glassesManager.onGlassesDisconnected = { [weak self] in
+            Task { @MainActor in
+                self?.glassesConnected = false
+            }
+        }
+        
+        glassesManager.onPhotoRequested = { [weak self] in
+            Task { @MainActor in
+                self?.handleCommandReceived("take a photo")
+            }
+        }
+        
+        glassesManager.onVideoRequested = { [weak self] in
+            Task { @MainActor in
+                self?.handleCommandReceived("show last video")
+            }
+        }
+    }
+    
+    private func handleEnterBackground() {
+        if isBackgroundModeEnabled {
+            BackgroundAudioManager.shared.keepAlive()
+            LiveActivityManager.shared.updateLiveActivity(
+                isListening: true,
+                lastCommand: "Listening in background..."
+            )
+        }
+    }
+    
+    private func handleEnterForeground() {
+        // Restart listening if needed
+        if appState == .listening {
+            try? wakeWordDetector?.startListening()
+        }
+    }
+    
     func startListening() {
         Task {
             do {
@@ -66,8 +143,19 @@ class AppViewModel: ObservableObject {
                 isPermissionGranted = granted
                 
                 if granted {
+                    // Configure for background
+                    BackgroundAudioManager.shared.configureForBackground()
+                    
                     try wakeWordDetector?.startListening()
                     appState = .listening
+                    isBackgroundModeEnabled = true
+                    
+                    // Start Live Activity
+                    LiveActivityManager.shared.startLiveActivity()
+                    
+                    // Start searching for Meta glasses
+                    MetaGlassesManager.shared.startSearching()
+                    
                 } else {
                     errorMessage = "Microphone or speech recognition permission denied"
                 }
@@ -80,10 +168,23 @@ class AppViewModel: ObservableObject {
     func stopListening() {
         wakeWordDetector?.stopListening()
         appState = .idle
+        isBackgroundModeEnabled = false
+        
+        // Stop Live Activity
+        LiveActivityManager.shared.stopLiveActivity()
+        
+        // Stop searching for glasses
+        MetaGlassesManager.shared.stopSearching()
     }
     
     private func handleWakeWordDetected() {
         appState = .wakeDetected
+        
+        // Update Live Activity
+        LiveActivityManager.shared.updateLiveActivity(
+            isListening: true,
+            lastCommand: "Wake word detected!"
+        )
         
         ttsManager.speak("Yes, sir?") { [weak self] in
             Task { @MainActor in
@@ -101,6 +202,12 @@ class AppViewModel: ObservableObject {
     private func handleCommandReceived(_ commandText: String) {
         appState = .processing
         
+        // Update Live Activity
+        LiveActivityManager.shared.updateLiveActivity(
+            isListening: false,
+            lastCommand: commandText
+        )
+        
         let commandType = commandManager.parseCommand(commandText)
         let command = Command(text: commandText, type: commandType)
         commandHistory.insert(command, at: 0)
@@ -109,12 +216,19 @@ class AppViewModel: ObservableObject {
     }
     
     private func executeCommand(type commandType: CommandType, at index: Int) {
-        
         Task {
             do {
                 switch commandType {
                 case .takePhoto:
-                    try await workflowController.capturePhoto()
+                    // Try glasses first, then phone
+                    if glassesConnected {
+                        let success = await MetaGlassesManager.shared.triggerGlassesPhoto()
+                        if !success {
+                            try await workflowController.capturePhoto()
+                        }
+                    } else {
+                        try await workflowController.capturePhoto()
+                    }
                 case .showVideo:
                     try await workflowController.showLastVideo()
                 case .recordNote:
@@ -144,14 +258,33 @@ class AppViewModel: ObservableObject {
         appState = .speaking
         let text = success ? commandType.responseText : commandType.failureText
         
+        // Update Live Activity
+        LiveActivityManager.shared.updateLiveActivity(
+            isListening: false,
+            lastCommand: text
+        )
+        
         ttsManager.speak(text) { [weak self] in
             Task { @MainActor in
                 self?.appState = .listening
+                LiveActivityManager.shared.updateLiveActivity(
+                    isListening: true,
+                    lastCommand: "Listening..."
+                )
             }
         }
     }
     
     func clearHistory() {
         commandHistory.removeAll()
+    }
+    
+    func connectGlasses() {
+        MetaGlassesManager.shared.startSearching()
+    }
+    
+    func disconnectGlasses() {
+        MetaGlassesManager.shared.disconnect()
+        glassesConnected = false
     }
 }
