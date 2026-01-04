@@ -21,7 +21,12 @@ class EventManager: ObservableObject {
     
     private func requestCalendarAccess() async -> Bool {
         if #available(iOS 17.0, *) {
-            return await eventStore.requestFullAccessToEvents()
+            do {
+                return try await eventStore.requestFullAccessToEvents()
+            } catch {
+                print("Calendar access error: \(error)")
+                return false
+            }
         } else {
             return await withCheckedContinuation { continuation in
                 eventStore.requestAccess(to: .event) { granted, _ in
@@ -33,11 +38,12 @@ class EventManager: ObservableObject {
     
     private func requestReminderAccess() async -> Bool {
         if #available(iOS 17.0, *) {
-             return await withCheckedContinuation { continuation in
-                 eventStore.requestFullAccessToReminders { granted, _ in
-                     continuation.resume(returning: granted)
-                 }
-             }
+            do {
+                return try await eventStore.requestFullAccessToReminders()
+            } catch {
+                print("Reminder access error: \(error)")
+                return false
+            }
         } else {
              return await withCheckedContinuation { continuation in
                  eventStore.requestAccess(to: .reminder) { granted, _ in
