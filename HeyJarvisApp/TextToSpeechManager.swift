@@ -20,21 +20,40 @@ class TextToSpeechManager: NSObject {
         self.speechSynthesizer = AVSpeechSynthesizer()
         super.init()
         self.speechSynthesizer.delegate = self
+        
+        // Configure audio session on init
+        configureAudioSession()
+    }
+    
+    private func configureAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .spokenContent, options: [.allowBluetooth, .allowBluetoothA2DP, .duckOthers])
+            try audioSession.setActive(true)
+            print("JARVIS Audio: Session configured")
+        } catch {
+            print("JARVIS Audio: Failed to configure session: \(error)")
+        }
     }
     
     func speak(_ text: String, completion: (() -> Void)? = nil) {
         completionHandler = completion
         currentText = text
         
+        print("JARVIS TTS: Speaking: \(text)")
+        
         // Route audio to Meta glasses if connected
         MetaGlassesManager.shared.routeAudioToGlasses()
         
         Task {
             do {
+                print("JARVIS TTS: Attempting Groq synthesis...")
                 let audioData = try await groqManager.synthesize(text: text)
+                print("JARVIS TTS: Got \(audioData.count) bytes, playing...")
                 await playAudio(data: audioData)
             } catch {
-                print("Groq TTS failed: \(error), falling back to AVSpeech")
+                print("JARVIS TTS: Groq failed with error: \(error)")
+                print("JARVIS TTS: Falling back to AVSpeech")
                 await fallbackToAVSpeech(text: text)
             }
         }
@@ -43,14 +62,28 @@ class TextToSpeechManager: NSObject {
     @MainActor
     private func playAudio(data: Data) async {
         do {
+            // Re-configure audio session before playback
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowBluetoothA2DP])
+            try audioSession.setCategory(.playback, mode: .spokenContent, options: [.allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true)
+            
+            // Stop any existing playback
+            audioPlayer?.stop()
             
             audioPlayer = try AVAudioPlayer(data: data)
             audioPlayer?.delegate = self
-            audioPlayer?.play()
+            audioPlayer?.volume = 1.0
+            audioPlayer?.prepareToPlay()
+            
+            let played = audioPlayer?.play() ?? false
+            print("JARVIS TTS: Audio playback started: \(played)")
+            
+            if !played {
+                print("JARVIS TTS: Playback failed, falling back")
+                fallbackToAVSpeechSync(text: currentText)
+            }
         } catch {
+            print("JARVIS TTS: AVAudioPlayer error: \(error)")
             fallbackToAVSpeechSync(text: currentText)
         }
     }
@@ -61,15 +94,17 @@ class TextToSpeechManager: NSObject {
     }
     
     private func fallbackToAVSpeechSync(text: String) {
+        print("JARVIS TTS: Using AVSpeech for: \(text)")
+        
         let utterance = AVSpeechUtterance(string: text)
         
-        // Use formal British voice for JARVIS character
-        if let britishVoice = AVSpeechSynthesisVoice(language: "en-GB") {
-            utterance.voice = britishVoice
-        } else {
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        }
+        // Try to find the best British voice
+        let voices = AVSpeechSynthesisVoice.speechVoices()
+        let britishVoice = voices.first { $0.language == "en-GB" && $0.quality == .enhanced }
+            ?? voices.first { $0.language == "en-GB" }
+            ?? AVSpeechSynthesisVoice(language: "en-US")
         
+        utterance.voice = britishVoice
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9
         utterance.pitchMultiplier = 0.85
         utterance.volume = 1.0
@@ -87,6 +122,7 @@ class TextToSpeechManager: NSObject {
 
 extension TextToSpeechManager: AVSpeechSynthesizerDelegate {
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        print("JARVIS TTS: AVSpeech finished")
         DispatchQueue.main.async {
             self.completionHandler?()
             self.completionHandler = nil
@@ -96,9 +132,15 @@ extension TextToSpeechManager: AVSpeechSynthesizerDelegate {
 
 extension TextToSpeechManager: AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        print("JARVIS TTS: Audio playback finished, success: \(flag)")
         DispatchQueue.main.async {
             self.completionHandler?()
             self.completionHandler = nil
         }
+    }
+    
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        print("JARVIS TTS: Decode error: \(error?.localizedDescription ?? "unknown")")
+        fallbackToAVSpeechSync(text: currentText)
     }
 }
