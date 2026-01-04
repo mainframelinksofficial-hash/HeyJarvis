@@ -13,6 +13,7 @@ struct ContentView: View {
     @StateObject private var glassesManager = MetaGlassesManager.shared
     @State private var showVideoPlayer = false
     @State private var playerItem: AVPlayerItem?
+    @State private var showConversationHistory = false
     
     var body: some View {
         ZStack {
@@ -51,6 +52,10 @@ struct ContentView: View {
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
         }
+        .sheet(isPresented: $showConversationHistory) {
+            ConversationHistoryView()
+                .environmentObject(viewModel)
+        }
         .sheet(isPresented: $showVideoPlayer) {
             if let playerItem = playerItem {
                 VideoPlayerView(playerItem: playerItem)
@@ -85,12 +90,22 @@ struct ContentView: View {
             
             Spacer()
             
-            Button {
-                viewModel.showSettings = true
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 22))
-                    .foregroundColor(Color("jarvisBlue"))
+            HStack(spacing: 16) {
+                Button {
+                    showConversationHistory = true
+                } label: {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color("jarvisBlue"))
+                }
+                
+                Button {
+                    viewModel.showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 22))
+                        .foregroundColor(Color("jarvisBlue"))
+                }
             }
         }
         .padding(.top, 20)

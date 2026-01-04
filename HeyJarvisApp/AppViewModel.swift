@@ -157,6 +157,9 @@ class AppViewModel: ObservableObject {
                     LiveActivityManager.shared.startLiveActivity()
                     MetaGlassesManager.shared.startSearching()
                     
+                    // Startup sound
+                    SoundManager.shared.playStartup()
+                    
                     // Premium JARVIS greeting
                     let hour = Calendar.current.component(.hour, from: Date())
                     let greeting: String
@@ -191,9 +194,11 @@ class AppViewModel: ObservableObject {
     private func handleWakeWordDetected() {
         appState = .wakeDetected
         
+        // Sound effect
+        SoundManager.shared.playHUDActivation()
+        
         // Haptic feedback
-        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-        impactFeedback.impactOccurred()
+        SettingsManager.shared.triggerHaptic()
         
         LiveActivityManager.shared.updateLiveActivity(
             isListening: true,
@@ -217,9 +222,11 @@ class AppViewModel: ObservableObject {
     private func handleCommandReceived(_ commandText: String) {
         appState = .processing
         
+        // Sound effect
+        SoundManager.shared.playProcessing()
+        
         // Haptic feedback
-        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-        impactFeedback.impactOccurred()
+        SettingsManager.shared.triggerHaptic()
         
         LiveActivityManager.shared.updateLiveActivity(
             isListening: false,
@@ -252,6 +259,7 @@ class AppViewModel: ObservableObject {
                     if index < self.commandHistory.count {
                         self.commandHistory[index].status = .success
                     }
+                    SoundManager.shared.playSuccess()
                     self.speakJarvis(response)
                 }
             } catch {
@@ -261,6 +269,7 @@ class AppViewModel: ObservableObject {
                     if index < self.commandHistory.count {
                         self.commandHistory[index].status = .failed
                     }
+                    SoundManager.shared.playError()
                     self.speakJarvis(fallbackResponse)
                 }
             }
