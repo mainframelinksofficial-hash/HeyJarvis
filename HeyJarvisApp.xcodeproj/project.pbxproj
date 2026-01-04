@@ -6,7 +6,6 @@
 	objectVersion = 56;
 	objects = {
 
-/* Begin PBXBuildFile section */
 		0001 /* HeyJarvisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001 /* HeyJarvisApp.swift */; };
 		0002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1002 /* ContentView.swift */; };
 		0003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1003 /* Assets.xcassets */; };
@@ -24,6 +23,10 @@
 		0015 /* JarvisLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1016 /* JarvisLiveActivity.swift */; };
 		0016 /* TTSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1017 /* TTSError.swift */; };
 		0017 /* JarvisAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1018 /* JarvisAI.swift */; };
+		0018 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1019 /* SettingsManager.swift */; };
+		0019 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1020 /* SoundManager.swift */; };
+		0020 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1021 /* SettingsView.swift */; };
+		0021 /* ConversationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1022 /* ConversationHistoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +48,10 @@
 		1016 /* JarvisLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisLiveActivity.swift; sourceTree = "<group>"; };
 		1017 /* TTSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSError.swift; sourceTree = "<group>"; };
 		1018 /* JarvisAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisAI.swift; sourceTree = "<group>"; };
+		1019 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		1020 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		1021 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1022 /* ConversationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHistoryView.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,6 +88,8 @@
 				1015 /* MetaGlassesManager.swift */,
 				1016 /* JarvisLiveActivity.swift */,
 				1018 /* JarvisAI.swift */,
+				1019 /* SettingsManager.swift */,
+				1020 /* SoundManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -104,6 +113,8 @@
 			children = (
 				1011 /* StatusView.swift */,
 				1012 /* CommandHistoryView.swift */,
+				1021 /* SettingsView.swift */,
+				1022 /* ConversationHistoryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -209,6 +220,10 @@
 				0015 /* JarvisLiveActivity.swift in Sources */,
 				0016 /* TTSError.swift in Sources */,
 				0017 /* JarvisAI.swift in Sources */,
+				0018 /* SettingsManager.swift in Sources */,
+				0019 /* SoundManager.swift in Sources */,
+				0020 /* SettingsView.swift in Sources */,
+				0021 /* ConversationHistoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
