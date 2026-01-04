@@ -27,6 +27,8 @@
 		0019 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1020 /* SoundManager.swift */; };
 		0020 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1021 /* SettingsView.swift */; };
 		0021 /* ConversationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1022 /* ConversationHistoryView.swift */; };
+		0022 /* JarvisIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023 /* JarvisIntents.swift */; };
+		0023 /* WidgetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024 /* WidgetDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		1020 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		1021 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1022 /* ConversationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHistoryView.swift; sourceTree = "<group>"; };
+		1023 /* JarvisIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisIntents.swift; sourceTree = "<group>"; };
+		1024 /* WidgetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataManager.swift; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -90,6 +94,8 @@
 				1018 /* JarvisAI.swift */,
 				1019 /* SettingsManager.swift */,
 				1020 /* SoundManager.swift */,
+				1023 /* JarvisIntents.swift */,
+				1024 /* WidgetDataManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -224,6 +230,8 @@
 				0019 /* SoundManager.swift in Sources */,
 				0020 /* SettingsView.swift in Sources */,
 				0021 /* ConversationHistoryView.swift in Sources */,
+				0022 /* JarvisIntents.swift in Sources */,
+				0023 /* WidgetDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
