@@ -30,6 +30,52 @@ enum JarvisVoice: String, CaseIterable {
     }
 }
 
+// MARK: - Wake Word Sensitivity
+enum WakeWordSensitivity: String, CaseIterable {
+    case low = "low"
+    case medium = "medium"
+    case high = "high"
+    
+    var displayName: String {
+        switch self {
+        case .low: return "Low"
+        case .medium: return "Medium"
+        case .high: return "High (Recommended)"
+        }
+    }
+    
+    var silenceTimeout: Double {
+        switch self {
+        case .low: return 4.0
+        case .medium: return 3.0
+        case .high: return 2.0
+        }
+    }
+}
+
+// MARK: - Response Length
+enum ResponseLength: String, CaseIterable {
+    case brief = "brief"
+    case normal = "normal"
+    case detailed = "detailed"
+    
+    var displayName: String {
+        switch self {
+        case .brief: return "Brief"
+        case .normal: return "Normal"
+        case .detailed: return "Detailed"
+        }
+    }
+    
+    var systemPromptAddition: String {
+        switch self {
+        case .brief: return "Keep responses very short and concise, 1-2 sentences max."
+        case .normal: return "Keep responses moderate in length."
+        case .detailed: return "Provide detailed, thorough responses when appropriate."
+        }
+    }
+}
+
 // MARK: - Haptic Intensity
 enum HapticIntensity: String, CaseIterable {
     case light = "light"
@@ -60,6 +106,12 @@ class SettingsManager: ObservableObject {
         static let hudSounds = "hudSoundsEnabled"
         static let hapticFeedback = "hapticFeedbackEnabled"
         static let hapticIntensity = "hapticIntensity"
+        static let wakeWordSensitivity = "wakeWordSensitivity"
+        static let responseLength = "responseLength"
+        static let autoStopTimer = "autoStopTimer"
+        static let customWakeWord = "customWakeWord"
+        static let rememberConversations = "rememberConversations"
+        static let vibrateOnResponse = "vibrateOnResponse"
     }
     
     // Voice Settings
@@ -93,6 +145,29 @@ class SettingsManager: ObservableObject {
         didSet { defaults.set(hapticIntensity.rawValue, forKey: Keys.hapticIntensity) }
     }
     
+    // Wake Word Settings
+    @Published var wakeWordSensitivity: WakeWordSensitivity {
+        didSet { defaults.set(wakeWordSensitivity.rawValue, forKey: Keys.wakeWordSensitivity) }
+    }
+    
+    @Published var customWakeWord: String {
+        didSet { defaults.set(customWakeWord, forKey: Keys.customWakeWord) }
+    }
+    
+    // AI Settings
+    @Published var responseLength: ResponseLength {
+        didSet { defaults.set(responseLength.rawValue, forKey: Keys.responseLength) }
+    }
+    
+    @Published var rememberConversations: Bool {
+        didSet { defaults.set(rememberConversations, forKey: Keys.rememberConversations) }
+    }
+    
+    // Additional Settings
+    @Published var vibrateOnResponse: Bool {
+        didSet { defaults.set(vibrateOnResponse, forKey: Keys.vibrateOnResponse) }
+    }
+    
     private var ttsManager: TextToSpeechManager?
     
     private init() {
@@ -104,6 +179,13 @@ class SettingsManager: ObservableObject {
         self.hudSoundsEnabled = defaults.object(forKey: Keys.hudSounds) as? Bool ?? true
         self.hapticFeedbackEnabled = defaults.object(forKey: Keys.hapticFeedback) as? Bool ?? true
         self.hapticIntensity = HapticIntensity(rawValue: defaults.string(forKey: Keys.hapticIntensity) ?? "") ?? .medium
+        
+        // New settings
+        self.wakeWordSensitivity = WakeWordSensitivity(rawValue: defaults.string(forKey: Keys.wakeWordSensitivity) ?? "") ?? .medium
+        self.customWakeWord = defaults.string(forKey: Keys.customWakeWord) ?? "hey jarvis"
+        self.responseLength = ResponseLength(rawValue: defaults.string(forKey: Keys.responseLength) ?? "") ?? .normal
+        self.rememberConversations = defaults.object(forKey: Keys.rememberConversations) as? Bool ?? true
+        self.vibrateOnResponse = defaults.object(forKey: Keys.vibrateOnResponse) as? Bool ?? false
     }
     
     func testVoice() {
@@ -121,6 +203,11 @@ class SettingsManager: ObservableObject {
         hudSoundsEnabled = true
         hapticFeedbackEnabled = true
         hapticIntensity = .medium
+        wakeWordSensitivity = .medium
+        customWakeWord = "hey jarvis"
+        responseLength = .normal
+        rememberConversations = true
+        vibrateOnResponse = false
         
         // Play confirmation
         SoundManager.shared.playConfirmation()

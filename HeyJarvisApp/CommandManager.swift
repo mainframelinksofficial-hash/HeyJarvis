@@ -42,6 +42,9 @@ class CommandManager {
         
         // Reminder commands
         (["set reminder", "remind me", "set an alarm", "create reminder", "don't let me forget"], .setReminder),
+        
+        // Timer commands
+        (["set timer", "set a timer", "timer for", "start timer", "countdown", "count down"], .setTimer),
     ]
     
     func parseCommand(_ text: String) -> CommandType {

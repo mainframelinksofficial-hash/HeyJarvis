@@ -172,10 +172,78 @@ struct SettingsView: View {
                             }
                         }
                         
+                        // Wake Word Settings
+                        SettingsSection(title: "Wake Word", icon: "waveform.badge.mic") {
+                            VStack(spacing: 16) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Sensitivity")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(Color("dimText"))
+                                    
+                                    Picker("Sensitivity", selection: $settings.wakeWordSensitivity) {
+                                        ForEach(WakeWordSensitivity.allCases, id: \.self) { level in
+                                            Text(level.displayName).tag(level)
+                                        }
+                                    }
+                                    .pickerStyle(.segmented)
+                                }
+                                
+                                Divider().background(Color.white.opacity(0.1))
+                                
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Custom Wake Phrase")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(Color("dimText"))
+                                    
+                                    TextField("hey jarvis", text: $settings.customWakeWord)
+                                        .textFieldStyle(.plain)
+                                        .padding(12)
+                                        .background(Color("primaryDark"))
+                                        .cornerRadius(8)
+                                        .foregroundColor(.white)
+                                        .autocorrectionDisabled()
+                                }
+                            }
+                        }
+                        
+                        // AI Settings
+                        SettingsSection(title: "AI Responses", icon: "brain") {
+                            VStack(spacing: 16) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Response Length")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(Color("dimText"))
+                                    
+                                    Picker("Length", selection: $settings.responseLength) {
+                                        ForEach(ResponseLength.allCases, id: \.self) { length in
+                                            Text(length.displayName).tag(length)
+                                        }
+                                    }
+                                    .pickerStyle(.segmented)
+                                }
+                                
+                                Divider().background(Color.white.opacity(0.1))
+                                
+                                SettingsToggle(
+                                    title: "Remember Conversations",
+                                    subtitle: "JARVIS remembers previous messages",
+                                    isOn: $settings.rememberConversations
+                                )
+                                
+                                Divider().background(Color.white.opacity(0.1))
+                                
+                                SettingsToggle(
+                                    title: "Vibrate on Response",
+                                    subtitle: "Haptic when JARVIS starts speaking",
+                                    isOn: $settings.vibrateOnResponse
+                                )
+                            }
+                        }
+                        
                         // About
                         SettingsSection(title: "About", icon: "info.circle.fill") {
                             VStack(spacing: 12) {
-                                AboutRow(label: "Version", value: "2.0.0")
+                                AboutRow(label: "Version", value: "2.1.0")
                                 AboutRow(label: "Build", value: "2026.01.04")
                                 AboutRow(label: "Developer", value: "Stark Industries")
                             }

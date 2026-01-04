@@ -21,6 +21,7 @@ enum CommandType: String, CaseIterable {
     case playMusic = "music"
     case sendMessage = "message"
     case setReminder = "reminder"
+    case setTimer = "timer"
     case unknown = "unknown"
     
     var icon: String {
@@ -36,6 +37,7 @@ enum CommandType: String, CaseIterable {
         case .playMusic: return "music.note"
         case .sendMessage: return "message.fill"
         case .setReminder: return "bell.fill"
+        case .setTimer: return "timer"
         case .unknown: return "brain.head.profile"
         }
     }
@@ -53,6 +55,7 @@ enum CommandType: String, CaseIterable {
         case .playMusic: return "Music"
         case .sendMessage: return "Message"
         case .setReminder: return "Reminder"
+        case .setTimer: return "Timer"
         case .unknown: return "AI Chat"
         }
     }
@@ -70,6 +73,7 @@ enum CommandType: String, CaseIterable {
         case .playMusic: return "Playing music for you now, sir."
         case .sendMessage: return "I'll need your device's permission to send messages, sir."
         case .setReminder: return "Reminder set, sir. I'll notify you at the appropriate time."
+        case .setTimer: return "Timer started, sir. I'll alert you when it's complete."
         case .unknown: return "I didn't quite catch that, sir. Could you repeat your request?"
         }
     }
@@ -87,6 +91,7 @@ enum CommandType: String, CaseIterable {
         case .playMusic: return "I'm unable to access your music library, sir."
         case .sendMessage: return "Message sending is not available, sir."
         case .setReminder: return "I couldn't set that reminder, sir."
+        case .setTimer: return "I couldn't set that timer, sir."
         case .unknown: return "I'm afraid I couldn't process that request, sir."
         }
     }
