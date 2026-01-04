@@ -4,10 +4,10 @@
 <dict>
     <key>GroqAPIKey</key>
     <string>YOUR_GROQ_API_KEY_HERE</string>
-    <key>TTSVoice</key>
-    <string>Arista-PlayAI</string>
     <key>TTSModel</key>
-    <string>playai-tts</string>
+    <string>canopylabs/orpheus-v1-english</string>
+    <key>TTSVoice</key>
+    <string>daniel</string>
     <key>SpeechRate</key>
     <real>1.0</real>
 </dict>
