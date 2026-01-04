@@ -212,6 +212,22 @@ class JarvisAI {
             return success ? "Playing your video now, sir." : "I couldn't locate any videos, sir. My apologies."
         case .recordNote:
             return success ? "Note recorded successfully, sir." : "The recording encountered an issue, sir."
+        case .getTime:
+            return success ? "" : "I seem to have lost track of time, sir."
+        case .getDate:
+            return success ? "" : "I'm having difficulty accessing the date, sir."
+        case .getWeather:
+            return success ? "" : "Weather services are currently unavailable, sir."
+        case .setBrightness:
+            return success ? "Brightness adjusted, sir." : "I couldn't adjust the brightness, sir."
+        case .setVolume:
+            return success ? "Volume adjusted, sir." : "Volume adjustment failed, sir."
+        case .playMusic:
+            return success ? "Playing music now, sir." : "I'm unable to access your music library, sir."
+        case .sendMessage:
+            return success ? "Message sent, sir." : "Message sending is not available, sir."
+        case .setReminder:
+            return success ? "Reminder set, sir." : "I couldn't set that reminder, sir."
         case .unknown:
             return "I didn't quite catch that, sir. Could you repeat your request?"
         }

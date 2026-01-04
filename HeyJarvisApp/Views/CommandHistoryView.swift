@@ -148,6 +148,18 @@ struct CommandCard: View {
             return Color.purple.opacity(0.2)
         case .recordNote:
             return Color.orange.opacity(0.2)
+        case .getTime, .getDate:
+            return Color.cyan.opacity(0.2)
+        case .getWeather:
+            return Color.yellow.opacity(0.2)
+        case .setBrightness, .setVolume:
+            return Color.gray.opacity(0.2)
+        case .playMusic:
+            return Color.pink.opacity(0.2)
+        case .sendMessage:
+            return Color.green.opacity(0.2)
+        case .setReminder:
+            return Color.red.opacity(0.2)
         case .unknown:
             return Color("jarvisBlue").opacity(0.2)
         }
@@ -161,6 +173,18 @@ struct CommandCard: View {
             return Color.purple
         case .recordNote:
             return Color.orange
+        case .getTime, .getDate:
+            return Color.cyan
+        case .getWeather:
+            return Color.yellow
+        case .setBrightness, .setVolume:
+            return Color.gray
+        case .playMusic:
+            return Color.pink
+        case .sendMessage:
+            return Color.green
+        case .setReminder:
+            return Color.red
         case .unknown:
             return Color("jarvisBlue")
         }
