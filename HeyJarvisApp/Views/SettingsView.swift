@@ -98,6 +98,25 @@ struct SettingsView: View {
                             }
                         }
                         
+                        // Always-On Mode
+                        SettingsSection(title: "Always-On Mode", icon: "power") {
+                            VStack(spacing: 16) {
+                                SettingsToggle(
+                                    title: "Always-On",
+                                    subtitle: "Keep JARVIS running in background",
+                                    isOn: Binding(
+                                        get: { BackgroundManager.shared.isAlwaysOnEnabled },
+                                        set: { _ in BackgroundManager.shared.toggle() }
+                                    )
+                                )
+                                
+                                Text("When enabled, JARVIS stays active even when the app is in the background. Say 'Hey Jarvis' anytime!")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(Color("dimText"))
+                                    .padding(.top, 4)
+                            }
+                        }
+                        
                         // Haptics
                         SettingsSection(title: "Haptics", icon: "iphone.radiowaves.left.and.right") {
                             VStack(spacing: 16) {
