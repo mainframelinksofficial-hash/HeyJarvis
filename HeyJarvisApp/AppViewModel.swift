@@ -2,12 +2,13 @@
 //  AppViewModel.swift
 //  HeyJarvisApp
 //
-//  MVVM ViewModel managing app state and coordination
+//  MVVM ViewModel - Core JARVIS brain managing all interactions
 //
 
 import SwiftUI
 import Combine
 import AVFoundation
+import UIKit
 
 @MainActor
 class AppViewModel: ObservableObject {
@@ -20,6 +21,7 @@ class AppViewModel: ObservableObject {
     @Published var isBackgroundModeEnabled: Bool = false
     @Published var glassesConnected: Bool = false
     @Published var jarvisResponse: String = ""
+    @Published var batteryLevel: Int = 100
     
     private var wakeWordDetector: WakeWordDetector?
     private var commandManager: CommandManager
@@ -37,6 +39,7 @@ class AppViewModel: ObservableObject {
         setupWakeWordDetector()
         setupBackgroundMode()
         setupMetaGlasses()
+        startBatteryMonitoring()
     }
     
     private func setupWakeWordDetector() {
@@ -93,7 +96,7 @@ class AppViewModel: ObservableObject {
         glassesManager.onGlassesConnected = { [weak self] in
             Task { @MainActor in
                 self?.glassesConnected = true
-                self?.speakJarvis("Meta glasses connected and operational, sir. All systems are online.")
+                self?.speakJarvis("Meta glasses connected and fully operational, sir. Audio will now route through your eyewear.")
                 LiveActivityManager.shared.updateLiveActivity(
                     isListening: true,
                     lastCommand: "Glasses connected"
@@ -104,19 +107,21 @@ class AppViewModel: ObservableObject {
         glassesManager.onGlassesDisconnected = { [weak self] in
             Task { @MainActor in
                 self?.glassesConnected = false
+                self?.speakJarvis("Glasses disconnected, sir. Reverting to phone audio.")
             }
         }
+    }
+    
+    private func startBatteryMonitoring() {
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        batteryLevel = Int(UIDevice.current.batteryLevel * 100)
         
-        glassesManager.onPhotoRequested = { [weak self] in
-            Task { @MainActor in
-                self?.handleCommandReceived("take a photo")
-            }
-        }
-        
-        glassesManager.onVideoRequested = { [weak self] in
-            Task { @MainActor in
-                self?.handleCommandReceived("show last video")
-            }
+        NotificationCenter.default.addObserver(
+            forName: UIDevice.batteryLevelDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.batteryLevel = Int(UIDevice.current.batteryLevel * 100)
         }
     }
     
@@ -152,20 +157,29 @@ class AppViewModel: ObservableObject {
                     LiveActivityManager.shared.startLiveActivity()
                     MetaGlassesManager.shared.startSearching()
                     
-                    // JARVIS greeting
-                    speakJarvis("JARVIS online, sir. All systems operational. How may I assist you?")
+                    // Premium JARVIS greeting
+                    let hour = Calendar.current.component(.hour, from: Date())
+                    let greeting: String
+                    if hour < 12 {
+                        greeting = "Good morning, sir. JARVIS online and all systems are fully operational. How may I assist you today?"
+                    } else if hour < 17 {
+                        greeting = "Good afternoon, sir. JARVIS at your service. All systems nominal and ready for your commands."
+                    } else {
+                        greeting = "Good evening, sir. JARVIS online. I trust you've had a productive day. What can I do for you?"
+                    }
+                    speakJarvis(greeting)
                     
                 } else {
-                    errorMessage = "Microphone or speech recognition permission denied"
+                    errorMessage = "I require microphone access to hear your commands, sir."
                 }
             } catch {
-                errorMessage = "Failed to start listening: \(error.localizedDescription)"
+                errorMessage = "Failed to initialize: \(error.localizedDescription)"
             }
         }
     }
     
     func stopListening() {
-        speakJarvis("Going offline, sir. It was a pleasure serving you.") { [weak self] in
+        speakJarvis("Going offline now, sir. It's been a pleasure serving you. Until next time.") { [weak self] in
             self?.wakeWordDetector?.stopListening()
             self?.appState = .idle
             self?.isBackgroundModeEnabled = false
@@ -177,12 +191,23 @@ class AppViewModel: ObservableObject {
     private func handleWakeWordDetected() {
         appState = .wakeDetected
         
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+        
         LiveActivityManager.shared.updateLiveActivity(
             isListening: true,
             lastCommand: "Wake word detected!"
         )
         
-        speakJarvis("At your service, sir.") { [weak self] in
+        let responses = [
+            "At your service, sir.",
+            "Yes, sir?",
+            "How may I assist you, sir?",
+            "I'm listening, sir.",
+            "Ready and awaiting your command, sir."
+        ]
+        speakJarvis(responses.randomElement() ?? "Yes, sir?") { [weak self] in
             Task { @MainActor in
                 self?.appState = .listening
             }
@@ -191,6 +216,10 @@ class AppViewModel: ObservableObject {
     
     private func handleCommandReceived(_ commandText: String) {
         appState = .processing
+        
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.impactOccurred()
         
         LiveActivityManager.shared.updateLiveActivity(
             isListening: false,
@@ -201,12 +230,15 @@ class AppViewModel: ObservableObject {
         let command = Command(text: commandText, type: commandType)
         commandHistory.insert(command, at: 0)
         
+        // Limit history to 50 items
+        if commandHistory.count > 50 {
+            commandHistory = Array(commandHistory.prefix(50))
+        }
+        
         if commandType == .unknown {
-            // Use JARVIS AI for conversational response
             handleConversation(commandText, at: 0)
         } else {
-            // Execute known command
-            executeCommand(type: commandType, at: 0)
+            executeCommand(type: commandType, text: commandText, at: 0)
         }
     }
     
@@ -224,7 +256,7 @@ class AppViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    let fallbackResponse = "I'm afraid I encountered a difficulty, sir. Perhaps we could try again?"
+                    let fallbackResponse = "I'm afraid I encountered a difficulty processing that request, sir. Perhaps we could try again?"
                     self.jarvisResponse = fallbackResponse
                     if index < self.commandHistory.count {
                         self.commandHistory[index].status = .failed
@@ -235,44 +267,77 @@ class AppViewModel: ObservableObject {
         }
     }
     
-    private func executeCommand(type commandType: CommandType, at index: Int) {
+    private func executeCommand(type commandType: CommandType, text: String, at index: Int) {
         Task {
+            var success = true
+            var response = ""
+            
             do {
                 switch commandType {
                 case .takePhoto:
                     if glassesConnected {
-                        let success = await MetaGlassesManager.shared.triggerGlassesPhoto()
-                        if !success {
+                        let glassesSuccess = await MetaGlassesManager.shared.triggerGlassesPhoto()
+                        if !glassesSuccess {
                             try await workflowController.capturePhoto()
                         }
                     } else {
                         try await workflowController.capturePhoto()
                     }
+                    response = commandType.responseText
+                    
                 case .showVideo:
                     try await workflowController.showLastVideo()
+                    response = commandType.responseText
+                    
                 case .recordNote:
                     try await workflowController.recordNote()
+                    response = commandType.responseText
+                    
+                case .getTime:
+                    let formatter = DateFormatter()
+                    formatter.timeStyle = .short
+                    let timeString = formatter.string(from: Date())
+                    response = "The current time is \(timeString), sir."
+                    
+                case .getDate:
+                    let formatter = DateFormatter()
+                    formatter.dateStyle = .full
+                    let dateString = formatter.string(from: Date())
+                    response = "Today is \(dateString), sir."
+                    
+                case .getWeather:
+                    response = "I'm afraid I don't have access to weather services at the moment, sir. Might I suggest checking your device's weather application?"
+                    
+                case .setBrightness:
+                    response = "I'm sorry, sir, but iOS doesn't permit third-party applications to adjust screen brightness directly. You'll need to use Control Center."
+                    
+                case .setVolume:
+                    response = "Volume control requires direct system access, sir. Please use your device's volume buttons."
+                    
+                case .playMusic:
+                    response = "I don't have access to your music library, sir. Shall I open the Music app for you?"
+                    
+                case .sendMessage:
+                    response = "Message functionality requires additional permissions, sir. This feature is currently being developed."
+                    
+                case .setReminder:
+                    response = "I've noted your reminder request, sir. However, I don't yet have access to your calendar. This feature is coming soon."
+                    
                 case .unknown:
                     break
                 }
                 
-                await MainActor.run {
-                    if index < self.commandHistory.count {
-                        self.commandHistory[index].status = .success
-                    }
-                    let response = self.jarvisAI.getCommandResponse(for: commandType, success: true)
-                    self.jarvisResponse = response
-                    self.speakJarvis(response)
-                }
             } catch {
-                await MainActor.run {
-                    if index < self.commandHistory.count {
-                        self.commandHistory[index].status = .failed
-                    }
-                    let response = self.jarvisAI.getCommandResponse(for: commandType, success: false)
-                    self.jarvisResponse = response
-                    self.speakJarvis(response)
+                success = false
+                response = jarvisAI.getCommandResponse(for: commandType, success: false)
+            }
+            
+            await MainActor.run {
+                if index < self.commandHistory.count {
+                    self.commandHistory[index].status = success ? .success : .failed
                 }
+                self.jarvisResponse = response
+                self.speakJarvis(response)
             }
         }
     }
@@ -301,6 +366,11 @@ class AppViewModel: ObservableObject {
     func clearHistory() {
         commandHistory.removeAll()
         jarvisAI.resetConversation()
+        jarvisResponse = ""
+        
+        // Haptic feedback
+        let notificationFeedback = UINotificationFeedbackGenerator()
+        notificationFeedback.notificationOccurred(.success)
     }
     
     func connectGlasses() {
