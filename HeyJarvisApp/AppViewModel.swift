@@ -47,7 +47,7 @@ class AppViewModel: ObservableObject {
         WatchSessionManager.shared.onCommandReceived = { [weak self] command in
             Task { @MainActor in
                 if command == "listen" {
-                    self?.wakeWordDetector?.startListening()
+                    try? self?.wakeWordDetector?.startListening()
                 } else if command == "stop" {
                     self?.wakeWordDetector?.stopListening()
                 } else {
