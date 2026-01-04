@@ -28,7 +28,7 @@ class TextToSpeechManager: NSObject {
     private func configureAudioSession() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback, mode: .spokenContent, options: [.allowBluetooth, .allowBluetoothA2DP, .duckOthers])
+            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowBluetoothA2DP, .duckOthers])
             try audioSession.setActive(true)
             print("JARVIS Audio: Session configured")
         } catch {
@@ -64,7 +64,7 @@ class TextToSpeechManager: NSObject {
         do {
             // Re-configure audio session before playback
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playback, mode: .spokenContent, options: [.allowBluetooth, .allowBluetoothA2DP])
+            try audioSession.setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowBluetoothA2DP])
             try audioSession.setActive(true)
             
             // Stop any existing playback
