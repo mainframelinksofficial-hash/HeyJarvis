@@ -10,7 +10,8 @@ import Foundation
 class GroqTTSManager {
     private let apiEndpoint = "https://api.groq.com/openai/v1/audio/speech"
     private let model = "playai-tts"
-    private let voice = "Fritz-PlayAI"  // Professional male voice for JARVIS
+    
+    // Voice is now pulled from user settings
     
     private var apiKey: String? {
         guard let plistPath = Bundle.main.path(forResource: "JarvisVoiceSettings", ofType: "plist"),
@@ -52,10 +53,14 @@ class GroqTTSManager {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.timeoutInterval = 30
         
+        // Get voice from user settings
+        let selectedVoice = SettingsManager.shared.selectedVoice.rawValue
+        print("JARVIS TTS: Using voice: \(selectedVoice)")
+        
         let body: [String: Any] = [
             "model": model,
             "input": processedText,
-            "voice": voice,
+            "voice": selectedVoice,
             "response_format": "mp3"
         ]
         
