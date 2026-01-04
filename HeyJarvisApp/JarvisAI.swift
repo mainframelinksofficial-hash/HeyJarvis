@@ -228,6 +228,8 @@ class JarvisAI {
             return success ? "Message sent, sir." : "Message sending is not available, sir."
         case .setReminder:
             return success ? "Reminder set, sir." : "I couldn't set that reminder, sir."
+        case .setTimer:
+            return success ? "Timer started, sir." : "I couldn't set that timer, sir."
         case .unknown:
             return "I didn't quite catch that, sir. Could you repeat your request?"
         }

@@ -332,6 +332,9 @@ class AppViewModel: ObservableObject {
                 case .setReminder:
                     response = "I've noted your reminder request, sir. However, I don't yet have access to your calendar. This feature is coming soon."
                     
+                case .setTimer:
+                    response = "Timer functionality requires system timer access, sir. This feature is in development."
+                    
                 case .unknown:
                     break
                 }
