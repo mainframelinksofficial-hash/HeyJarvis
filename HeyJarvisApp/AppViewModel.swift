@@ -40,6 +40,31 @@ class AppViewModel: ObservableObject {
         setupBackgroundMode()
         setupMetaGlasses()
         startBatteryMonitoring()
+        setupWatchConnectivity()
+    }
+    
+    private func setupWatchConnectivity() {
+        WatchSessionManager.shared.onCommandReceived = { [weak self] command in
+            Task { @MainActor in
+                if command == "listen" {
+                    self?.wakeWordDetector?.startListening()
+                } else if command == "stop" {
+                    self?.wakeWordDetector?.stopListening()
+                } else {
+                     // Treat as voice command text
+                    self?.handleCommandReceived(command)
+                }
+            }
+        }
+        
+        // Sync status changes
+        $appState
+            .sink { state in
+                let isListening = state == .listening
+                let status = state.displayText
+                WatchSessionManager.shared.sendStatusToWatch(isListening: isListening, statusText: status)
+            }
+            .store(in: &cancellables)
     }
     
     private func setupWakeWordDetector() {

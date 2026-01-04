@@ -30,7 +30,6 @@
 		0022 /* JarvisIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023 /* JarvisIntents.swift */; };
 		0023 /* WidgetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024 /* WidgetDataManager.swift */; };
 		0024 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025 /* WeatherManager.swift */; };
-		0025 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1026 /* WatchSessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +58,6 @@
 		1023 /* JarvisIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisIntents.swift; sourceTree = "<group>"; };
 		1024 /* WidgetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataManager.swift; sourceTree = "<group>"; };
 		1025 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
-		1026 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchSessionManager.swift"; sourceTree = "<group>"; };
 		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -101,7 +99,6 @@
 				1023 /* JarvisIntents.swift */,
 				1024 /* WidgetDataManager.swift */,
 				1025 /* WeatherManager.swift */,
-				1026 /* WatchSessionManager.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -239,7 +236,6 @@
 				0022 /* JarvisIntents.swift in Sources */,
 				0023 /* WidgetDataManager.swift in Sources */,
 				0024 /* WeatherManager.swift in Sources */,
-				0025 /* WatchSessionManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
