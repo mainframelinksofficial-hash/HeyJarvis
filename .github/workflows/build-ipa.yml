@@ -16,13 +16,20 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Build for Simulator
+      - name: Build IPA
         run: |
           xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
             -sdk iphonesimulator \
-            CODE_SIGNING_ALLOWED=NO
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            CODE_SIGNING_ALLOWED=NO \
+            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
+            | tee xcodebuild.log
+
+      - name: Show Build Log on Failure
+        if: failure()
+        run: cat xcodebuild.log
 
       - name: Create IPA
         run: |
