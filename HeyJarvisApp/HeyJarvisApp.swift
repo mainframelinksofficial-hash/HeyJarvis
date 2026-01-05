@@ -13,6 +13,7 @@ import UIKit
 struct HeyJarvisApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var appViewModel = AppViewModel()
+    var syntax_error_test =  // THIS MUST FAIL BUILD
     
     var body: some Scene {
         WindowGroup {
