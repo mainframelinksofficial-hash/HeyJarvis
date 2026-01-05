@@ -6,102 +6,102 @@
 	objectVersion = 56;
 	objects = {
 
-		0001 /* HeyJarvisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001 /* HeyJarvisApp.swift */; };
-		0002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1002 /* ContentView.swift */; };
-		0003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1003 /* Assets.xcassets */; };
-		0004 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1004 /* AppViewModel.swift */; };
-		0005 /* WakeWordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1005 /* WakeWordDetector.swift */; };
-		0006 /* CommandManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006 /* CommandManager.swift */; };
-		0007 /* MetaWorkflowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1007 /* MetaWorkflowController.swift */; };
-		0008 /* TextToSpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1008 /* TextToSpeechManager.swift */; };
-		0009 /* GroqTTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1009 /* GroqTTSManager.swift */; };
-		0010 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1010 /* Command.swift */; };
-		0011 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1011 /* StatusView.swift */; };
-		0012 /* CommandHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1012 /* CommandHistoryView.swift */; };
-		0013 /* JarvisVoiceSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1013 /* JarvisVoiceSettings.plist */; };
-		0014 /* MetaGlassesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1015 /* MetaGlassesManager.swift */; };
-		0015 /* JarvisLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1016 /* JarvisLiveActivity.swift */; };
-		0016 /* TTSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1017 /* TTSError.swift */; };
-		0017 /* JarvisAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1018 /* JarvisAI.swift */; };
-		0018 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1019 /* SettingsManager.swift */; };
-		0019 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1020 /* SoundManager.swift */; };
-		0020 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1021 /* SettingsView.swift */; };
-		0021 /* ConversationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1022 /* ConversationHistoryView.swift */; };
-		0022 /* JarvisIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1023 /* JarvisIntents.swift */; };
-		0023 /* WidgetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1024 /* WidgetDataManager.swift */; };
-		0024 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1025 /* WeatherManager.swift */; };
-		0025 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1026 /* WatchSessionManager.swift */; };
-		0026 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1027 /* HomeManager.swift */; };
-		0027 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1028 /* MediaManager.swift */; };
-		0028 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1029 /* EventManager.swift */; };
-		0029 /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1030 /* TimerManager.swift */; };
-		0030 /* BriefingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1031 /* BriefingManager.swift */; };
-		0031 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032 /* HealthManager.swift */; };
-		0032 /* AppLauncherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1033 /* AppLauncherManager.swift */; };
-		0033 /* BackgroundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1034 /* BackgroundManager.swift */; };
-		0034 /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035 /* OfflineManager.swift */; };
-		0035 /* CommandReferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1036 /* CommandReferenceView.swift */; };
-		0036 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1037 /* MemoryManager.swift */; };
-		0037 /* ProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1038 /* ProtocolManager.swift */; };
-		0038 /* SystemMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1039 /* SystemMonitor.swift */; };
-		0039 /* JarvisMindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1040 /* JarvisMindView.swift */; };
-		0040 /* GlassesStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1041 /* GlassesStatusView.swift */; };
-		0041 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1042 /* HeaderView.swift */; };
-		0042 /* JarvisResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1043 /* JarvisResponseView.swift */; };
-		0043 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1044 /* TranscriptionView.swift */; };
+/* Begin PBXBuildFile section */
+		A1B2C3D4E5F60001 /* HeyJarvisApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60001 /* HeyJarvisApp.swift */; };
+		A1B2C3D4E5F60002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60002 /* ContentView.swift */; };
+		A1B2C3D4E5F60003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60003 /* Assets.xcassets */; };
+		A1B2C3D4E5F60004 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60004 /* AppViewModel.swift */; };
+		A1B2C3D4E5F60005 /* WakeWordDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60005 /* WakeWordDetector.swift */; };
+		A1B2C3D4E5F60006 /* CommandManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60006 /* CommandManager.swift */; };
+		A1B2C3D4E5F60007 /* MetaWorkflowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60007 /* MetaWorkflowController.swift */; };
+		A1B2C3D4E5F60008 /* TextToSpeechManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60008 /* TextToSpeechManager.swift */; };
+		A1B2C3D4E5F60009 /* GroqTTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60009 /* GroqTTSManager.swift */; };
+		A1B2C3D4E5F60010 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60010 /* Command.swift */; };
+		A1B2C3D4E5F60011 /* StatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60011 /* StatusView.swift */; };
+		A1B2C3D4E5F60012 /* CommandHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60012 /* CommandHistoryView.swift */; };
+		A1B2C3D4E5F60013 /* JarvisVoiceSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60013 /* JarvisVoiceSettings.plist */; };
+		A1B2C3D4E5F60014 /* MetaGlassesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60014 /* MetaGlassesManager.swift */; };
+		A1B2C3D4E5F60015 /* JarvisLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60015 /* JarvisLiveActivity.swift */; };
+		A1B2C3D4E5F60016 /* TTSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60016 /* TTSError.swift */; };
+		A1B2C3D4E5F60017 /* JarvisAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60017 /* JarvisAI.swift */; };
+		A1B2C3D4E5F60018 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60018 /* SettingsManager.swift */; };
+		A1B2C3D4E5F60019 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60019 /* SoundManager.swift */; };
+		A1B2C3D4E5F60020 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60020 /* SettingsView.swift */; };
+		A1B2C3D4E5F60021 /* ConversationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60021 /* ConversationHistoryView.swift */; };
+		A1B2C3D4E5F60022 /* JarvisIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60022 /* JarvisIntents.swift */; };
+		A1B2C3D4E5F60023 /* WidgetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60023 /* WidgetDataManager.swift */; };
+		A1B2C3D4E5F60024 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60024 /* WeatherManager.swift */; };
+		A1B2C3D4E5F60025 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60025 /* WatchSessionManager.swift */; };
+		A1B2C3D4E5F60026 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60026 /* HomeManager.swift */; };
+		A1B2C3D4E5F60027 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60027 /* MediaManager.swift */; };
+		A1B2C3D4E5F60028 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60028 /* EventManager.swift */; };
+		A1B2C3D4E5F60029 /* TimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60029 /* TimerManager.swift */; };
+		A1B2C3D4E5F60030 /* BriefingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60030 /* BriefingManager.swift */; };
+		A1B2C3D4E5F60031 /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60031 /* HealthManager.swift */; };
+		A1B2C3D4E5F60032 /* AppLauncherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60032 /* AppLauncherManager.swift */; };
+		A1B2C3D4E5F60033 /* BackgroundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60033 /* BackgroundManager.swift */; };
+		A1B2C3D4E5F60034 /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60034 /* OfflineManager.swift */; };
+		A1B2C3D4E5F60035 /* CommandReferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60035 /* CommandReferenceView.swift */; };
+		A1B2C3D4E5F60036 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60036 /* MemoryManager.swift */; };
+		A1B2C3D4E5F60037 /* ProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60037 /* ProtocolManager.swift */; };
+		A1B2C3D4E5F60038 /* SystemMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60038 /* SystemMonitor.swift */; };
+		A1B2C3D4E5F60039 /* JarvisMindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60039 /* JarvisMindView.swift */; };
+		A1B2C3D4E5F60040 /* GlassesStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60040 /* GlassesStatusView.swift */; };
+		A1B2C3D4E5F60041 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60041 /* HeaderView.swift */; };
+		A1B2C3D4E5F60042 /* JarvisResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60042 /* JarvisResponseView.swift */; };
+		A1B2C3D4E5F60043 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A60043 /* TranscriptionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1001 /* HeyJarvisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeyJarvisApp.swift; sourceTree = "<group>"; };
-		1002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		1003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1004 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
-		1005 /* WakeWordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakeWordDetector.swift; sourceTree = "<group>"; };
-		1006 /* CommandManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandManager.swift; sourceTree = "<group>"; };
-		1007 /* MetaWorkflowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaWorkflowController.swift; sourceTree = "<group>"; };
-		1008 /* TextToSpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechManager.swift; sourceTree = "<group>"; };
-		1009 /* GroqTTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroqTTSManager.swift; sourceTree = "<group>"; };
-		1010 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
-		1011 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
-		1012 /* CommandHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandHistoryView.swift; sourceTree = "<group>"; };
-		1013 /* JarvisVoiceSettings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JarvisVoiceSettings.plist; sourceTree = "<group>"; };
-		1014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1015 /* MetaGlassesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaGlassesManager.swift; sourceTree = "<group>"; };
-		1016 /* JarvisLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisLiveActivity.swift; sourceTree = "<group>"; };
-		1017 /* TTSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSError.swift; sourceTree = "<group>"; };
-		1018 /* JarvisAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisAI.swift; sourceTree = "<group>"; };
-		1019 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
-		1020 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		1021 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		1022 /* ConversationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHistoryView.swift; sourceTree = "<group>"; };
-		1023 /* JarvisIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisIntents.swift; sourceTree = "<group>"; };
-		1024 /* WidgetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataManager.swift; sourceTree = "<group>"; };
-		1025 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
-		1026 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WatchSessionManager.swift"; sourceTree = "<group>"; };
-		1027 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
-		1028 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
-		1029 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
-		1030 /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
-		1031 /* BriefingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefingManager.swift; sourceTree = "<group>"; };
-		1032 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
-		1033 /* AppLauncherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncherManager.swift; sourceTree = "<group>"; };
-		1034 /* BackgroundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundManager.swift; sourceTree = "<group>"; };
-		1035 /* OfflineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineManager.swift; sourceTree = "<group>"; };
-		1036 /* CommandReferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandReferenceView.swift; sourceTree = "<group>"; };
-		1037 /* MemoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryManager.swift; sourceTree = "<group>"; };
-		1038 /* ProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolManager.swift; sourceTree = "<group>"; };
-		1039 /* SystemMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitor.swift; sourceTree = "<group>"; };
-		1040 /* JarvisMindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisMindView.swift; sourceTree = "<group>"; };
-		1041 /* GlassesStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesStatusView.swift; sourceTree = "<group>"; };
-		1042 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		1043 /* JarvisResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisResponseView.swift; sourceTree = "<group>"; };
-		1044 /* TranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionView.swift; sourceTree = "<group>"; };
-		1045 /* TECHNICAL_OVERVIEW.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = TECHNICAL_OVERVIEW.md; sourceTree = "<group>"; };
-		2000 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1C2D3E4F5A60001 /* HeyJarvisApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeyJarvisApp.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1C2D3E4F5A60004 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60005 /* WakeWordDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WakeWordDetector.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60006 /* CommandManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60007 /* MetaWorkflowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaWorkflowController.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60008 /* TextToSpeechManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60009 /* GroqTTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroqTTSManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60010 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60011 /* StatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60012 /* CommandHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandHistoryView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60013 /* JarvisVoiceSettings.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JarvisVoiceSettings.plist; sourceTree = "<group>"; };
+		B1C2D3E4F5A60014 /* MetaGlassesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaGlassesManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60015 /* JarvisLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisLiveActivity.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60016 /* TTSError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSError.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60017 /* JarvisAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisAI.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60018 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60019 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60020 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60021 /* ConversationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHistoryView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60022 /* JarvisIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisIntents.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60023 /* WidgetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60024 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60025 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60026 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60027 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60028 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60029 /* TimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60030 /* BriefingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefingManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60031 /* HealthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60032 /* AppLauncherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncherManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60033 /* BackgroundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60034 /* OfflineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60035 /* CommandReferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandReferenceView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60036 /* MemoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60037 /* ProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolManager.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60038 /* SystemMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMonitor.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60039 /* JarvisMindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisMindView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60040 /* GlassesStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesStatusView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60041 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60042 /* JarvisResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JarvisResponseView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60043 /* TranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionView.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60050 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1D2E3F4A5B60001 /* HeyJarvisApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeyJarvisApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3000 /* Frameworks */ = {
+		D1E2F3A4B5C60001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -111,115 +111,115 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4000 = {
+		E1F2A3B4C5D60001 = {
 			isa = PBXGroup;
 			children = (
-				4001 /* HeyJarvisApp */,
-				4005 /* Products */,
+				E1F2A3B4C5D60002 /* HeyJarvisApp */,
+				E1F2A3B4C5D60003 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		4001 /* HeyJarvisApp */ = {
+		E1F2A3B4C5D60002 /* HeyJarvisApp */ = {
 			isa = PBXGroup;
 			children = (
-				1001 /* HeyJarvisApp.swift */,
-				1002 /* ContentView.swift */,
-				1004 /* AppViewModel.swift */,
-				1005 /* WakeWordDetector.swift */,
-				1006 /* CommandManager.swift */,
-				1007 /* MetaWorkflowController.swift */,
-				1008 /* TextToSpeechManager.swift */,
-				1009 /* GroqTTSManager.swift */,
-				1015 /* MetaGlassesManager.swift */,
-				1016 /* JarvisLiveActivity.swift */,
-				1018 /* JarvisAI.swift */,
-				1019 /* SettingsManager.swift */,
-				1020 /* SoundManager.swift */,
-				1023 /* JarvisIntents.swift */,
-				1024 /* WidgetDataManager.swift */,
-				1025 /* WeatherManager.swift */,
-				1026 /* WatchSessionManager.swift */,
-				1027 /* HomeManager.swift */,
-				1028 /* MediaManager.swift */,
-				1029 /* EventManager.swift */,
-				1030 /* TimerManager.swift */,
-				1031 /* BriefingManager.swift */,
-				1032 /* HealthManager.swift */,
-				1033 /* AppLauncherManager.swift */,
-				1034 /* BackgroundManager.swift */,
-				1035 /* OfflineManager.swift */,
-				1037 /* MemoryManager.swift */,
-				1038 /* ProtocolManager.swift */,
-				1039 /* SystemMonitor.swift */,
-				4002 /* Models */,
-				4003 /* Views */,
-				4004 /* Resources */,
-				1003 /* Assets.xcassets */,
-				1014 /* Info.plist */,
+				B1C2D3E4F5A60001 /* HeyJarvisApp.swift */,
+				B1C2D3E4F5A60002 /* ContentView.swift */,
+				B1C2D3E4F5A60004 /* AppViewModel.swift */,
+				B1C2D3E4F5A60005 /* WakeWordDetector.swift */,
+				B1C2D3E4F5A60006 /* CommandManager.swift */,
+				B1C2D3E4F5A60007 /* MetaWorkflowController.swift */,
+				B1C2D3E4F5A60008 /* TextToSpeechManager.swift */,
+				B1C2D3E4F5A60009 /* GroqTTSManager.swift */,
+				B1C2D3E4F5A60014 /* MetaGlassesManager.swift */,
+				B1C2D3E4F5A60015 /* JarvisLiveActivity.swift */,
+				B1C2D3E4F5A60017 /* JarvisAI.swift */,
+				B1C2D3E4F5A60018 /* SettingsManager.swift */,
+				B1C2D3E4F5A60019 /* SoundManager.swift */,
+				B1C2D3E4F5A60022 /* JarvisIntents.swift */,
+				B1C2D3E4F5A60023 /* WidgetDataManager.swift */,
+				B1C2D3E4F5A60024 /* WeatherManager.swift */,
+				B1C2D3E4F5A60025 /* WatchSessionManager.swift */,
+				B1C2D3E4F5A60026 /* HomeManager.swift */,
+				B1C2D3E4F5A60027 /* MediaManager.swift */,
+				B1C2D3E4F5A60028 /* EventManager.swift */,
+				B1C2D3E4F5A60029 /* TimerManager.swift */,
+				B1C2D3E4F5A60030 /* BriefingManager.swift */,
+				B1C2D3E4F5A60031 /* HealthManager.swift */,
+				B1C2D3E4F5A60032 /* AppLauncherManager.swift */,
+				B1C2D3E4F5A60033 /* BackgroundManager.swift */,
+				B1C2D3E4F5A60034 /* OfflineManager.swift */,
+				B1C2D3E4F5A60036 /* MemoryManager.swift */,
+				B1C2D3E4F5A60037 /* ProtocolManager.swift */,
+				B1C2D3E4F5A60038 /* SystemMonitor.swift */,
+				E1F2A3B4C5D60004 /* Models */,
+				E1F2A3B4C5D60005 /* Views */,
+				E1F2A3B4C5D60006 /* Resources */,
+				B1C2D3E4F5A60003 /* Assets.xcassets */,
+				B1C2D3E4F5A60050 /* Info.plist */,
 			);
 			path = HeyJarvisApp;
 			sourceTree = "<group>";
 		};
-		4002 /* Models */ = {
+		E1F2A3B4C5D60003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1010 /* Command.swift */,
-				1017 /* TTSError.swift */,
+				C1D2E3F4A5B60001 /* HeyJarvisApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E1F2A3B4C5D60004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B1C2D3E4F5A60010 /* Command.swift */,
+				B1C2D3E4F5A60016 /* TTSError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		4003 /* Views */ = {
+		E1F2A3B4C5D60005 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1011 /* StatusView.swift */,
-				1012 /* CommandHistoryView.swift */,
-				1021 /* SettingsView.swift */,
-				1022 /* ConversationHistoryView.swift */,
-				1036 /* CommandReferenceView.swift */,
-				1040 /* JarvisMindView.swift */,
-				4006 /* Components */,
+				B1C2D3E4F5A60011 /* StatusView.swift */,
+				B1C2D3E4F5A60012 /* CommandHistoryView.swift */,
+				B1C2D3E4F5A60020 /* SettingsView.swift */,
+				B1C2D3E4F5A60021 /* ConversationHistoryView.swift */,
+				B1C2D3E4F5A60035 /* CommandReferenceView.swift */,
+				B1C2D3E4F5A60039 /* JarvisMindView.swift */,
+				E1F2A3B4C5D60007 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		4006 /* Components */ = {
+		E1F2A3B4C5D60006 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1041 /* GlassesStatusView.swift */,
-				1042 /* HeaderView.swift */,
-				1043 /* JarvisResponseView.swift */,
-				1044 /* TranscriptionView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		4004 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				1013 /* JarvisVoiceSettings.plist */,
+				B1C2D3E4F5A60013 /* JarvisVoiceSettings.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		4005 /* Products */ = {
+		E1F2A3B4C5D60007 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				2000 /* HeyJarvisApp.app */,
+				B1C2D3E4F5A60040 /* GlassesStatusView.swift */,
+				B1C2D3E4F5A60041 /* HeaderView.swift */,
+				B1C2D3E4F5A60042 /* JarvisResponseView.swift */,
+				B1C2D3E4F5A60043 /* TranscriptionView.swift */,
 			);
-			name = Products;
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5000 /* HeyJarvisApp */ = {
+		F1A2B3C4D5E60001 /* HeyJarvisApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6002 /* Build configuration list for PBXNativeTarget "HeyJarvisApp" */;
+			buildConfigurationList = F1A2B3C4D5E60010 /* Build configuration list for PBXNativeTarget "HeyJarvisApp" */;
 			buildPhases = (
-				5001 /* Sources */,
-				3000 /* Frameworks */,
-				5002 /* Resources */,
+				F1A2B3C4D5E60002 /* Sources */,
+				D1E2F3A4B5C60001 /* Frameworks */,
+				F1A2B3C4D5E60003 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -227,25 +227,25 @@
 			);
 			name = HeyJarvisApp;
 			productName = HeyJarvisApp;
-			productReference = 2000 /* HeyJarvisApp.app */;
+			productReference = C1D2E3F4A5B60001 /* HeyJarvisApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		7000 /* Project object */ = {
+		A1B2C3D4E5F60100 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					5000 = {
+					F1A2B3C4D5E60001 = {
 						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
-			buildConfigurationList = 6001 /* Build configuration list for PBXProject "HeyJarvisApp" */;
+			buildConfigurationList = A1B2C3D4E5F60101 /* Build configuration list for PBXProject "HeyJarvisApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -253,81 +253,81 @@
 				en,
 				Base,
 			);
-			mainGroup = 4000;
-			productRefGroup = 4005 /* Products */;
+			mainGroup = E1F2A3B4C5D60001;
+			productRefGroup = E1F2A3B4C5D60003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5000 /* HeyJarvisApp */,
+				F1A2B3C4D5E60001 /* HeyJarvisApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		5002 /* Resources */ = {
+		F1A2B3C4D5E60003 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0003 /* Assets.xcassets in Resources */,
-				0013 /* JarvisVoiceSettings.plist in Resources */,
+				A1B2C3D4E5F60003 /* Assets.xcassets in Resources */,
+				A1B2C3D4E5F60013 /* JarvisVoiceSettings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		5001 /* Sources */ = {
+		F1A2B3C4D5E60002 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0001 /* HeyJarvisApp.swift in Sources */,
-				0002 /* ContentView.swift in Sources */,
-				0004 /* AppViewModel.swift in Sources */,
-				0005 /* WakeWordDetector.swift in Sources */,
-				0006 /* CommandManager.swift in Sources */,
-				0007 /* MetaWorkflowController.swift in Sources */,
-				0008 /* TextToSpeechManager.swift in Sources */,
-				0009 /* GroqTTSManager.swift in Sources */,
-				0010 /* Command.swift in Sources */,
-				0011 /* StatusView.swift in Sources */,
-				0012 /* CommandHistoryView.swift in Sources */,
-				0014 /* MetaGlassesManager.swift in Sources */,
-				0015 /* JarvisLiveActivity.swift in Sources */,
-				0016 /* TTSError.swift in Sources */,
-				0017 /* JarvisAI.swift in Sources */,
-				0018 /* SettingsManager.swift in Sources */,
-				0019 /* SoundManager.swift in Sources */,
-				0020 /* SettingsView.swift in Sources */,
-				0021 /* ConversationHistoryView.swift in Sources */,
-				0022 /* JarvisIntents.swift in Sources */,
-				0023 /* WidgetDataManager.swift in Sources */,
-				0024 /* WeatherManager.swift in Sources */,
-				0025 /* WatchSessionManager.swift in Sources */,
-				0026 /* HomeManager.swift in Sources */,
-				0027 /* MediaManager.swift in Sources */,
-				0028 /* EventManager.swift in Sources */,
-				0029 /* TimerManager.swift in Sources */,
-				0030 /* BriefingManager.swift in Sources */,
-				0031 /* HealthManager.swift in Sources */,
-				0032 /* AppLauncherManager.swift in Sources */,
-				0033 /* BackgroundManager.swift in Sources */,
-				0034 /* OfflineManager.swift in Sources */,
-				0035 /* CommandReferenceView.swift in Sources */,
-				0036 /* MemoryManager.swift in Sources */,
-				0037 /* ProtocolManager.swift in Sources */,
-				0038 /* SystemMonitor.swift in Sources */,
-				0039 /* JarvisMindView.swift in Sources */,
-				0040 /* GlassesStatusView.swift in Sources */,
-				0041 /* HeaderView.swift in Sources */,
-				0042 /* JarvisResponseView.swift in Sources */,
-				0043 /* TranscriptionView.swift in Sources */,
+				A1B2C3D4E5F60001 /* HeyJarvisApp.swift in Sources */,
+				A1B2C3D4E5F60002 /* ContentView.swift in Sources */,
+				A1B2C3D4E5F60004 /* AppViewModel.swift in Sources */,
+				A1B2C3D4E5F60005 /* WakeWordDetector.swift in Sources */,
+				A1B2C3D4E5F60006 /* CommandManager.swift in Sources */,
+				A1B2C3D4E5F60007 /* MetaWorkflowController.swift in Sources */,
+				A1B2C3D4E5F60008 /* TextToSpeechManager.swift in Sources */,
+				A1B2C3D4E5F60009 /* GroqTTSManager.swift in Sources */,
+				A1B2C3D4E5F60010 /* Command.swift in Sources */,
+				A1B2C3D4E5F60011 /* StatusView.swift in Sources */,
+				A1B2C3D4E5F60012 /* CommandHistoryView.swift in Sources */,
+				A1B2C3D4E5F60014 /* MetaGlassesManager.swift in Sources */,
+				A1B2C3D4E5F60015 /* JarvisLiveActivity.swift in Sources */,
+				A1B2C3D4E5F60016 /* TTSError.swift in Sources */,
+				A1B2C3D4E5F60017 /* JarvisAI.swift in Sources */,
+				A1B2C3D4E5F60018 /* SettingsManager.swift in Sources */,
+				A1B2C3D4E5F60019 /* SoundManager.swift in Sources */,
+				A1B2C3D4E5F60020 /* SettingsView.swift in Sources */,
+				A1B2C3D4E5F60021 /* ConversationHistoryView.swift in Sources */,
+				A1B2C3D4E5F60022 /* JarvisIntents.swift in Sources */,
+				A1B2C3D4E5F60023 /* WidgetDataManager.swift in Sources */,
+				A1B2C3D4E5F60024 /* WeatherManager.swift in Sources */,
+				A1B2C3D4E5F60025 /* WatchSessionManager.swift in Sources */,
+				A1B2C3D4E5F60026 /* HomeManager.swift in Sources */,
+				A1B2C3D4E5F60027 /* MediaManager.swift in Sources */,
+				A1B2C3D4E5F60028 /* EventManager.swift in Sources */,
+				A1B2C3D4E5F60029 /* TimerManager.swift in Sources */,
+				A1B2C3D4E5F60030 /* BriefingManager.swift in Sources */,
+				A1B2C3D4E5F60031 /* HealthManager.swift in Sources */,
+				A1B2C3D4E5F60032 /* AppLauncherManager.swift in Sources */,
+				A1B2C3D4E5F60033 /* BackgroundManager.swift in Sources */,
+				A1B2C3D4E5F60034 /* OfflineManager.swift in Sources */,
+				A1B2C3D4E5F60035 /* CommandReferenceView.swift in Sources */,
+				A1B2C3D4E5F60036 /* MemoryManager.swift in Sources */,
+				A1B2C3D4E5F60037 /* ProtocolManager.swift in Sources */,
+				A1B2C3D4E5F60038 /* SystemMonitor.swift in Sources */,
+				A1B2C3D4E5F60039 /* JarvisMindView.swift in Sources */,
+				A1B2C3D4E5F60040 /* GlassesStatusView.swift in Sources */,
+				A1B2C3D4E5F60041 /* HeaderView.swift in Sources */,
+				A1B2C3D4E5F60042 /* JarvisResponseView.swift in Sources */,
+				A1B2C3D4E5F60043 /* TranscriptionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		8001 /* Debug */ = {
+		A1B2C3D4E5F60200 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -390,7 +390,7 @@
 			};
 			name = Debug;
 		};
-		8002 /* Release */ = {
+		A1B2C3D4E5F60201 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -446,7 +446,7 @@
 			};
 			name = Release;
 		};
-		8003 /* Debug */ = {
+		A1B2C3D4E5F60202 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -467,7 +467,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.6.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AI.Jarvis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -476,7 +476,7 @@
 			};
 			name = Debug;
 		};
-		8004 /* Release */ = {
+		A1B2C3D4E5F60203 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -497,7 +497,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.6.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AI.Jarvis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -509,25 +509,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6001 /* Build configuration list for PBXProject "HeyJarvisApp" */ = {
+		A1B2C3D4E5F60101 /* Build configuration list for PBXProject "HeyJarvisApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8001 /* Debug */,
-				8002 /* Release */,
+				A1B2C3D4E5F60200 /* Debug */,
+				A1B2C3D4E5F60201 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6002 /* Build configuration list for PBXNativeTarget "HeyJarvisApp" */ = {
+		F1A2B3C4D5E60010 /* Build configuration list for PBXNativeTarget "HeyJarvisApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8003 /* Debug */,
-				8004 /* Release */,
+				A1B2C3D4E5F60202 /* Debug */,
+				A1B2C3D4E5F60203 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 7000 /* Project object */;
+	rootObject = A1B2C3D4E5F60100 /* Project object */;
 }
