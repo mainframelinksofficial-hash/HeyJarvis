@@ -138,6 +138,8 @@ struct SettingsView: View {
                                         Text("Light").tag(HapticIntensity.light)
                                         Text("Medium").tag(HapticIntensity.medium)
                                         Text("Strong").tag(HapticIntensity.strong)
+                                    }
+                                    .pickerStyle(.segmented)
                                 }
                             }
                         }
