@@ -18,6 +18,7 @@ jobs:
 
       - name: Build IPA
         run: |
+          set -o pipefail
           xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
