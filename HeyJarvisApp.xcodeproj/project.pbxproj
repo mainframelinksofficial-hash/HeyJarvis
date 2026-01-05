@@ -41,14 +41,15 @@
 		0033 /* BackgroundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1034 /* BackgroundManager.swift */; };
 		0034 /* OfflineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1035 /* OfflineManager.swift */; };
 		0035 /* CommandReferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1036 /* CommandReferenceView.swift */; };
-		0036 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1037 /* MemoryManager.swift */; };
-		0037 /* ProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1038 /* ProtocolManager.swift */; };
-		0038 /* SystemMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1039 /* SystemMonitor.swift */; };
-		0039 /* JarvisMindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1040 /* JarvisMindView.swift */; };
-		0040 /* GlassesStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1041 /* GlassesStatusView.swift */; };
-		0041 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1042 /* HeaderView.swift */; };
-		0042 /* JarvisResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1043 /* JarvisResponseView.swift */; };
-		0043 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1044 /* TranscriptionView.swift */; };
+/********** EXECUTED IN Sources BUILD PHASE **********/
+		E2A00036 /* MemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11037 /* MemoryManager.swift */; };
+		E2A00037 /* ProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11038 /* ProtocolManager.swift */; };
+		E2A00038 /* SystemMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11039 /* SystemMonitor.swift */; };
+		E2A00039 /* JarvisMindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11040 /* JarvisMindView.swift */; };
+		E2A00040 /* GlassesStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11041 /* GlassesStatusView.swift */; };
+		E2A00041 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11042 /* HeaderView.swift */; };
+		E2A00042 /* JarvisResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11043 /* JarvisResponseView.swift */; };
+		E2A00043 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A11044 /* TranscriptionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -148,10 +149,9 @@
 				1033 /* AppLauncherManager.swift */,
 				1034 /* BackgroundManager.swift */,
 				1035 /* OfflineManager.swift */,
-				1037 /* MemoryManager.swift */,
-				1038 /* ProtocolManager.swift */,
-				1039 /* SystemMonitor.swift */,
-				1045 /* TECHNICAL_OVERVIEW.md */,
+				E2A11037 /* MemoryManager.swift */,
+				E2A11038 /* ProtocolManager.swift */,
+				E2A11039 /* SystemMonitor.swift */,
 				4002 /* Models */,
 				4003 /* Views */,
 				4004 /* Resources */,
@@ -178,21 +178,13 @@
 				1021 /* SettingsView.swift */,
 				1022 /* ConversationHistoryView.swift */,
 				1036 /* CommandReferenceView.swift */,
-				1040 /* JarvisMindView.swift */,
-				4006 /* Components */,
+				E2A11040 /* JarvisMindView.swift */,
+				E2A11041 /* GlassesStatusView.swift */,
+				E2A11042 /* HeaderView.swift */,
+				E2A11043 /* JarvisResponseView.swift */,
+				E2A11044 /* TranscriptionView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		4006 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				1041 /* GlassesStatusView.swift */,
-				1042 /* HeaderView.swift */,
-				1043 /* JarvisResponseView.swift */,
-				1044 /* TranscriptionView.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		4004 /* Resources */ = {
@@ -314,14 +306,14 @@
 				0033 /* BackgroundManager.swift in Sources */,
 				0034 /* OfflineManager.swift in Sources */,
 				0035 /* CommandReferenceView.swift in Sources */,
-				0036 /* MemoryManager.swift in Sources */,
-				0037 /* ProtocolManager.swift in Sources */,
-				0038 /* SystemMonitor.swift in Sources */,
-				0039 /* JarvisMindView.swift in Sources */,
-				0040 /* GlassesStatusView.swift in Sources */,
-				0041 /* HeaderView.swift in Sources */,
-				0042 /* JarvisResponseView.swift in Sources */,
-				0043 /* TranscriptionView.swift in Sources */,
+				E2A0036 /* MemoryManager.swift in Sources */,
+				E2A0037 /* ProtocolManager.swift in Sources */,
+				E2A0038 /* SystemMonitor.swift in Sources */,
+				E2A0039 /* JarvisMindView.swift in Sources */,
+				E2A0040 /* GlassesStatusView.swift in Sources */,
+				E2A0041 /* HeaderView.swift in Sources */,
+				E2A0042 /* JarvisResponseView.swift in Sources */,
+				E2A0043 /* TranscriptionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
