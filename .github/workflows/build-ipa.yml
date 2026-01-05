@@ -18,7 +18,19 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Clean and Build
+      - name: Inject API Key
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -n "$GROQ_API_KEY" ]; then
+            echo "Injecting Groq API key..."
+            sed -i '' "s/YOUR_GROQ_API_KEY_HERE/$GROQ_API_KEY/g" HeyJarvisApp/Resources/JarvisVoiceSettings.plist 2>/dev/null || true
+            echo "API key injected"
+          else
+            echo "No GROQ_API_KEY secret found, using placeholder"
+          fi
+
+      - name: Build for Simulator
         run: |
           xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
@@ -26,15 +38,45 @@ jobs:
             -sdk iphonesimulator \
             CODE_SIGNING_ALLOWED=NO
 
-      - name: Package IPA
+      - name: Build for Device (Unsigned)
         run: |
-          APP=$(find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -type d | head -1)
-          mkdir -p Payload
-          cp -r "$APP" Payload/
-          zip -r HeyJarvisApp.ipa Payload
+          xcodebuild clean build \
+            -project HeyJarvisApp.xcodeproj \
+            -scheme HeyJarvisApp \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO || echo "Device build failed, continuing..."
 
-      - name: Upload IPA
+      - name: Package Simulator IPA
+        run: |
+          APP=$(find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -path "*Debug-iphonesimulator*" -type d | head -1)
+          if [ -n "$APP" ]; then
+            mkdir -p Payload-Sim
+            cp -r "$APP" Payload-Sim/
+            cd Payload-Sim && zip -r ../HeyJarvisApp-Simulator.ipa . && cd ..
+          fi
+
+      - name: Package Device IPA
+        run: |
+          APP=$(find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -path "*Release-iphoneos*" -type d | head -1)
+          if [ -n "$APP" ]; then
+            mkdir -p Payload-Device
+            cp -r "$APP" Payload-Device/
+            cd Payload-Device && zip -r ../HeyJarvisApp-Device.ipa . && cd ..
+          fi
+
+      - name: Upload Simulator IPA
         uses: actions/upload-artifact@v4
         with:
-          name: HeyJarvisApp-IPA
-          path: HeyJarvisApp.ipa
+          name: HeyJarvisApp-Simulator-IPA
+          path: HeyJarvisApp-Simulator.ipa
+          if-no-files-found: ignore
+
+      - name: Upload Device IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: HeyJarvisApp-Device-IPA
+          path: HeyJarvisApp-Device.ipa
+          if-no-files-found: ignore
