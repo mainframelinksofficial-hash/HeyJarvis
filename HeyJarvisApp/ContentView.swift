@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  HeyJarvisApp
 //
-//  Main UI with Stark Industries theme
+//  Main UI with Stark Industries theme and Meta glasses integration
 //
 
 import SwiftUI
@@ -10,8 +10,10 @@ import AVKit
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: AppViewModel
+    @StateObject private var glassesManager = MetaGlassesManager.shared
     @State private var showVideoPlayer = false
     @State private var playerItem: AVPlayerItem?
+    @State private var showConversationHistory = false
     
     var body: some View {
         ZStack {
@@ -22,20 +24,33 @@ struct ContentView: View {
             )
             .ignoresSafeArea()
             
+            
             VStack(spacing: 0) {
-                headerView
+                HeaderView(
+                    showHistory: $showConversationHistory,
+                    showSettings: $viewModel.showSettings
+                )
+                
+                GlassesStatusView(
+                    glassesManager: glassesManager,
+                    isBackgroundModeEnabled: viewModel.isBackgroundModeEnabled
+                )
                 
                 Spacer()
                 
-                StatusView(state: viewModel.appState)
-                    .padding(.vertical, 40)
+                // The Mind (Dynamic Core)
+                JarvisMindView()
+                    .frame(height: 250)
+                    .padding(.vertical, 20)
                 
-                transcriptionView
+                TranscriptionView(text: viewModel.lastTranscription)
+                
+                JarvisResponseView(responseText: viewModel.jarvisResponse)
                 
                 Spacer()
                 
                 CommandHistoryView(commands: viewModel.commandHistory)
-                    .frame(maxHeight: 250)
+                    .frame(maxHeight: 180)
                 
                 controlButtons
                     .padding(.bottom, 30)
@@ -45,6 +60,10 @@ struct ContentView: View {
         .preferredColorScheme(.dark)
         .sheet(isPresented: $viewModel.showSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: $showConversationHistory) {
+            ConversationHistoryView()
+                .environmentObject(viewModel)
         }
         .sheet(isPresented: $showVideoPlayer) {
             if let playerItem = playerItem {
@@ -66,52 +85,10 @@ struct ContentView: View {
         }
     }
     
-    private var headerView: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("HEY JARVIS")
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                
-                Text("Meta Glasses Companion")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color("dimText"))
-            }
-            
-            Spacer()
-            
-            Button {
-                viewModel.showSettings = true
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 22))
-                    .foregroundColor(Color("jarvisBlue"))
-            }
-        }
-        .padding(.top, 20)
-    }
-    
-    private var transcriptionView: some View {
-        VStack(spacing: 8) {
-            if !viewModel.lastTranscription.isEmpty {
-                Text("Heard:")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color("dimText"))
-                
-                Text(viewModel.lastTranscription)
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(.white.opacity(0.8))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .padding(.horizontal, 20)
-            }
-        }
-        .frame(height: 60)
-    }
-    
     private var controlButtons: some View {
         HStack(spacing: 20) {
             Button {
+                SoundManager.shared.playImpact() // Heavier sound for main action
                 if viewModel.appState == .idle {
                     viewModel.startListening()
                 } else {
@@ -136,9 +113,13 @@ struct ContentView: View {
                 .cornerRadius(25)
                 .shadow(color: Color("jarvisBlue").opacity(0.4), radius: 10, x: 0, y: 5)
             }
+            .simultaneousGesture(TapGesture().onEnded {
+               // Fallback if action handler doesn't trigger immediately
+            })
             
             if !viewModel.commandHistory.isEmpty {
                 Button {
+                    SoundManager.shared.playClick()
                     viewModel.clearHistory()
                 } label: {
                     Image(systemName: "trash.fill")
@@ -152,80 +133,7 @@ struct ContentView: View {
         }
     }
 }
-
-struct SettingsView: View {
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                Color("primaryDark").ignoresSafeArea()
-                
-                VStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("OpenAI API Key")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color("dimText"))
-                        
-                        Text("Configure your API key in JarvisVoiceSettings.plist")
-                            .font(.system(size: 13))
-                            .foregroundColor(.white.opacity(0.6))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color("accentDark"))
-                    .cornerRadius(12)
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Voice Commands")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Color("dimText"))
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            commandRow(icon: "camera.fill", command: "\"Take a photo\"")
-                            commandRow(icon: "play.rectangle.fill", command: "\"Show last video\"")
-                            commandRow(icon: "mic.fill", command: "\"Record note\"")
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                    .background(Color("accentDark"))
-                    .cornerRadius(12)
-                    
-                    Spacer()
-                    
-                    Text("Hey Jarvis v1.0")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color("dimText"))
-                }
-                .padding()
-            }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .foregroundColor(Color("jarvisBlue"))
-                }
-            }
-        }
-    }
-    
-    private func commandRow(icon: String, command: String) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 14))
-                .foregroundColor(Color("jarvisBlue"))
-                .frame(width: 24)
-            
-            Text(command)
-                .font(.system(size: 14))
-                .foregroundColor(.white.opacity(0.8))
-        }
-    }
-}
+// SettingsView moved to Views/SettingsView.swift
 
 struct VideoPlayerView: View {
     let playerItem: AVPlayerItem
@@ -245,6 +153,7 @@ struct VideoPlayerView: View {
                 HStack {
                     Spacer()
                     Button {
+                        SoundManager.shared.playClick()
                         player?.pause()
                         dismiss()
                     } label: {

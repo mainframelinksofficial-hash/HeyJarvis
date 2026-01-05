@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5000"
+               BlueprintIdentifier = "F1A2B3C4D5E60001"
                BuildableName = "HeyJarvisApp.app"
                BlueprintName = "HeyJarvisApp"
                ReferencedContainer = "container:HeyJarvisApp.xcodeproj">
@@ -43,7 +43,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5000"
+            BlueprintIdentifier = "F1A2B3C4D5E60001"
             BuildableName = "HeyJarvisApp.app"
             BlueprintName = "HeyJarvisApp"
             ReferencedContainer = "container:HeyJarvisApp.xcodeproj">
@@ -60,7 +60,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5000"
+            BlueprintIdentifier = "F1A2B3C4D5E60001"
             BuildableName = "HeyJarvisApp.app"
             BlueprintName = "HeyJarvisApp"
             ReferencedContainer = "container:HeyJarvisApp.xcodeproj">

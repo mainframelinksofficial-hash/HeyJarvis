@@ -2,24 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- OpenAI API Configuration -->
-    <key>OpenAIAPIKey</key>
-    <string>sk-your-key-here</string>
-    
-    <!-- Voice Settings -->
-    <key>VoiceModel</key>
-    <string>gpt-4o-mini-tts</string>
-    <key>VoiceName</key>
-    <string>onyx</string>
-    <key>ResponseFormat</key>
-    <string>mp3</string>
-    
-    <!-- Fallback Settings -->
-    <key>FallbackVoiceLanguage</key>
-    <string>en-GB</string>
-    <key>FallbackSpeechRate</key>
-    <real>0.9</real>
-    <key>FallbackPitchMultiplier</key>
-    <real>0.85</real>
+    <key>GroqAPIKey</key>
+    <string>YOUR_GROQ_API_KEY_HERE</string>
+    <key>TTSModel</key>
+    <string>canopylabs/orpheus-v1-english</string>
+    <key>TTSVoice</key>
+    <string>daniel</string>
+    <key>SpeechRate</key>
+    <real>1.0</real>
 </dict>
 </plist>

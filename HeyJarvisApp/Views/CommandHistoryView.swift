@@ -2,7 +2,8 @@
 //  CommandHistoryView.swift
 //  HeyJarvisApp
 //
-//  Scrollable command history list
+//  "Mission Log"
+//  A terminal-style stream of historical system actions.
 //
 
 import SwiftUI
@@ -11,90 +12,152 @@ struct CommandHistoryView: View {
     let commands: [Command]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if !commands.isEmpty {
-                Text("Command History")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color("dimText"))
-                    .padding(.horizontal, 4)
+        ZStack {
+            // Background Grid (subtle tech texture)
+            VStack(spacing: 0) {
+                ForEach(0..<20) { _ in
+                    Divider().background(Color("jarvisBlue").opacity(0.1))
+                    Spacer()
+                }
             }
+            .opacity(0.3)
             
-            ScrollView {
-                LazyVStack(spacing: 10) {
-                    ForEach(commands) { command in
-                        CommandRow(command: command)
+            VStack(alignment: .leading, spacing: 0) {
+                // Header
+                HStack {
+                    Image(systemName: "terminal.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color("jarvisBlue"))
+                    
+                    Text("MISSION LOG // DATA STREAM")
+                        .font(.custom("Courier", size: 14))
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("jarvisBlue"))
+                        .tracking(1)
+                    
+                    Spacer()
+                    
+                    if !commands.isEmpty {
+                        Text("REC: \(commands.count)")
+                            .font(.custom("Courier", size: 12))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color("jarvisBlue").opacity(0.3))
+                            .cornerRadius(4)
+                    }
+                }
+                .padding()
+                .background(Color.black.opacity(0.5))
+                
+                Divider().background(Color("jarvisBlue"))
+                
+                if commands.isEmpty {
+                    emptyState
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 0) {
+                            ForEach(commands.reversed()) { command in
+                                MissionLogEntry(command: command)
+                                Divider().background(Color.white.opacity(0.1))
+                            }
+                        }
                     }
                 }
             }
-            .scrollIndicators(.hidden)
         }
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.black.opacity(0.6))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color("jarvisBlue").opacity(0.5), lineWidth: 1)
+                )
+        )
+        .padding()
+    }
+    
+    private var emptyState: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "cursorarrow.rays")
+                .font(.system(size: 40))
+                .foregroundColor(Color("jarvisBlue").opacity(0.5))
+            
+            Text("DATA STREAM EMPTY")
+                .font(.custom("Courier", size: 16))
+                .foregroundColor(Color("dimText"))
+                .tracking(2)
+            
+            Text("Awaiting input...")
+                .font(.custom("Courier", size: 12))
+                .foregroundColor(Color("dimText").opacity(0.7))
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
-struct CommandRow: View {
+struct MissionLogEntry: View {
     let command: Command
     
-    private var statusColor: Color {
-        switch command.status {
-        case .pending:
-            return Color("jarvisBlue")
-        case .success:
-            return Color("successGreen")
-        case .failed:
-            return Color.red
-        }
-    }
-    
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: command.type.icon)
-                .font(.system(size: 16))
+        HStack(alignment: .top, spacing: 12) {
+            // Timestamp column
+            Text(command.formattedTime)
+                .font(.custom("Courier", size: 11))
                 .foregroundColor(Color("jarvisBlue"))
-                .frame(width: 36, height: 36)
-                .background(Color("jarvisBlue").opacity(0.15))
-                .cornerRadius(10)
+                .frame(width: 50, alignment: .leading)
+                .padding(.top, 2)
             
+            // Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(command.text.capitalized)
-                    .font(.system(size: 14, weight: .medium))
+                Text(command.text.uppercased())
+                    .font(.custom("Courier", size: 14))
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .lineLimit(1)
+                    .lineLimit(2)
                 
-                HStack(spacing: 6) {
-                    Text(command.type.rawValue)
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(Color("dimText"))
-                    
-                    Text("•")
-                        .foregroundColor(Color("dimText"))
-                    
-                    Text(command.formattedTime)
-                        .font(.system(size: 11))
-                        .foregroundColor(Color("dimText"))
+                HStack {
+                    Text("TYPE: \(command.type.displayName.uppercased())")
+                    Spacer()
+                    Text(command.status.rawValue.uppercased())
+                        .foregroundColor(statusColor)
                 }
+                .font(.custom("Courier", size: 10))
+                .foregroundColor(.gray)
             }
             
             Spacer()
             
-            Image(systemName: command.status.icon)
-                .font(.system(size: 16))
-                .foregroundColor(statusColor)
+            // Status Indicator
+            Circle()
+                .fill(statusColor)
+                .frame(width: 6, height: 6)
+                .shadow(color: statusColor, radius: 4)
+                .padding(.top, 6)
         }
-        .padding(12)
-        .background(Color("accentDark"))
-        .cornerRadius(12)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color.white.opacity(0.02))
+    }
+    
+    private var statusColor: Color {
+        switch command.status {
+        case .success: return .green
+        case .failed: return .red
+        case .pending: return .orange
+        }
     }
 }
 
 #Preview {
     ZStack {
-        Color("primaryDark").ignoresSafeArea()
-        
+        Color.black.ignoresSafeArea()
         CommandHistoryView(commands: [
-            Command(text: "Take a photo", type: .takePhoto, status: .success),
-            Command(text: "Show last video", type: .showVideo, status: .pending),
-            Command(text: "Record note", type: .recordNote, status: .failed)
+            Command(text: "Initiate Party Mode", type: .executeProtocol, status: .success),
+            Command(text: "What time is it?", type: .getTime, status: .success),
+            Command(text: "Set phasers to stun", type: .unknown, status: .failed)
         ])
-        .padding()
     }
 }

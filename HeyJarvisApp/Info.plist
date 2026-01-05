@@ -17,21 +17,13 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>3.8.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
-    <key>UIApplicationSceneManifest</key>
-    <dict>
-        <key>UIApplicationSupportsMultipleScenes</key>
-        <false/>
-    </dict>
-    <key>UILaunchScreen</key>
-    <dict>
-        <key>UIColorName</key>
-        <string>primaryDark</string>
-    </dict>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
         <string>armv7</string>
@@ -43,26 +35,68 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    <key>UISupportedInterfaceOrientations~ipad</key>
+    <key>UIBackgroundModes</key>
     <array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationPortraitUpsideDown</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
+        <string>audio</string>
+        <string>bluetooth-central</string>
+        <string>fetch</string>
+        <string>processing</string>
     </array>
-    <key>UIUserInterfaceStyle</key>
-    <string>Dark</string>
-    
-    <!-- Privacy Permissions -->
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.AI.Jarvis.refresh</string>
+    </array>
+    <key>NSSupportsLiveActivities</key>
+    <true/>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Hey Jarvis needs microphone access to listen for wake words and voice commands.</string>
+    <string>Hey Jarvis needs microphone access to listen for your voice commands and the "Hey Jarvis" wake word, even when running in the background.</string>
     <key>NSSpeechRecognitionUsageDescription</key>
-    <string>Hey Jarvis uses speech recognition to understand your voice commands.</string>
+    <string>Hey Jarvis uses speech recognition to understand your voice commands and respond like JARVIS from Iron Man.</string>
     <key>NSCameraUsageDescription</key>
-    <string>Hey Jarvis needs camera access to take photos when you say "take a photo".</string>
+    <string>Hey Jarvis needs camera access to take photos when you say "Take a photo" command.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Hey Jarvis saves photos you take to your photo library.</string>
+    <string>Hey Jarvis saves captured photos to your photo library.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Hey Jarvis needs access to your photo library to show recent videos.</string>
+    <string>Hey Jarvis accesses your photo library to show your last video when you say "Show last video".</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Hey Jarvis connects to your Ray-Ban Meta glasses via Bluetooth to provide voice assistant features.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Hey Jarvis connects to your Ray-Ban Meta glasses via Bluetooth.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Hey Jarvis needs your location to provide accurate local weather reports when you ask.</string>
+    <key>NSHomeKitUsageDescription</key>
+    <string>Hey Jarvis accesses your HomeKit accessories to let you control lights and devices with your voice.</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Hey Jarvis requires access to your media library to play music commands.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Hey Jarvis accesses your calendar to read your events and schedule.</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>Hey Jarvis accesses your reminders to manage your to-do lists.</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>Hey Jarvis reads your health data to report fitness stats like steps and heart rate.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>spotify</string>
+        <string>uber</string>
+        <string>lyft</string>
+        <string>maps</string>
+        <string>waze</string>
+        <string>comgooglemaps</string>
+        <string>whatsapp</string>
+        <string>tg</string>
+        <string>youtube</string>
+        <string>netflix</string>
+        <string>twitter</string>
+        <string>instagram</string>
+        <string>fb</string>
+        <string>discord</string>
+        <string>slack</string>
+        <string>nikerunclub</string>
+        <string>fitness</string>
+        <string>x-apple-health</string>
+        <string>strava</string>
+        <string>pelotoncycle</string>
+        <string>myfitnesspal</string>
+    </array>
 </dict>
 </plist>
