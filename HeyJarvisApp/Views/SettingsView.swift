@@ -11,6 +11,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var settings = SettingsManager.shared
     @StateObject private var glassesManager = MetaGlassesManager.shared
+    @State private var showCommandReference = false
     
     var body: some View {
         NavigationView {
@@ -139,6 +140,44 @@ struct SettingsView: View {
                                         Text("Strong").tag(HapticIntensity.strong)
                                     }
                                     .pickerStyle(.segmented)
+                                }
+                            }
+                            }
+                        }
+                        
+                        // Help & Support
+                        SettingsSection(title: "Help & Support", icon: "questionmark.circle.fill") {
+                            VStack(spacing: 16) {
+                                Button {
+                                    showCommandReference = true
+                                } label: {
+                                    HStack {
+                                        Text("View Available Commands")
+                                            .foregroundColor(.white)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(Color("dimText"))
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Help & Support
+                        SettingsSection(title: "Help & Support", icon: "questionmark.circle.fill") {
+                            VStack(spacing: 16) {
+                                Button {
+                                    showCommandReference = true
+                                } label: {
+                                    HStack {
+                                        Text("View Available Commands")
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 14, weight: .medium))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(Color("dimText"))
+                                    }
                                 }
                             }
                         }
@@ -297,6 +336,9 @@ struct SettingsView: View {
             .toolbarBackground(.visible, for: .navigationBar)
         }
         .preferredColorScheme(.dark)
+        .fullScreenCover(isPresented: $showCommandReference) {
+            CommandReferenceView()
+        }
     }
 }
 
