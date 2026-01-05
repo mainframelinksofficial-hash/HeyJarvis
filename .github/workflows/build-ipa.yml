@@ -54,12 +54,16 @@ jobs:
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
             -archivePath build/HeyJarvisApp.xcarchive \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGN_IDENTITY="" \
+            -sdk iphoneos \
+            -arch arm64 \
+            CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
             DEVELOPMENT_TEAM="" \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
+            2>&1 | tee archive.log || (cat archive.log && exit 1)
 
       - name: Create Unsigned IPA
         run: |
