@@ -74,7 +74,7 @@ struct JarvisMindView: View {
     
     private var coreColor: Color {
         switch viewModel.appState {
-        case .listening: return Color("neonGreen") // Listening active
+        case .listening, .wakeDetected: return Color("neonGreen") // Listening active
         case .processing: return Color.purple // Processing thought
         case .speaking: return Color("jarvisBlue") // Speaking
         case .idle: return Color("jarvisBlue").opacity(0.8) // Standby
@@ -83,7 +83,7 @@ struct JarvisMindView: View {
     
     private var iconName: String {
         switch viewModel.appState {
-        case .listening: return "mic.fill"
+        case .listening, .wakeDetected: return "mic.fill"
         case .processing: return "cpu"
         case .speaking: return "waveform"
         case .idle: return "power"
@@ -106,7 +106,7 @@ struct JarvisMindView: View {
     
     private func updateAnimations(for state: AppState) {
         switch state {
-        case .listening:
+        case .listening, .wakeDetected:
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                 isListening = true
             }
