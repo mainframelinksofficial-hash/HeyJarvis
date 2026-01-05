@@ -44,45 +44,21 @@ jobs:
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
             -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
-            2>&1 | tee build.log || (cat build.log && exit 1)
+            IPHONEOS_DEPLOYMENT_TARGET=17.0
 
-      - name: Build Archive
-        run: |
-          xcodebuild archive \
-            -project HeyJarvisApp.xcodeproj \
-            -scheme HeyJarvisApp \
-            -archivePath build/HeyJarvisApp.xcarchive \
-            -sdk iphoneos \
-            -arch arm64 \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES \
-            DEVELOPMENT_TEAM="" \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
-            2>&1 | tee archive.log || (cat archive.log && exit 1)
-
-      - name: Create Unsigned IPA
+      - name: Create Simulator App Bundle
         run: |
           mkdir -p build/Payload
-          cp -r build/HeyJarvisApp.xcarchive/Products/Applications/HeyJarvisApp.app build/Payload/
+          cp -r build/DerivedData/Build/Products/Debug-iphonesimulator/HeyJarvisApp.app build/Payload/
           cd build
-          zip -r HeyJarvisApp-unsigned.ipa Payload
+          zip -r HeyJarvisApp-simulator.ipa Payload
           rm -rf Payload
 
-      - name: Upload IPA Artifact
+      - name: Upload Simulator IPA
         uses: actions/upload-artifact@v4
         with:
-          name: HeyJarvisApp-IPA
-          path: build/HeyJarvisApp-unsigned.ipa
-          retention-days: 30
-
-      - name: Upload Archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: HeyJarvisApp-Archive
-          path: build/HeyJarvisApp.xcarchive
+          name: HeyJarvisApp-Simulator-IPA
+          path: build/HeyJarvisApp-simulator.ipa
           retention-days: 30
