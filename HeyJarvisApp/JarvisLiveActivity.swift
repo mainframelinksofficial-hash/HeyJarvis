@@ -6,7 +6,9 @@
 //
 
 import ActivityKit
+import AVFoundation
 import SwiftUI
+import UIKit
 
 // MARK: - Live Activity Attributes
 struct JarvisActivityAttributes: ActivityAttributes {
@@ -123,6 +125,3 @@ class BackgroundAudioManager {
         }
     }
 }
-
-import AVFoundation
-import UIKit
