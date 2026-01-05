@@ -47,6 +47,30 @@ class AppViewModel: ObservableObject {
         setupMetaGlasses()
         startBatteryMonitoring()
         setupWatchConnectivity()
+        setupLifecycleObservers()
+        
+        // Check immediately on launch
+        checkPendingQuery()
+    }
+    
+    private func setupLifecycleObservers() {
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.checkPendingQuery()
+        }
+    }
+    
+    private func checkPendingQuery() {
+        if let query = UserDefaults(suiteName: "group.com.AI.Jarvis")?.string(forKey: "pendingQuery") {
+            // Clear it so we don't run it twice
+            UserDefaults(suiteName: "group.com.AI.Jarvis")?.removeObject(forKey: "pendingQuery")
+            
+            // Execute command
+            handleCommandReceived(query)
+        }
     }
     
     private func setupWatchConnectivity() {

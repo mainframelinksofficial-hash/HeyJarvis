@@ -28,16 +28,19 @@ struct HeyJarvisApp: App {
     private func handleQuickAction(url: URL) {
         guard url.scheme == "jarvis" else { return }
         
+        var command = ""
         switch url.host {
         case "briefing":
-            appViewModel.handleCommandReceived("good morning")
+            command = "good morning"
         case "lights":
-            appViewModel.handleCommandReceived("turn on the lights")
+            command = "turn on the lights"
         case "timer":
-            appViewModel.handleCommandReceived("set a timer for 5 minutes")
+            command = "set a timer for 5 minutes"
         default:
-            break
+            return
         }
+        
+        UserDefaults(suiteName: "group.com.AI.Jarvis")?.set(command, forKey: "pendingQuery")
     }
 }
 
