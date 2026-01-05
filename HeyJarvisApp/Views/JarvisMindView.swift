@@ -67,7 +67,7 @@ struct JarvisMindView: View {
         .onAppear {
             startAnimations()
         }
-        .onChange(of: viewModel.appState) { newState in
+        .onChange(of: viewModel.appState) { _, newState in
             updateAnimations(for: newState)
         }
     }
