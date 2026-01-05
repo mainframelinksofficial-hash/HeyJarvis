@@ -258,9 +258,6 @@ class AppViewModel: ObservableObject {
                     } else {
                         greeting = "Good evening, sir. JARVIS online. I trust you've had a productive day. What can I do for you?"
                     }
-                    } else {
-                        greeting = "Good evening, sir. JARVIS online. I trust you've had a productive day. What can I do for you?"
-                    }
                     speakJarvis(greeting)
                     syncToWidget()
                     
