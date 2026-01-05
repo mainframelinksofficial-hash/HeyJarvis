@@ -239,7 +239,6 @@ struct SettingsView: View {
         .fullScreenCover(isPresented: $showCommandReference) {
             CommandReferenceView()
         }
-    }
     
     private var batteryColor: Color {
         let level = systemMonitor.batteryLevel.replacingOccurrences(of: "%", with: "")
