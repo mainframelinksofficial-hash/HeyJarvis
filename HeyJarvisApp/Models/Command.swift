@@ -27,7 +27,6 @@ enum CommandType: String, CaseIterable {
     case dailyBriefing = "briefing"
     case fitness = "fitness"
     case openApp = "app"
-    case openApp = "app"
     case navigate = "navigate"
     case remember = "remember"
     case executeProtocol = "protocol"

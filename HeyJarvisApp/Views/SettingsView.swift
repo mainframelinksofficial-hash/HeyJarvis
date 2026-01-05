@@ -1,4 +1,3 @@
-```
 //
 //  SettingsView.swift
 //  HeyJarvisApp

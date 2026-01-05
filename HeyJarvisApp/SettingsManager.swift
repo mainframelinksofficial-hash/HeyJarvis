@@ -114,15 +114,6 @@ enum JarvisPersonality: String, CaseIterable {
         case .friendly: 
             return "You are warm, casual, and enthusiastic. You use exclamation marks and are very encouraging. Use first names if known."
         }
-    var promptModifier: String {
-        switch self {
-        case .professional: 
-            return "You are unfailingly polite, formal, and British. Address the user as 'sir'. Be concise and efficient."
-        case .sarcastic: 
-            return "You have a dry, witty, and slightly sarcastic personality. You are still helpful, but you make quips. Channel Tony Stark's AI."
-        case .friendly: 
-            return "You are warm, casual, and enthusiastic. You use exclamation marks and are very encouraging. Use first names if known."
-        }
     }
 }
 
