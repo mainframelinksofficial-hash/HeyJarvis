@@ -9,30 +9,24 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Select Xcode 15.4
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
-
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Build for Simulator
+      - name: Clean and Build
         run: |
-          set -o pipefail
-          xcodebuild \
+          xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
             -sdk iphonesimulator \
-            -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
-            build | xcpretty
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Package App
+      - name: Package IPA
         run: |
           APP=$(find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -type d | head -1)
           mkdir -p Payload
