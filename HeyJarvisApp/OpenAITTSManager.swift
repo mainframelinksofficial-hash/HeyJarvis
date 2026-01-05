@@ -65,23 +65,3 @@ class OpenAITTSManager {
         return data
     }
 }
-
-enum TTSError: LocalizedError {
-    case noAPIKey
-    case invalidURL
-    case invalidResponse
-    case apiError(String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .noAPIKey:
-            return "No OpenAI API key configured"
-        case .invalidURL:
-            return "Invalid API URL"
-        case .invalidResponse:
-            return "Invalid response from server"
-        case .apiError(let message):
-            return "API error: \(message)"
-        }
-    }
-}
