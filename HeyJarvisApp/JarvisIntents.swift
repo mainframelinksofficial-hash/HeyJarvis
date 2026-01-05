@@ -67,79 +67,10 @@ struct GetTimeIntent: AppIntent {
 }
 
 // MARK: - Shortcuts Provider
+// MARK: - Shortcuts Provider
 struct JarvisShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
-        AppShortcut(
-            intent: AskJarvisIntent(),
-            phrases: [
-                "Ask \(.applicationName) something",
-                "Talk to \(.applicationName)",
-                "Hey \(.applicationName)"
-            ],
-            shortTitle: "Ask Jarvis",
-            systemImageName: "waveform"
-        )
-        
-        AppShortcut(
-            intent: TakePhotoIntent(),
-            phrases: [
-                "Take a photo with \(.applicationName)",
-                "\(.applicationName) take a picture"
-            ],
-            shortTitle: "Take Photo",
-            systemImageName: "camera.fill"
-        )
-        
-        AppShortcut(
-            intent: RecordNoteIntent(),
-            phrases: [
-                "Record a note with \(.applicationName)",
-                "\(.applicationName) record note"
-            ],
-            shortTitle: "Record Note",
-            systemImageName: "mic.fill"
-        )
-        
-        AppShortcut(
-            intent: GetTimeIntent(),
-            phrases: [
-                "Ask \(.applicationName) for the time",
-                "\(.applicationName) what time is it"
-            ],
-            shortTitle: "Get Time",
-            systemImageName: "clock.fill"
-        )
-        
-        AppShortcut(
-            intent: DailyBriefingIntent(),
-            phrases: [
-                "Good morning \(.applicationName)",
-                "\(.applicationName) daily briefing",
-                "\(.applicationName) what's new"
-            ],
-            shortTitle: "Daily Briefing",
-            systemImageName: "sun.horizon.fill"
-        )
-        
-        AppShortcut(
-            intent: LightsOnIntent(),
-            phrases: [
-                "\(.applicationName) turn on the lights",
-                "\(.applicationName) lights on"
-            ],
-            shortTitle: "Lights On",
-            systemImageName: "lightbulb.fill"
-        )
-        
-        AppShortcut(
-            intent: GetStepsIntent(),
-            phrases: [
-                "\(.applicationName) how many steps",
-                "\(.applicationName) step count"
-            ],
-            shortTitle: "Step Count",
-            systemImageName: "figure.run"
-        )
+        return [] // Disabled for debugging
     }
 }
 
