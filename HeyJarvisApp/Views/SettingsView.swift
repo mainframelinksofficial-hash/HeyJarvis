@@ -138,27 +138,6 @@ struct SettingsView: View {
                                         Text("Light").tag(HapticIntensity.light)
                                         Text("Medium").tag(HapticIntensity.medium)
                                         Text("Strong").tag(HapticIntensity.strong)
-                                    }
-                                    .pickerStyle(.segmented)
-                                }
-                            }
-                            }
-                        }
-                        
-                        // Help & Support
-                        SettingsSection(title: "Help & Support", icon: "questionmark.circle.fill") {
-                            VStack(spacing: 16) {
-                                Button {
-                                    showCommandReference = true
-                                } label: {
-                                    HStack {
-                                        Text("View Available Commands")
-                                            .foregroundColor(.white)
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .font(.system(size: 14, weight: .semibold))
-                                            .foregroundColor(Color("dimText"))
-                                    }
                                 }
                             }
                         }
