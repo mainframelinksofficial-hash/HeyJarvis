@@ -100,7 +100,6 @@ struct SettingsView: View {
                         HUDSection(title: "VOICE MODULE") {
                             VStack(spacing: 16) {
                                 HStack {
-// ... rest of the view remains same as before, just ensuring we replace the header ...
                                     VStack(alignment: .leading) {
                                         Text("AI VOICE")
                                             .font(.caption)
@@ -127,7 +126,7 @@ struct SettingsView: View {
                                     Text("SPEED")
                                         .font(.caption)
                                         .foregroundColor(.gray)
-                                    Spacer()
+                                        Spacer()
                                     Text(String(format: "%.1fx", settings.speechSpeed))
                                         .font(.caption)
                                         .foregroundColor(Color("jarvisBlue"))
@@ -239,6 +238,7 @@ struct SettingsView: View {
         .fullScreenCover(isPresented: $showCommandReference) {
             CommandReferenceView()
         }
+    }
     
     private var batteryColor: Color {
         let level = systemMonitor.batteryLevel.replacingOccurrences(of: "%", with: "")
