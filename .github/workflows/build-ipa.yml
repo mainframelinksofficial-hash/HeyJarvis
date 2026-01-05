@@ -43,15 +43,10 @@ jobs:
           xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest' \
+            -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0 || \
-          xcodebuild clean build \
-            -project HeyJarvisApp.xcodeproj \
-            -scheme HeyJarvisApp \
-            -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=latest' \
-            CODE_SIGNING_ALLOWED=NO \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0
+            IPHONEOS_DEPLOYMENT_TARGET=17.0 \
+            2>&1 | tee build.log || (cat build.log && exit 1)
 
       - name: Build Archive
         run: |
