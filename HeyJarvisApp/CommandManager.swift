@@ -63,11 +63,20 @@ class CommandManager {
         
         // Navigation commands
         (["navigate", "directions", "take me to", "how do i get to", "drive to", "walk to"], .navigate),
+        
+        // Memory commands
+        (["remember that", "save memory", "don't forget", "remember this", "memorize"], .remember),
     ]
     
     func parseCommand(_ text: String) -> CommandType {
         let lowercased = text.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
+        // 1. Check for Custom Protocols first (highest priority)
+        if ProtocolManager.shared.checkTrigger(lowercased) != nil {
+            return .executeProtocol
+        }
+        
+        // 2. Check standard patterns
         for pattern in commandPatterns {
             for keyword in pattern.keywords {
                 if lowercased.contains(keyword) {

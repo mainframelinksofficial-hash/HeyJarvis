@@ -2,7 +2,8 @@
 //  CommandHistoryView.swift
 //  HeyJarvisApp
 //
-//  Premium command history with glassmorphism cards
+//  "Mission Log"
+//  A terminal-style stream of historical system actions.
 //
 
 import SwiftUI
@@ -11,251 +12,152 @@ struct CommandHistoryView: View {
     let commands: [Command]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "clock.arrow.circlepath")
-                    .font(.system(size: 14))
-                    .foregroundColor(Color("dimText"))
-                
-                Text("Command History")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(Color("dimText"))
-                
-                Spacer()
-                
-                if !commands.isEmpty {
-                    Text("\(commands.count)")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color("jarvisBlue").opacity(0.5))
-                        .cornerRadius(10)
+        ZStack {
+            // Background Grid (subtle tech texture)
+            VStack(spacing: 0) {
+                ForEach(0..<20) { _ in
+                    Divider().background(Color("jarvisBlue").opacity(0.1))
+                    Spacer()
                 }
             }
-            .padding(.horizontal, 4)
+            .opacity(0.3)
             
-            if commands.isEmpty {
-                emptyState
-            } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 10) {
-                        ForEach(commands) { command in
-                            CommandCard(command: command)
+            VStack(alignment: .leading, spacing: 0) {
+                // Header
+                HStack {
+                    Image(systemName: "terminal.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color("jarvisBlue"))
+                    
+                    Text("MISSION LOG // DATA STREAM")
+                        .font(.custom("Courier", size: 14))
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("jarvisBlue"))
+                        .tracking(1)
+                    
+                    Spacer()
+                    
+                    if !commands.isEmpty {
+                        Text("REC: \(commands.count)")
+                            .font(.custom("Courier", size: 12))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color("jarvisBlue").opacity(0.3))
+                            .cornerRadius(4)
+                    }
+                }
+                .padding()
+                .background(Color.black.opacity(0.5))
+                
+                Divider().background(Color("jarvisBlue"))
+                
+                if commands.isEmpty {
+                    emptyState
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 0) {
+                            ForEach(commands.reversed()) { command in
+                                MissionLogEntry(command: command)
+                                Divider().background(Color.white.opacity(0.1))
+                            }
                         }
                     }
                 }
             }
         }
-        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white.opacity(0.05))
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.black.opacity(0.6))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color("jarvisBlue").opacity(0.5), lineWidth: 1)
                 )
         )
+        .padding()
     }
     
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "text.bubble")
-                .font(.system(size: 32))
-                .foregroundColor(Color("dimText").opacity(0.5))
+        VStack(spacing: 16) {
+            Spacer()
+            Image(systemName: "cursorarrow.rays")
+                .font(.system(size: 40))
+                .foregroundColor(Color("jarvisBlue").opacity(0.5))
             
-            Text("No commands yet")
-                .font(.system(size: 14))
+            Text("DATA STREAM EMPTY")
+                .font(.custom("Courier", size: 16))
+                .foregroundColor(Color("dimText"))
+                .tracking(2)
+            
+            Text("Awaiting input...")
+                .font(.custom("Courier", size: 12))
                 .foregroundColor(Color("dimText").opacity(0.7))
-            
-            Text("Say \"Hey Jarvis\" to get started")
-                .font(.system(size: 12))
-                .foregroundColor(Color("dimText").opacity(0.5))
+            Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 30)
     }
 }
 
-struct CommandCard: View {
+struct MissionLogEntry: View {
     let command: Command
-    @State private var appeared = false
     
     var body: some View {
-        HStack(spacing: 12) {
-            // Command type icon
-            ZStack {
-                Circle()
-                    .fill(iconBackgroundColor)
-                    .frame(width: 40, height: 40)
-                
-                Image(systemName: command.type.icon)
-                    .font(.system(size: 16))
-                    .foregroundColor(iconColor)
-            }
+        HStack(alignment: .top, spacing: 12) {
+            // Timestamp column
+            Text(command.formattedTime)
+                .font(.custom("Courier", size: 11))
+                .foregroundColor(Color("jarvisBlue"))
+                .frame(width: 50, alignment: .leading)
+                .padding(.top, 2)
             
+            // Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(command.text)
-                    .font(.system(size: 14, weight: .medium))
+                Text(command.text.uppercased())
+                    .font(.custom("Courier", size: 14))
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .lineLimit(1)
+                    .lineLimit(2)
                 
-                HStack(spacing: 8) {
-                    // Type badge
-                    Text(command.type.displayName)
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundColor(iconColor)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(iconBackgroundColor)
-                        .cornerRadius(4)
-                    
-                    // Timestamp
-                    Text(command.formattedTime)
-                        .font(.system(size: 11))
-                        .foregroundColor(Color("dimText"))
+                HStack {
+                    Text("TYPE: \(command.type.displayName.uppercased())")
+                    Spacer()
+                    Text(command.status.rawValue.uppercased())
+                        .foregroundColor(statusColor)
                 }
+                .font(.custom("Courier", size: 10))
+                .foregroundColor(.gray)
             }
             
             Spacer()
             
-            // Status indicator
-            statusIcon
+            // Status Indicator
+            Circle()
+                .fill(statusColor)
+                .frame(width: 6, height: 6)
+                .shadow(color: statusColor, radius: 4)
+                .padding(.top, 6)
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color("accentDark"))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(statusBorderColor, lineWidth: 1)
-                )
-        )
-        .scaleEffect(appeared ? 1 : 0.9)
-        .opacity(appeared ? 1 : 0)
-        .onAppear {
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                appeared = true
-            }
-        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background(Color.white.opacity(0.02))
     }
     
-    private var iconBackgroundColor: Color {
-        switch command.type {
-        case .takePhoto:
-            return Color.blue.opacity(0.2)
-        case .showVideo:
-            return Color.purple.opacity(0.2)
-        case .recordNote:
-            return Color.orange.opacity(0.2)
-        case .getTime, .getDate:
-            return Color.cyan.opacity(0.2)
-        case .getWeather:
-            return Color.yellow.opacity(0.2)
-        case .setBrightness, .setVolume:
-            return Color.gray.opacity(0.2)
-        case .playMusic:
-            return Color.pink.opacity(0.2)
-        case .sendMessage:
-            return Color.green.opacity(0.2)
-        case .setReminder:
-            return Color.red.opacity(0.2)
-        case .setTimer:
-            return Color.indigo.opacity(0.2)
-        case .calendar:
-            return Color.teal.opacity(0.2)
-        case .homeControl:
-            return Color.yellow.opacity(0.2)
-        case .dailyBriefing:
-            return Color.orange.opacity(0.2)
-        case .fitness:
-            return Color.green.opacity(0.2)
-        case .openApp:
-            return Color.purple.opacity(0.2)
-        case .navigate:
-            return Color.blue.opacity(0.2)
-        case .unknown:
-            return Color("jarvisBlue").opacity(0.2)
-        }
-    }
-    
-    private var iconColor: Color {
-        switch command.type {
-        case .takePhoto:
-            return Color.blue
-        case .showVideo:
-            return Color.purple
-        case .recordNote:
-            return Color.orange
-        case .getTime, .getDate:
-            return Color.cyan
-        case .getWeather:
-            return Color.yellow
-        case .setBrightness, .setVolume:
-            return Color.gray
-        case .playMusic:
-            return Color.pink
-        case .sendMessage:
-            return Color.green
-        case .setReminder:
-            return Color.red
-        case .setTimer:
-            return Color.indigo
-        case .calendar:
-            return Color.teal
-        case .homeControl:
-            return Color.yellow
-        case .dailyBriefing:
-            return Color.orange
-        case .fitness:
-            return Color.green
-        case .openApp:
-            return Color.purple
-        case .navigate:
-            return Color.blue
-        case .unknown:
-            return Color("jarvisBlue")
-        }
-    }
-    
-    private var statusBorderColor: Color {
+    private var statusColor: Color {
         switch command.status {
-        case .success:
-            return Color("successGreen").opacity(0.3)
-        case .failed:
-            return Color.red.opacity(0.3)
-        case .pending:
-            return Color.white.opacity(0.1)
-        }
-    }
-    
-    @ViewBuilder
-    private var statusIcon: some View {
-        switch command.status {
-        case .success:
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 20))
-                .foregroundColor(Color("successGreen"))
-        case .failed:
-            Image(systemName: "xmark.circle.fill")
-                .font(.system(size: 20))
-                .foregroundColor(.red)
-        case .pending:
-            ProgressView()
-                .scaleEffect(0.8)
-                .tint(Color("jarvisBlue"))
+        case .success: return .green
+        case .failed: return .red
+        case .pending: return .orange
         }
     }
 }
 
 #Preview {
     ZStack {
-        Color("primaryDark").ignoresSafeArea()
+        Color.black.ignoresSafeArea()
         CommandHistoryView(commands: [
-            Command(text: "Take a photo", type: .takePhoto),
-            Command(text: "What time is it?", type: .unknown),
-            Command(text: "Show last video", type: .showVideo)
+            Command(text: "Initiate Party Mode", type: .executeProtocol, status: .success),
+            Command(text: "What time is it?", type: .getTime, status: .success),
+            Command(text: "Set phasers to stun", type: .unknown, status: .failed)
         ])
-        .padding()
     }
 }

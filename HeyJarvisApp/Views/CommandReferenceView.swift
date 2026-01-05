@@ -2,133 +2,156 @@
 //  CommandReferenceView.swift
 //  HeyJarvisApp
 //
-//  Displays a list of all available voice commands grouped by category
+//  "Command Database // Holographic Index"
+//  A futuristic catalog of all available system commands.
 //
 
 import SwiftUI
 
 struct CommandReferenceView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var searchText = ""
+    
+    // Grid columns
+    let columns = [
+        GridItem(.adaptive(minimum: 160), spacing: 16)
+    ]
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color("primaryDark").ignoresSafeArea()
-                
-                ScrollView {
-                    VStack(spacing: 20) {
-                        Text("Available Commands")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
-                            .padding(.top)
+        ZStack {
+            // Background
+            Color.black.ignoresSafeArea()
+            
+            // Tech overlay
+            VStack {
+                Divider().background(Color("jarvisBlue").opacity(0.3))
+                Spacer()
+            }
+            .padding(.top, 50)
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    
+                    // Header
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("COMMAND DATABASE")
+                                .font(.custom("Courier", size: 12))
+                                .foregroundColor(Color("jarvisBlue"))
+                                .tracking(2)
+                            
+                            Text("INDEX // VER 3.1")
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
                         
+                        Button(action: { presentationMode.wrappedValue.dismiss() }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(Color("jarvisBlue"))
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    
+                    // Search Bar (Visual only for now)
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color("jarvisBlue"))
+                        TextField("SEARCH INDEX...", text: $searchText)
+                            .font(.custom("Courier", size: 14))
+                            .foregroundColor(.white)
+                            .accentColor(Color("jarvisBlue"))
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white.opacity(0.05))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color("jarvisBlue").opacity(0.5), lineWidth: 1)
+                            )
+                    )
+                    .padding(.horizontal)
+                    
+                    // Grid Layout
+                    LazyVGrid(columns: columns, spacing: 16) {
                         // General
-                        CommandCategorySection(
-                            title: "General",
+                        CommandCardSection(
+                            title: "GENERAL",
                             icon: "brain.head.profile",
                             commands: [
                                 "Hey Jarvis",
                                 "What time is it?",
-                                "What's the date?",
-                                "How's the weather?",
-                                "Take a photo",
-                                "Record a video"
+                                "Take a photo"
                             ]
                         )
                         
                         // Productivity
-                        CommandCategorySection(
-                            title: "Productivity",
+                        CommandCardSection(
+                            title: "PRODUCTIVITY",
                             icon: "checklist",
                             commands: [
                                 "Daily briefing",
-                                "Good morning",
-                                "Set a timer for 5 minutes",
-                                "Remind me to buy milk",
-                                "What's on my calendar?",
-                                "Creating a note"
+                                "Set timer for...",
+                                "Remind me to..."
                             ]
                         )
                         
                         // Smart Home
-                        CommandCategorySection(
-                            title: "Smart Home",
+                        CommandCardSection(
+                            title: "SMART HOME",
                             icon: "lightbulb.fill",
                             commands: [
-                                "Turn on the lights",
-                                "Turn off the lights",
-                                "Activate movie mode",
-                                "Are the lights on?"
+                                "Lights on/off",
+                                "Turn on lights",
+                                "Party mode"
                             ]
                         )
                         
                         // Media
-                        CommandCategorySection(
-                            title: "Media",
+                        CommandCardSection(
+                            title: "MEDIA",
                             icon: "play.circle.fill",
                             commands: [
-                                "Play some music",
-                                "Open Spotify",
-                                "Next song",
-                                "Pause music",
-                                "Set volume to 50%"
+                                "Play music",
+                                "Volume 50%",
+                                "Next song"
                             ]
                         )
                         
                         // Fitness
-                        CommandCategorySection(
-                            title: "Fitness",
+                        CommandCardSection(
+                            title: "FITNESS",
                             icon: "figure.run",
                             commands: [
-                                "How many steps today?",
-                                "What's my heart rate?",
-                                "Open Nike Run Club",
-                                "Open Strava"
+                                "Step count",
+                                "Heart rate",
+                                "Health status"
                             ]
                         )
                         
-                        // Navigation
-                        CommandCategorySection(
-                            title: "Navigation",
-                            icon: "location.fill",
+                        // Custom Protocols
+                        CommandCardSection(
+                            title: "PROTOCOLS",
+                            icon: "bolt.shield.fill",
                             commands: [
-                                "Navigate to home",
-                                "Take me to Starbucks",
-                                "Call an Uber"
-                            ]
-                        )
-                        
-                        // Apps
-                        CommandCategorySection(
-                            title: "Apps",
-                            icon: "square.grid.2x2.fill",
-                            commands: [
-                                "Open WhatsApp",
-                                "Open YouTube",
-                                "Open Netflix",
-                                "Open Instagram",
-                                "Open Settings"
+                                "Party Mode",
+                                "Goodnight Protocol",
+                                "Security check"
                             ]
                         )
                     }
-                    .padding(.bottom, 30)
-                }
-            }
-            .navigationBarHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 40)
                 }
             }
         }
     }
 }
 
-struct CommandCategorySection: View {
+struct CommandCardSection: View {
     let title: String
     let icon: String
     let commands: [String]
@@ -137,32 +160,47 @@ struct CommandCategorySection: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: icon)
+                    .font(.system(size: 16))
                     .foregroundColor(Color("jarvisBlue"))
-                    .font(.system(size: 18))
-                
                 Text(title)
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.caption)
+                    .fontWeight(.bold)
                     .foregroundColor(Color("jarvisBlue"))
+                    .tracking(1)
             }
-            .padding(.horizontal)
             
-            VStack(alignment: .leading, spacing: 1) {
-                ForEach(commands, id: \.self) { command in
-                    HStack {
+            Divider().background(Color("jarvisBlue").opacity(0.3))
+            
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(commands, id: \.self) { cmd in
+                    HStack(spacing: 6) {
                         Text("•")
                             .foregroundColor(Color("dimText"))
-                        Text("\"\(command)\"")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white.opacity(0.9))
+                            .font(.system(size: 10))
+                        Text(cmd)
+                            .font(.system(size: 12))
+                            .foregroundColor(.white.opacity(0.8))
+                            .lineLimit(1)
                     }
-                    .padding(.vertical, 6)
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.white.opacity(0.05))
                 }
             }
-            .cornerRadius(12)
-            .padding(.horizontal)
+            
+            Spacer(minLength: 0)
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
+        )
+        // Make cards equal height in the grid
+        .frame(minHeight: 160, alignment: .top)
     }
+}
+
+#Preview {
+    CommandReferenceView()
 }

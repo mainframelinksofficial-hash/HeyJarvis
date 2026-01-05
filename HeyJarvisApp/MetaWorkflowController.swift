@@ -232,7 +232,11 @@ class MetaWorkflowController: NSObject {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: recordingURL!, settings: settings)
+            guard let url = recordingURL else {
+                completion(.failure(NSError(domain: "MetaWorkflow", code: 9, userInfo: [NSLocalizedDescriptionKey: "Invalid recording URL"])))
+                return
+            }
+            audioRecorder = try AVAudioRecorder(url: url, settings: settings)
             audioRecorder?.record()
             isRecording = true
             completion(.success(()))

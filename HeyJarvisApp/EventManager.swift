@@ -70,7 +70,9 @@ class EventManager: ObservableObject {
         
         // Summarize
         let count = events.count
-        let firstEvent = events.first!
+        guard let firstEvent = events.first else {
+            return "Your calendar is clear for the rest of the day, sir."
+        }
         let title = firstEvent.title ?? "Event"
         let time = DateFormatter.localizedString(from: firstEvent.startDate, dateStyle: .none, timeStyle: .short)
         
@@ -93,6 +95,33 @@ class EventManager: ObservableObject {
             return "I've added '\(title)' to your reminders."
         } catch {
             return "I failed to create that reminder, sir. Error: \(error.localizedDescription)"
+        }
+    }
+    
+    func getIncompleteReminders() async -> String {
+        return await withCheckedContinuation { continuation in
+            let predicate = eventStore.predicateForReminders(in: nil)
+            eventStore.fetchReminders(matching: predicate) { reminders in
+                guard let reminders = reminders else {
+                    continuation.resume(returning: "")
+                    return
+                }
+                
+                let incomplete = reminders.filter { !$0.isCompleted }
+                if incomplete.isEmpty {
+                    continuation.resume(returning: "")
+                    return
+                }
+                
+                let count = incomplete.count
+                let topThree = incomplete.prefix(3).map { $0.title ?? "Item" }.joined(separator: ", ")
+                
+                if count > 3 {
+                    continuation.resume(returning: "You have \(count) pending tasks, including: \(topThree).")
+                } else {
+                    continuation.resume(returning: "You have pending tasks: \(topThree).")
+                }
+            }
         }
     }
 }

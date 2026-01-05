@@ -27,7 +27,10 @@ enum CommandType: String, CaseIterable {
     case dailyBriefing = "briefing"
     case fitness = "fitness"
     case openApp = "app"
+    case openApp = "app"
     case navigate = "navigate"
+    case remember = "remember"
+    case executeProtocol = "protocol"
     case unknown = "unknown"
     
     var icon: String {
@@ -50,6 +53,8 @@ enum CommandType: String, CaseIterable {
         case .fitness: return "figure.run"
         case .openApp: return "app.badge"
         case .navigate: return "location.fill"
+        case .remember: return "brain.head.profile"
+        case .executeProtocol: return "bolt.shield.fill"
         case .unknown: return "brain.head.profile"
         }
     }
@@ -74,6 +79,8 @@ enum CommandType: String, CaseIterable {
         case .fitness: return "Fitness"
         case .openApp: return "App"
         case .navigate: return "Navigate"
+        case .remember: return "Memory"
+        case .executeProtocol: return "Protocol"
         case .unknown: return "AI Chat"
         }
     }
@@ -98,6 +105,8 @@ enum CommandType: String, CaseIterable {
         case .fitness: return "" // Handled dynamically
         case .openApp: return "" // Handled dynamically
         case .navigate: return "" // Handled dynamically
+        case .remember: return "I've committed that to memory, sir."
+        case .executeProtocol: return "Initiating protocol sequence, sir."
         case .unknown: return "I didn't quite catch that, sir. Could you repeat your request?"
         }
     }
@@ -122,6 +131,8 @@ enum CommandType: String, CaseIterable {
         case .fitness: return "I couldn't access your health data, sir."
         case .openApp: return "I couldn't open that app, sir."
         case .navigate: return "I couldn't start navigation, sir."
+        case .remember: return "I was unable to save that memory, sir."
+        case .executeProtocol: return "Protocol execution failed, sir."
         case .unknown: return "I'm afraid I couldn't process that request, sir."
         }
     }

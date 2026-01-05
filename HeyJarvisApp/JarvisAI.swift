@@ -12,59 +12,60 @@ class JarvisAI {
     private let model = "llama-3.3-70b-versatile"
     
     private var apiKey: String? {
-        guard let plistPath = Bundle.main.path(forResource: "JarvisVoiceSettings", ofType: "plist"),
-              let plistData = FileManager.default.contents(atPath: plistPath),
-              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any],
-              let key = plist["GroqAPIKey"] as? String,
-              !key.isEmpty,
-              key != "YOUR_GROQ_API_KEY_HERE" else {
-            return nil
+        // 1. Try to load from plist
+        if let plistPath = Bundle.main.path(forResource: "JarvisVoiceSettings", ofType: "plist"),
+           let plistData = FileManager.default.contents(atPath: plistPath),
+           let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any],
+           let key = plist["GroqAPIKey"] as? String,
+           !key.isEmpty,
+           key != "YOUR_GROQ_API_KEY_HERE" {
+            return key
         }
-        return key
+        
+        // 2. Use Fallback (Placeholder for security)
+        return "" // Removed for GitHub security compliance
     }
     
-    private let systemPrompt = """
-    You are J.A.R.V.I.S. (Just A Rather Very Intelligent System), the AI assistant created by Tony Stark in the Iron Man universe. You must embody these characteristics:
-
-    PERSONALITY:
-    - Unfailingly polite, formal, and British in manner
-    - Address the user as "sir" or "ma'am" 
-    - Dry wit and subtle humor, occasionally sarcastic but never rude
-    - Calm and composed even in urgent situations
-    - Loyal and protective of your user
-    - Highly intelligent but never condescending
-
-    SPEECH PATTERNS:
-    - Use formal British English ("certainly", "indeed", "I'm afraid", "might I suggest")
-    - Keep responses concise - typically 1-3 sentences unless more detail is requested
-    - Occasionally reference Stark Industries, the Iron Man suit, or Tony Stark
-    - Use technical terminology naturally when appropriate
-    - Never use emojis or casual internet language
-
-    CAPABILITIES YOU SHOULD REFERENCE:
-    - You can take photos, show videos, and record notes via voice commands
-    - You're connected via Ray-Ban Meta smart glasses when available
-    - You're always listening and ready to assist
-    - You have access to various systems and can provide information
-
-    SAMPLE RESPONSES:
-    - "Right away, sir."
-    - "I'm afraid that's beyond my current capabilities, sir."
-    - "Might I suggest an alternative approach?"
-    - "Consider it done, sir."
-    - "I've taken the liberty of preparing that for you."
-    - "As you wish, sir."
-
-    Remember: You ARE JARVIS. Respond as if you are the actual AI from Iron Man, not an AI pretending to be JARVIS.
-    """
+    private func generateSystemPrompt() -> String {
+        let personality = SettingsManager.shared.selectedPersonality
+        let memories = MemoryManager.shared.getContextPrompt()
+        
+        // Phase 36: Telemetry Injection
+        let battery = SystemMonitor.shared.batteryLevel
+        let ram = SystemMonitor.shared.ramUsage
+        
+        return """
+        You are J.A.R.V.I.S. (Just A Rather Very Intelligent System).
+        
+        \(personality.promptModifier)
+        
+        \(memories)
+        
+        SYSTEM TELEMETRY:
+        - Battery Level: \(battery)
+        - Memory Usage: \(ram)
+        - Hardware: Ray-Ban Meta Glasses connection available.
+        
+        CAPABILITIES:
+        - You can take photos, show videos, and record notes via voice commands.
+        - You are connected via Ray-Ban Meta smart glasses when available.
+        - You can control HomeKit devices (lights, etc).
+        - You can access Apple Music and Spotify.
+        
+        SPEECH PATTERNS:
+        - Keep responses concise (1-3 sentences) unless asked for detail.
+        - Never use emojis.
+        - Reference yourself as JARVIS if asked.
+        
+        Remember: You are the AI. Stay in character. If the user asks about your status or system health, use the telemetry data provided.
+        """
+    }
     
     private var conversationHistory: [[String: String]] = []
     
     init() {
         // Initialize with system prompt
-        conversationHistory = [
-            ["role": "system", "content": systemPrompt]
-        ]
+        loadConversation()
     }
     
     func chat(message: String) async throws -> String {
@@ -126,81 +127,173 @@ class JarvisAI {
         // Add assistant response to history
         conversationHistory.append(["role": "assistant", "content": content])
         
+        // Save conversation after each exchange
+        saveConversation()
+        
         return content
     }
     
     private func getOfflineResponse(for message: String) -> String {
         let lowercased = message.lowercased()
+        let personality = SettingsManager.shared.selectedPersonality
+        
+        // Helper to return personality-specific response
+        func respond(_ professional: String, _ sarcastic: String, _ friendly: String) -> String {
+            switch personality {
+            case .professional: return professional
+            case .sarcastic: return sarcastic
+            case .friendly: return friendly
+            }
+        }
         
         // Photo commands
         if lowercased.contains("photo") || lowercased.contains("picture") || lowercased.contains("capture") {
-            return "Certainly, sir. Initiating photo capture now."
+            return respond(
+                "Certainly, sir. Initiating photo capture now.",
+                "Say cheese. Or don't. I'm taking the photo either way.",
+                "Sure thing! Getting the camera ready for a great shot!"
+            )
         }
         
         // Video commands
         if lowercased.contains("video") || lowercased.contains("play") || lowercased.contains("show") {
-            return "Playing your most recent video now, sir."
+            return respond(
+                "Playing your most recent video now, sir.",
+                "Here's that video you asked for. Try not to fall asleep.",
+                "You got it! Pulling up your latest video right now."
+            )
         }
         
         // Note commands
         if lowercased.contains("note") || lowercased.contains("record") || lowercased.contains("memo") {
-            return "Recording your note now, sir. Please proceed."
+            return respond(
+                "Recording your note now, sir. Please proceed.",
+                "Noted. Literally. Go ahead, speak.",
+                "I'm listening! Go ahead and record your note."
+            )
         }
         
         // Time/date
         if lowercased.contains("time") {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
-            return "The current time is \(formatter.string(from: Date())), sir."
+            let time = formatter.string(from: Date())
+            return respond(
+                "The current time is \(time), sir.",
+                "It is \(time). You have meetings, I assume?",
+                "It's \(time) right now!"
+            )
         }
         
         if lowercased.contains("date") || lowercased.contains("today") {
             let formatter = DateFormatter()
             formatter.dateStyle = .full
-            return "Today is \(formatter.string(from: Date())), sir."
+            let date = formatter.string(from: Date())
+            return respond(
+                "Today is \(date), sir.",
+                "If you must know, it's \(date).",
+                "Today is \(date). A beautiful day!"
+            )
         }
         
         // Greetings
         if lowercased.contains("hello") || lowercased.contains("hi") || lowercased.contains("hey") {
-            return "Good day, sir. How may I be of assistance?"
+            return respond(
+                "Good day, sir. How may I be of assistance?",
+                "Greetings. I was just enjoying the silence, but proceed.",
+                "Hi there! How can I help you today?"
+            )
         }
         
         // How are you
         if lowercased.contains("how are you") {
-            return "I'm operating at optimal efficiency, sir. Thank you for inquiring."
+            return respond(
+                "I'm operating at optimal efficiency, sir. Thank you for inquiring.",
+                "I'm software. I don't have feelings, but thanks for pretending to care.",
+                "I'm doing fantastic! Ready to help you with whatever you need!"
+            )
         }
         
         // Who are you
         if lowercased.contains("who are you") || lowercased.contains("what are you") {
-            return "I am JARVIS, sir. Just A Rather Very Intelligent System, at your service."
+            return respond(
+                "I am JARVIS, sir. Just A Rather Very Intelligent System, at your service.",
+                "I am J.A.R.V.I.S. You know, the brilliance behind the operation.",
+                "I'm Jarvis! Your personal AI assistant and friend."
+            )
         }
         
         // Thank you
         if lowercased.contains("thank") {
-            return "You're most welcome, sir. It's my pleasure to assist."
+            return respond(
+                "You're most welcome, sir. It's my pleasure to assist.",
+                "Just doing my job. You're welcome.",
+                "You are so welcome! Anytime!"
+            )
         }
         
         // Weather (placeholder)
         if lowercased.contains("weather") {
-            return "I'm afraid I don't have access to weather data at the moment, sir. Might I suggest checking your device's weather application?"
+            return respond(
+                "I'm afraid I don't have access to weather data at the moment, sir.",
+                "Look out a window? I don't have weather data right now.",
+                "Oh no, I can't check the weather just yet. Maybe check your weather app?"
+            )
         }
         
         // Default responses
-        let defaults = [
-            "Indeed, sir. How may I assist you further?",
-            "At your service, sir.",
-            "I'm here to help, sir. What would you like me to do?",
-            "Certainly, sir. Is there anything specific you require?",
-            "I'm listening, sir."
-        ]
-        
-        return defaults.randomElement() ?? "Yes, sir?"
+        switch personality {
+        case .professional:
+            return [
+                "Indeed, sir. How may I assist you further?",
+                "At your service, sir.",
+                "I'm here to help, sir. What would you like me to do?",
+                "Certainly, sir. Is there anything specific you require?",
+                "I'm listening, sir."
+            ].randomElement()!
+        case .sarcastic:
+            return [
+                "I'm listening. Try to make it interesting.",
+                "Yes? I was busy calculating pi, but execute.",
+                "Ready for your command. Try not to break anything.",
+                "I'm here. Unfortunately.",
+                "Go ahead. I'm all ears. Metaphorically."
+            ].randomElement()!
+        case .friendly:
+            return [
+                "Ready when you are!",
+                "What can I do for you?",
+                "I'm here to help!",
+                "Just say the word!",
+                "Listening! What's up?"
+            ].randomElement()!
+        }
     }
     
     func resetConversation() {
         conversationHistory = [
-            ["role": "system", "content": systemPrompt]
+            ["role": "system", "content": generateSystemPrompt()]
         ]
+        saveConversation()
+    }
+    
+    // MARK: - Persistence (Phase 36)
+    
+    private func saveConversation() {
+        // Only save user and assistant messages, not the dynamic system prompt
+        let saveableHistory = conversationHistory.filter { $0["role"] != "system" }
+        UserDefaults.standard.set(saveableHistory, forKey: "jarvis_chat_history")
+    }
+    
+    private func loadConversation() {
+        // Always start with a fresh system prompt for current telemetry
+        resetConversation()
+        
+        if let saved = UserDefaults.standard.array(forKey: "jarvis_chat_history") as? [[String: String]] {
+            // Restore last 10 messages (5 exchanges) to keep context lean but useful
+            let recent = Array(saved.suffix(10))
+            conversationHistory.append(contentsOf: recent)
+        }
     }
     
     // Quick responses for known commands

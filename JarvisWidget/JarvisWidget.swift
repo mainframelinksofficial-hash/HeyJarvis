@@ -8,12 +8,47 @@
 import WidgetKit
 import SwiftUI
 
+import AppIntents
+
+// MARK: - App Intents
+
+@available(iOS 16.0, *)
+struct ToggleLightsIntent: AppIntent {
+    static var title: LocalizedStringResource = "Toggle Lights"
+    static var description = IntentDescription("Toggles the main lights in the room.")
+    
+    @Parameter(title: "On")
+    var isOn: Bool
+    
+    init() {
+        self.isOn = false
+    }
+    
+    init(isOn: Bool) {
+        self.isOn = isOn
+    }
+    
+    func perform() async throws -> some IntentResult {
+        // Toggle the state in UserDefaults
+        let defaults = UserDefaults(suiteName: "group.com.AI.Jarvis")
+        let current = defaults?.bool(forKey: "lightsAreOn") ?? false
+        let newState = !current
+        defaults?.set(newState, forKey: "lightsAreOn")
+        
+        // In a real app, this would use HomeKit or send a network request.
+        // Since we are in an extension, we update shared state.
+        
+        return .result()
+    }
+}
+
 // MARK: - Widget Entry
 struct JarvisEntry: TimelineEntry {
     let date: Date
     let isListening: Bool
     let lastCommand: String
     let commandCount: Int
+    let lightsOn: Bool
 }
 
 // MARK: - Widget Provider
@@ -23,7 +58,8 @@ struct JarvisProvider: TimelineProvider {
             date: Date(),
             isListening: true,
             lastCommand: "Ready",
-            commandCount: 0
+            commandCount: 0,
+            lightsOn: false
         )
     }
     
@@ -32,7 +68,8 @@ struct JarvisProvider: TimelineProvider {
             date: Date(),
             isListening: UserDefaults(suiteName: "group.com.AI.Jarvis")?.bool(forKey: "isListening") ?? false,
             lastCommand: UserDefaults(suiteName: "group.com.AI.Jarvis")?.string(forKey: "lastCommand") ?? "Say 'Hey Jarvis'",
-            commandCount: UserDefaults(suiteName: "group.com.AI.Jarvis")?.integer(forKey: "commandCount") ?? 0
+            commandCount: UserDefaults(suiteName: "group.com.AI.Jarvis")?.integer(forKey: "commandCount") ?? 0,
+            lightsOn: UserDefaults(suiteName: "group.com.AI.Jarvis")?.bool(forKey: "lightsAreOn") ?? false
         )
         completion(entry)
     }
@@ -44,7 +81,8 @@ struct JarvisProvider: TimelineProvider {
             date: Date(),
             isListening: sharedDefaults?.bool(forKey: "isListening") ?? false,
             lastCommand: sharedDefaults?.string(forKey: "lastCommand") ?? "Say 'Hey Jarvis'",
-            commandCount: sharedDefaults?.integer(forKey: "commandCount") ?? 0
+            commandCount: sharedDefaults?.integer(forKey: "commandCount") ?? 0,
+            lightsOn: sharedDefaults?.bool(forKey: "lightsAreOn") ?? false
         )
         
         // Refresh every 5 minutes
@@ -59,34 +97,36 @@ struct JarvisWidgetSmallView: View {
     let entry: JarvisEntry
     
     var body: some View {
-        ZStack {
-            // Background gradient
-            LinearGradient(
-                colors: [Color(red: 0.1, green: 0.18, blue: 0.22), Color(red: 0.08, green: 0.14, blue: 0.28)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            
-            VStack(spacing: 8) {
-                // Status orb
-                ZStack {
-                    Circle()
-                        .fill(entry.isListening ? Color.cyan : Color.gray.opacity(0.5))
-                        .frame(width: 44, height: 44)
-                        .shadow(color: entry.isListening ? Color.cyan.opacity(0.6) : Color.clear, radius: 10)
+        Link(destination: URL(string: "heyjarvis://listen")!) {
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    colors: [Color(red: 0.1, green: 0.18, blue: 0.22), Color(red: 0.08, green: 0.14, blue: 0.28)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                
+                VStack(spacing: 8) {
+                    // Status orb
+                    ZStack {
+                        Circle()
+                            .fill(entry.isListening ? Color.cyan : Color.gray.opacity(0.5))
+                            .frame(width: 44, height: 44)
+                            .shadow(color: entry.isListening ? Color.cyan.opacity(0.6) : Color.clear, radius: 10)
+                        
+                        Image(systemName: entry.isListening ? "waveform" : "mic.fill")
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                    }
                     
-                    Image(systemName: entry.isListening ? "waveform" : "mic.slash.fill")
-                        .font(.system(size: 18))
+                    Text("JARVIS")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
+                    
+                    Text(entry.isListening ? "Listening" : "Tap to Speak")
+                        .font(.system(size: 10))
+                        .foregroundColor(entry.isListening ? Color.cyan : Color.gray)
                 }
-                
-                Text("JARVIS")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                
-                Text(entry.isListening ? "Listening" : "Offline")
-                    .font(.system(size: 10))
-                    .foregroundColor(entry.isListening ? Color.cyan : Color.gray)
             }
         }
     }
@@ -106,25 +146,48 @@ struct JarvisWidgetMediumView: View {
             )
             
             HStack(spacing: 16) {
-                // Left side - Status orb
-                ZStack {
-                    Circle()
-                        .fill(entry.isListening ? Color.cyan : Color.gray.opacity(0.5))
-                        .frame(width: 60, height: 60)
-                        .shadow(color: entry.isListening ? Color.cyan.opacity(0.6) : Color.clear, radius: 15)
-                    
-                    Image(systemName: entry.isListening ? "waveform" : "mic.slash.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.white)
+                // Left side - Link to App
+                Link(destination: URL(string: "heyjarvis://listen")!) {
+                    ZStack {
+                        Circle()
+                            .fill(entry.isListening ? Color.cyan : Color.gray.opacity(0.5))
+                            .frame(width: 60, height: 60)
+                            .shadow(color: entry.isListening ? Color.cyan.opacity(0.6) : Color.clear, radius: 15)
+                        
+                        Image(systemName: entry.isListening ? "waveform" : "mic.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white)
+                    }
                 }
                 
-                // Right side - Info
+                // Right side - Controls
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("JARVIS")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                    HStack {
+                        Text("JARVIS PRO")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                        
+                        // Interactive Button (iOS 17+)
+                        if #available(iOS 17.0, *) {
+                            Button(intent: ToggleLightsIntent(isOn: entry.lightsOn)) {
+                                Image(systemName: entry.lightsOn ? "lightbulb.fill" : "lightbulb")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(entry.lightsOn ? .yellow : .gray)
+                                    .padding(6)
+                                    .background(Color.white.opacity(0.1))
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            Image(systemName: entry.lightsOn ? "lightbulb.fill" : "lightbulb")
+                                .font(.system(size: 14))
+                                .foregroundColor(entry.lightsOn ? .yellow : .gray)
+                        }
+                    }
                     
-                    Text(entry.isListening ? "Listening..." : "Tap to activate")
+                    Text(entry.isListening ? "Systems Online" : "Systems Offline")
                         .font(.system(size: 12))
                         .foregroundColor(entry.isListening ? Color.cyan : Color.gray)
                     
@@ -142,13 +205,8 @@ struct JarvisWidgetMediumView: View {
                             .foregroundColor(.white.opacity(0.7))
                             .lineLimit(1)
                     }
-                    
-                    if entry.commandCount > 0 {
-                        Text("\(entry.commandCount) commands today")
-                            .font(.system(size: 9))
-                            .foregroundColor(.gray)
-                    }
                 }
+                .padding(.trailing, 4)
                 
                 Spacer()
             }
@@ -166,8 +224,8 @@ struct JarvisWidget: Widget {
             JarvisWidgetEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("JARVIS")
-        .description("Quick access to your AI assistant")
+        .configurationDisplayName("JARVIS Interface")
+        .description("Interactive control center")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -201,12 +259,12 @@ struct JarvisWidgetBundle: WidgetBundle {
 #Preview(as: .systemSmall) {
     JarvisWidget()
 } timeline: {
-    JarvisEntry(date: .now, isListening: true, lastCommand: "Take a photo", commandCount: 5)
-    JarvisEntry(date: .now, isListening: false, lastCommand: "Offline", commandCount: 0)
+    JarvisEntry(date: .now, isListening: true, lastCommand: "Take a photo", commandCount: 5, lightsOn: false)
+    JarvisEntry(date: .now, isListening: false, lastCommand: "Offline", commandCount: 0, lightsOn: true)
 }
 
 #Preview(as: .systemMedium) {
     JarvisWidget()
 } timeline: {
-    JarvisEntry(date: .now, isListening: true, lastCommand: "What time is it?", commandCount: 12)
+    JarvisEntry(date: .now, isListening: true, lastCommand: "What time is it?", commandCount: 12, lightsOn: true)
 }

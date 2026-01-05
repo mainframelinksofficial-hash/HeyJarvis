@@ -26,7 +26,8 @@ struct HeyJarvisApp: App {
     }
     
     private func handleQuickAction(url: URL) {
-        guard url.scheme == "jarvis" else { return }
+        // Accept both schemes
+        guard url.scheme == "jarvis" || url.scheme == "heyjarvis" else { return }
         
         var command = ""
         switch url.host {
@@ -36,10 +37,19 @@ struct HeyJarvisApp: App {
             command = "turn on the lights"
         case "timer":
             command = "set a timer for 5 minutes"
+        case "listen":
+            command = "listen"
         default:
             return
         }
         
+        // Post notification for immediate handling if app is active
+        NotificationCenter.default.post(
+            name: NSNotification.Name("QuickActionCommand"),
+            object: command
+        )
+        
+        // Also save as pending just in case
         UserDefaults(suiteName: "group.com.AI.Jarvis")?.set(command, forKey: "pendingQuery")
     }
 }

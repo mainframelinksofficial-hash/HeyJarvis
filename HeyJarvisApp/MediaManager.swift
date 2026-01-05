@@ -69,7 +69,10 @@ class MediaManager: ObservableObject {
     
     /// Check if Spotify is installed
     var isSpotifyInstalled: Bool {
-        return UIApplication.shared.canOpenURL(URL(string: "spotify:")!)
+        if let url = URL(string: "spotify:") {
+            return UIApplication.shared.canOpenURL(url)
+        }
+        return false
     }
     
     /// Open Spotify and start playing

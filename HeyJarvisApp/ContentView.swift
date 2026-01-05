@@ -24,19 +24,28 @@ struct ContentView: View {
             )
             .ignoresSafeArea()
             
+            
             VStack(spacing: 0) {
-                headerView
+                HeaderView(
+                    showHistory: $showConversationHistory,
+                    showSettings: $viewModel.showSettings
+                )
                 
-                glassesStatusView
+                GlassesStatusView(
+                    glassesManager: glassesManager,
+                    isBackgroundModeEnabled: viewModel.isBackgroundModeEnabled
+                )
                 
                 Spacer()
                 
-                StatusView(state: viewModel.appState)
+                // The Mind (Dynamic Core)
+                JarvisMindView()
+                    .frame(height: 250)
                     .padding(.vertical, 20)
                 
-                transcriptionView
+                TranscriptionView(text: viewModel.lastTranscription)
                 
-                jarvisResponseView
+                JarvisResponseView(responseText: viewModel.jarvisResponse)
                 
                 Spacer()
                 
@@ -76,153 +85,10 @@ struct ContentView: View {
         }
     }
     
-    private var headerView: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("HEY JARVIS")
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                
-                Text("Meta Glasses Companion")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color("dimText"))
-            }
-            
-            Spacer()
-            
-            HStack(spacing: 16) {
-                Button {
-                    showConversationHistory = true
-                } label: {
-                    Image(systemName: "clock.arrow.circlepath")
-                        .font(.system(size: 20))
-                        .foregroundColor(Color("jarvisBlue"))
-                }
-                
-                Button {
-                    viewModel.showSettings = true
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 22))
-                        .foregroundColor(Color("jarvisBlue"))
-                }
-            }
-        }
-        .padding(.top, 20)
-    }
-    
-    private var glassesStatusView: some View {
-        HStack(spacing: 12) {
-            // Glasses connection indicator
-            HStack(spacing: 8) {
-                Image(systemName: glassesManager.isGlassesConnected ? "eyeglasses" : "eyeglasses")
-                    .font(.system(size: 16))
-                    .foregroundColor(glassesManager.isGlassesConnected ? Color("successGreen") : Color("dimText"))
-                
-                Text(glassesManager.connectionState.rawValue)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(glassesManager.isGlassesConnected ? Color("successGreen") : Color("dimText"))
-                
-                if glassesManager.isGlassesConnected && glassesManager.batteryLevel > 0 {
-                    Text("\(glassesManager.batteryLevel)%")
-                        .font(.system(size: 11))
-                        .foregroundColor(Color("dimText"))
-                }
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(20)
-            
-            Spacer()
-            
-            // Background mode indicator
-            if viewModel.isBackgroundModeEnabled {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(Color("successGreen"))
-                        .frame(width: 8, height: 8)
-                    
-                    Text("Always On")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(Color("successGreen"))
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(Color("successGreen").opacity(0.2))
-                .cornerRadius(15)
-            }
-        }
-        .padding(.top, 12)
-    }
-    
-    private var transcriptionView: some View {
-        VStack(spacing: 8) {
-            if !viewModel.lastTranscription.isEmpty {
-                Text("Heard:")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(Color("dimText"))
-                
-                Text(viewModel.lastTranscription)
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(.white.opacity(0.8))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .padding(.horizontal, 20)
-            }
-        }
-        .frame(height: 50)
-    }
-    
-    private var jarvisResponseView: some View {
-        VStack(spacing: 8) {
-            if !viewModel.jarvisResponse.isEmpty {
-                HStack(alignment: .top, spacing: 12) {
-                    // JARVIS avatar
-                    ZStack {
-                        Circle()
-                            .fill(Color("jarvisBlue").opacity(0.3))
-                            .frame(width: 36, height: 36)
-                        
-                        Image(systemName: "brain.head.profile")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color("jarvisBlue"))
-                    }
-                    
-                    // Speech bubble
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("JARVIS")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(Color("jarvisBlue"))
-                        
-                        Text(viewModel.jarvisResponse)
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.white.opacity(0.9))
-                            .lineLimit(4)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .padding(12)
-                    .background(Color("accentDark"))
-                    .cornerRadius(16)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color("jarvisBlue").opacity(0.3), lineWidth: 1)
-                    )
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 4)
-                .transition(.opacity.combined(with: .move(edge: .bottom)))
-                .animation(.easeInOut(duration: 0.3), value: viewModel.jarvisResponse)
-            }
-        }
-        .frame(minHeight: 80)
-        .padding(.vertical, 8)
-    }
-    
     private var controlButtons: some View {
         HStack(spacing: 20) {
             Button {
+                SoundManager.shared.playImpact() // Heavier sound for main action
                 if viewModel.appState == .idle {
                     viewModel.startListening()
                 } else {
@@ -247,9 +113,13 @@ struct ContentView: View {
                 .cornerRadius(25)
                 .shadow(color: Color("jarvisBlue").opacity(0.4), radius: 10, x: 0, y: 5)
             }
+            .simultaneousGesture(TapGesture().onEnded {
+               // Fallback if action handler doesn't trigger immediately
+            })
             
             if !viewModel.commandHistory.isEmpty {
                 Button {
+                    SoundManager.shared.playClick()
                     viewModel.clearHistory()
                 } label: {
                     Image(systemName: "trash.fill")
@@ -263,7 +133,6 @@ struct ContentView: View {
         }
     }
 }
-
 // SettingsView moved to Views/SettingsView.swift
 
 struct VideoPlayerView: View {
@@ -284,6 +153,7 @@ struct VideoPlayerView: View {
                 HStack {
                     Spacer()
                     Button {
+                        SoundManager.shared.playClick()
                         player?.pause()
                         dismiss()
                     } label: {

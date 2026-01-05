@@ -165,7 +165,9 @@ class BackgroundManager: ObservableObject {
             forTaskWithIdentifier: "com.AI.Jarvis.refresh",
             using: nil
         ) { task in
-            self.handleBackgroundRefresh(task: task as! BGAppRefreshTask)
+            if let refreshTask = task as? BGAppRefreshTask {
+                self.handleBackgroundRefresh(task: refreshTask)
+            }
         }
         
         // Schedule the task

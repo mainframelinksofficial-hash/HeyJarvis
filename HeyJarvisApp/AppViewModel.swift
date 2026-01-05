@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import AVFoundation
 import UIKit
+import WidgetKit
 
 @MainActor
 class AppViewModel: ObservableObject {
@@ -61,15 +62,47 @@ class AppViewModel: ObservableObject {
         ) { [weak self] _ in
             self?.checkPendingQuery()
         }
+        
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("QuickActionCommand"),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            if let command = notification.object as? String {
+                self?.handleQuickActionCommand(command)
+            }
+        }
+        
+        // Play immersive startup sound
+        SoundManager.shared.playStartup()
+    }
+    
+    private func handleQuickActionCommand(_ command: String) {
+        if command == "listen" {
+            startListening()
+        } else {
+            handleCommandReceived(command)
+        }
     }
     
     private func checkPendingQuery() {
-        if let query = UserDefaults(suiteName: "group.com.AI.Jarvis")?.string(forKey: "pendingQuery") {
+        let defaults = UserDefaults(suiteName: "group.com.AI.Jarvis")
+        
+        // 1. Check for pending voice commands
+        if let query = defaults?.string(forKey: "pendingQuery") {
             // Clear it so we don't run it twice
-            UserDefaults(suiteName: "group.com.AI.Jarvis")?.removeObject(forKey: "pendingQuery")
+            defaults?.removeObject(forKey: "pendingQuery")
             
             // Execute command
             handleCommandReceived(query)
+        }
+        
+        // 2. Sync Light State from Widget
+        if let lightsOn = defaults?.bool(forKey: "lightsAreOn") {
+            // We just ask HomeManager to set the state. 
+            // It will check actual status and update if needed.
+            // Note: We don't speak the response here to avoid annoyance on every open
+            _ = HomeManager.shared.toggleLights(on: lightsOn)
         }
     }
     
@@ -225,7 +258,11 @@ class AppViewModel: ObservableObject {
                     } else {
                         greeting = "Good evening, sir. JARVIS online. I trust you've had a productive day. What can I do for you?"
                     }
+                    } else {
+                        greeting = "Good evening, sir. JARVIS online. I trust you've had a productive day. What can I do for you?"
+                    }
                     speakJarvis(greeting)
+                    syncToWidget()
                     
                 } else {
                     errorMessage = "I require microphone access to hear your commands, sir."
@@ -241,8 +278,10 @@ class AppViewModel: ObservableObject {
             self?.wakeWordDetector?.stopListening()
             self?.appState = .idle
             self?.isBackgroundModeEnabled = false
+            self?.isBackgroundModeEnabled = false
             LiveActivityManager.shared.stopLiveActivity()
             MetaGlassesManager.shared.stopSearching()
+            self?.syncToWidget()
         }
     }
     
@@ -297,6 +336,8 @@ class AppViewModel: ObservableObject {
             commandHistory = Array(commandHistory.prefix(50))
         }
         
+        syncToWidget()
+        
         if commandType == .unknown {
             handleConversation(commandText, at: 0)
         } else {
@@ -315,6 +356,7 @@ class AppViewModel: ObservableObject {
                         self.commandHistory[index].status = .success
                     }
                     SoundManager.shared.playSuccess()
+                    SettingsManager.shared.triggerNotificationHaptic(.success)
                     self.speakJarvis(response)
                 }
             } catch {
@@ -325,6 +367,7 @@ class AppViewModel: ObservableObject {
                         self.commandHistory[index].status = .failed
                     }
                     SoundManager.shared.playError()
+                    SettingsManager.shared.triggerNotificationHaptic(.error)
                     self.speakJarvis(fallbackResponse)
                 }
             }
@@ -491,6 +534,71 @@ class AppViewModel: ObservableObject {
                         response = AppLauncherManager.shared.navigateTo(destination: destination)
                     }
                     
+                case .remember:
+                    // Extract the memory content
+                    let lower = text.lowercased()
+                    let memory = text
+                        .replacingOccurrences(of: "remember that", with: "", options: .caseInsensitive)
+                        .replacingOccurrences(of: "remember this", with: "", options: .caseInsensitive)
+                        .replacingOccurrences(of: "don't forget", with: "", options: .caseInsensitive)
+                        .replacingOccurrences(of: "memorize", with: "", options: .caseInsensitive)
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    if memory.isEmpty {
+                        response = "What would you like me to remember, sir?"
+                    } else {
+                        MemoryManager.shared.addFact(memory)
+                        response = commandType.responseText
+                    }
+                    
+                case .executeProtocol:
+                    // Find the matching protocol
+                    if let proto = ProtocolManager.shared.checkTrigger(text) {
+                        // Execute actions
+                        for action in proto.actions {
+                            switch action.type {
+                            case .lights:
+                                let _ = await HomeManager.shared.toggleLights(on: action.value != "off")
+                                
+                            case .volume:
+                                // Simulate volume change
+                                if let vol = Float(action.value) {
+                                    // Simulating system volume change
+                                    print("Setting volume to \(vol)")
+                                }
+                                
+                            case .music:
+                                // Launch music if needed
+                                let _ = AppLauncherManager.shared.launchApp(from: "spotify")
+                                
+                            case .say:
+                                // This will be handled by the response override below
+                                break
+                                
+                            case .wait:
+                                // Parse wait time (default 1s)
+                                let seconds = Double(action.value) ?? 1.0
+                                let nanoseconds = UInt64(seconds * 1_000_000_000)
+                                try? await Task.sleep(nanoseconds: nanoseconds)
+                                
+                            case .lock:
+                                // Simulate lock
+                                print("Locking doors...")
+                            }
+                        }
+                        
+                        // Set custom response if defined, otherwise default
+                        if let customResponse = proto.response {
+                            response = customResponse
+                        } else if let sayAction = proto.actions.first(where: { $0.type == .say }) {
+                            response = sayAction.value
+                        } else {
+                            response = "Protocol \(proto.name) executed successfully, sir."
+                        }
+                    } else {
+                        response = "Protocol verified but could not be initiated, sir."
+                    }
+                    
                 case .unknown:
                     break
                 }
@@ -526,8 +634,28 @@ class AppViewModel: ObservableObject {
                     isListening: true,
                     lastCommand: "Listening..."
                 )
+                self?.syncToWidget()
                 completion?()
             }
+        }
+    }
+    
+    private func syncToWidget() {
+        let defaults = UserDefaults(suiteName: "group.com.AI.Jarvis")
+        defaults?.set(appState == .listening || appState == .processing || appState == .speaking, forKey: "isListening")
+        defaults?.set(commandHistory.first?.text ?? "Ready", forKey: "lastCommand")
+        defaults?.set(commandHistory.count, forKey: "commandCount")
+        
+        // Force widget reload
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+    
+    func addToHistory(_ command: Command) {
+        commandHistory.append(command)
+        
+        // Hardening: Prevent memory leaks by capping history
+        if commandHistory.count > 50 {
+            commandHistory.removeFirst(commandHistory.count - 50)
         }
     }
     

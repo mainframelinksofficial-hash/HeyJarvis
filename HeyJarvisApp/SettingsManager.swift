@@ -90,6 +90,56 @@ enum HapticIntensity: String, CaseIterable {
         }
     }
 }
+    
+// MARK: - AI Personality
+enum JarvisPersonality: String, CaseIterable {
+    case professional = "professional"
+    case sarcastic = "sarcastic"
+    case friendly = "friendly"
+    
+    var displayName: String {
+        switch self {
+        case .professional: return "Professional (Classic)"
+        case .sarcastic: return "Sarcastic (Tony Stark Mode)"
+        case .friendly: return "Friendly (Casual)"
+        }
+    }
+    
+    var promptModifier: String {
+        switch self {
+        case .professional: 
+            return "You are unfailingly polite, formal, and British. Address the user as 'sir'. Be concise and efficient."
+        case .sarcastic: 
+            return "You have a dry, witty, and slightly sarcastic personality. You are still helpful, but you make quips. Channel Tony Stark's AI."
+        case .friendly: 
+            return "You are warm, casual, and enthusiastic. You use exclamation marks and are very encouraging. Use first names if known."
+        }
+    var promptModifier: String {
+        switch self {
+        case .professional: 
+            return "You are unfailingly polite, formal, and British. Address the user as 'sir'. Be concise and efficient."
+        case .sarcastic: 
+            return "You have a dry, witty, and slightly sarcastic personality. You are still helpful, but you make quips. Channel Tony Stark's AI."
+        case .friendly: 
+            return "You are warm, casual, and enthusiastic. You use exclamation marks and are very encouraging. Use first names if known."
+        }
+    }
+}
+
+// MARK: - Sound Theme
+enum SoundTheme: String, CaseIterable {
+    case jarvis = "jarvis"
+    case friday = "friday"
+    case scifi = "scifi"
+    
+    var displayName: String {
+        switch self {
+        case .jarvis: return "JARVIS (Classic)"
+        case .friday: return "F.R.I.D.A.Y. (Soft)"
+        case .scifi: return "Retro Sci-Fi"
+        }
+    }
+}
 
 // MARK: - Settings Manager
 class SettingsManager: ObservableObject {
@@ -168,6 +218,14 @@ class SettingsManager: ObservableObject {
         didSet { defaults.set(vibrateOnResponse, forKey: Keys.vibrateOnResponse) }
     }
     
+    @Published var selectedPersonality: JarvisPersonality {
+        didSet { defaults.set(selectedPersonality.rawValue, forKey: "selectedPersonality") }
+    }
+    
+    @Published var selectedSoundTheme: SoundTheme {
+        didSet { defaults.set(selectedSoundTheme.rawValue, forKey: "selectedSoundTheme") }
+    }
+    
     private var ttsManager: TextToSpeechManager?
     
     private init() {
@@ -186,6 +244,8 @@ class SettingsManager: ObservableObject {
         self.responseLength = ResponseLength(rawValue: defaults.string(forKey: Keys.responseLength) ?? "") ?? .normal
         self.rememberConversations = defaults.object(forKey: Keys.rememberConversations) as? Bool ?? true
         self.vibrateOnResponse = defaults.object(forKey: Keys.vibrateOnResponse) as? Bool ?? false
+        self.selectedPersonality = JarvisPersonality(rawValue: defaults.string(forKey: "selectedPersonality") ?? "") ?? .professional
+        self.selectedSoundTheme = SoundTheme(rawValue: defaults.string(forKey: "selectedSoundTheme") ?? "") ?? .jarvis
     }
     
     func testVoice() {
@@ -216,7 +276,26 @@ class SettingsManager: ObservableObject {
     
     func triggerHaptic() {
         guard hapticFeedbackEnabled else { return }
-        let generator = UIImpactFeedbackGenerator(style: hapticIntensity.feedbackStyle)
+        
+        // Dynamic Haptics based on Personality
+        var style: UIImpactFeedbackGenerator.FeedbackStyle = hapticIntensity.feedbackStyle
+        
+        // Override style based on personality to give "character"
+        switch selectedPersonality {
+        case .professional:
+            // Respects user setting exactly (Medium default)
+            break 
+        case .sarcastic:
+            // Sarcastic is sharper, heavier
+            if style == .medium { style = .heavy }
+            else if style == .light { style = .medium }
+        case .friendly:
+            // Friendly is lighter, bouncier
+            if style == .heavy { style = .medium }
+            else if style == .medium { style = .light }
+        }
+        
+        let generator = UIImpactFeedbackGenerator(style: style)
         generator.impactOccurred()
     }
     
