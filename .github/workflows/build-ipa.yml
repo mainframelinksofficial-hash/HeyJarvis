@@ -26,35 +26,37 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Inject API Key
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: |
-          if [ -n "$GROQ_API_KEY" ]; then
-            echo "Injecting Groq API key..."
-            sed -i '' "s/YOUR_GROQ_API_KEY_HERE/$GROQ_API_KEY/g" HeyJarvisApp/Resources/JarvisVoiceSettings.plist
-            echo "API key injected successfully"
-          else
-            echo "No GROQ_API_KEY secret found, using placeholder"
-          fi
+      - name: List available simulators
+        run: xcrun simctl list devices available
 
       - name: Build for iOS Simulator
         run: |
           xcodebuild clean build \
             -project HeyJarvisApp.xcodeproj \
             -scheme HeyJarvisApp \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
-            -derivedDataPath build/DerivedData \
+            -sdk iphonesimulator \
+            -configuration Debug \
             CODE_SIGNING_ALLOWED=NO \
-            IPHONEOS_DEPLOYMENT_TARGET=17.0
+            ONLY_ACTIVE_ARCH=NO
 
-      - name: Create Simulator App Bundle
+      - name: Locate Built App
         run: |
-          mkdir -p build/Payload
-          cp -r build/DerivedData/Build/Products/Debug-iphonesimulator/HeyJarvisApp.app build/Payload/
-          cd build
-          zip -r HeyJarvisApp-simulator.ipa Payload
-          rm -rf Payload
+          find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -type d 2>/dev/null | head -1
+
+      - name: Create Simulator IPA
+        run: |
+          APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "HeyJarvisApp.app" -type d 2>/dev/null | head -1)
+          if [ -n "$APP_PATH" ]; then
+            mkdir -p build/Payload
+            cp -r "$APP_PATH" build/Payload/
+            cd build
+            zip -r HeyJarvisApp-simulator.ipa Payload
+            rm -rf Payload
+            echo "IPA created successfully!"
+          else
+            echo "Could not find built app"
+            exit 1
+          fi
 
       - name: Upload Simulator IPA
         uses: actions/upload-artifact@v4
