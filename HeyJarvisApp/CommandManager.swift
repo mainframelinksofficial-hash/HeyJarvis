@@ -58,6 +58,10 @@ class CommandManager {
         // Fitness commands
         (["steps", "step count", "heart rate", "fitness", "activity", "how many steps", "health"], .fitness),
         
+        // Workout commands
+        (["start workout", "start run", "start running", "go for a run", "let's run", "start cycle", "start cycling", "begin workout"], .startWorkout),
+        (["end workout", "stop workout", "finish workout", "stop run", "end run", "finish run"], .endWorkout),
+        
         // App launcher commands
         (["open", "launch", "start", "uber", "lyft", "youtube", "netflix", "instagram", "twitter", "whatsapp", "telegram"], .openApp),
         

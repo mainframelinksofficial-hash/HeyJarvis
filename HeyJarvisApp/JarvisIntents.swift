@@ -8,6 +8,27 @@
 import AppIntents
 import SwiftUI
 
+// MARK: - Workout Types
+enum WorkoutTypeEnum: String, AppEnum, CaseIterable {
+    case running = "running"
+    case walking = "walking"
+    case cycling = "cycling"
+    case hiit = "hiit"
+    case yoga = "yoga"
+    case strength = "strength"
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Workout Type"
+    
+    static var caseDisplayRepresentations: [WorkoutTypeEnum: DisplayRepresentation] = [
+        .running: "Running",
+        .walking: "Walking",
+        .cycling: "Cycling",
+        .hiit: "HIIT",
+        .yoga: "Yoga",
+        .strength: "Strength Training"
+    ]
+}
+
 // MARK: - Ask Jarvis Intent
 struct AskJarvisIntent: AppIntent {
     static var title: LocalizedStringResource = "Ask Jarvis"
@@ -140,6 +161,29 @@ struct JarvisShortcuts: AppShortcutsProvider {
             shortTitle: "Step Count",
             systemImageName: "figure.run"
         )
+        
+        AppShortcut(
+            intent: StartWorkoutIntent(),
+            phrases: [
+                "Start a workout with \(.applicationName)",
+                "\(.applicationName) start workout",
+                "\(.applicationName) let's run",
+                "Start a run with \(.applicationName)"
+            ],
+            shortTitle: "Start Workout",
+            systemImageName: "figure.run.circle.fill"
+        )
+        
+        AppShortcut(
+            intent: EndWorkoutIntent(),
+            phrases: [
+                "End workout with \(.applicationName)",
+                "\(.applicationName) stop workout",
+                "\(.applicationName) finish run"
+            ],
+            shortTitle: "End Workout",
+            systemImageName: "stop.circle.fill"
+        )
     }
 }
 
@@ -176,5 +220,39 @@ struct GetStepsIntent: AppIntent {
     func perform() async throws -> some IntentResult & ProvidesDialog {
         UserDefaults(suiteName: "group.com.AI.Jarvis")?.set("how many steps", forKey: "pendingQuery")
         return .result(dialog: "Checking your fitness data, sir...")
+    }
+}
+
+// MARK: - Start Workout Intent
+struct StartWorkoutIntent: AppIntent {
+    static var title: LocalizedStringResource = "Start Workout"
+    static var description = IntentDescription("Start a workout session with JARVIS")
+    static var openAppWhenRun: Bool = true
+    
+    @Parameter(title: "Workout Type")
+    var type: WorkoutTypeEnum
+    
+    init() {}
+    
+    init(type: WorkoutTypeEnum) {
+        self.type = type
+    }
+    
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        let command = "start \(type.rawValue) workout"
+        UserDefaults(suiteName: "group.com.AI.Jarvis")?.set(command, forKey: "pendingQuery")
+        return .result(dialog: "Initiating \(type.rawValue) protocol, sir.")
+    }
+}
+
+// MARK: - End Workout Intent
+struct EndWorkoutIntent: AppIntent {
+    static var title: LocalizedStringResource = "End Workout"
+    static var description = IntentDescription("End the current workout session")
+    static var openAppWhenRun: Bool = true
+    
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        UserDefaults(suiteName: "group.com.AI.Jarvis")?.set("end workout", forKey: "pendingQuery")
+        return .result(dialog: "Stopping workout session, sir.")
     }
 }

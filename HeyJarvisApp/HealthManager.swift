@@ -37,8 +37,16 @@ class HealthManager: ObservableObject {
             HKCategoryType(.sleepAnalysis)
         ]
         
+        // Types we want to share (write)
+        let typesToShare: Set<HKSampleType> = [
+            HKObjectType.workoutType(),
+            HKQuantityType(.activeEnergyBurned),
+            HKQuantityType(.distanceWalkingRunning),
+            HKQuantityType(.distanceCycling)
+        ]
+        
         do {
-            try await healthStore.requestAuthorization(toShare: [], read: typesToRead)
+            try await healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead)
             isAuthorized = true
             return true
         } catch {

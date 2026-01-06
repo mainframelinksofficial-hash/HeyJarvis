@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import AVFoundation
 import UIKit
+import HealthKit
 
 @MainActor
 class AppViewModel: ObservableObject {
@@ -428,6 +429,22 @@ class AppViewModel: ObservableObject {
                     } else {
                         response = await HealthManager.shared.getTodaySteps()
                     }
+                    
+                case .startWorkout:
+                    let lower = text.lowercased()
+                    var type: HKWorkoutActivityType = .running
+                    if lower.contains("walk") { type = .walking }
+                    else if lower.contains("cycle") || lower.contains("bike") { type = .cycling }
+                    else if lower.contains("hiit") { type = .highIntensityIntervalTraining }
+                    else if lower.contains("yoga") { type = .yoga }
+                    else if lower.contains("strength") { type = .functionalStrengthTraining }
+                    
+                    try await WorkoutManager.shared.startWorkout(type: type)
+                    response = commandType.responseText
+                    
+                case .endWorkout:
+                    WorkoutManager.shared.endWorkout()
+                    response = commandType.responseText
                     
                 case .openApp:
                     // Open third-party apps
