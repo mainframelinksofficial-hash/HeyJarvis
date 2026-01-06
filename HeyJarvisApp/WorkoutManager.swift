@@ -2,19 +2,15 @@
 //  WorkoutManager.swift
 //  HeyJarvisApp
 //
-//  Manages HealthKit workout sessions and live data tracking
+//  SIMULATION MODE - Manages fake workout sessions for testing
 //
 
 import Foundation
 import HealthKit
 import Combine
 
-class WorkoutManager: NSObject, ObservableObject {
+class WorkoutManager: ObservableObject {
     static let shared = WorkoutManager()
-    
-    let healthStore = HKHealthStore()
-    var session: HKWorkoutSession?
-    var builder: HKLiveWorkoutBuilder?
     
     // Published metrics for UI updates
     @Published var isWorkoutActive = false
@@ -25,71 +21,56 @@ class WorkoutManager: NSObject, ObservableObject {
     
     private var timer: Timer?
     private var startDate: Date?
+    private var currentType: HKWorkoutActivityType = .running
     
-    override private init() {
-        super.init()
-    }
+    private init() {}
     
     func startWorkout(type: HKWorkoutActivityType) async throws {
-        let configuration = HKWorkoutConfiguration()
-        configuration.activityType = type
-        configuration.locationType = .outdoor
+        // No actual HealthKit session is started to avoid permission/entitlement crashes
+        self.currentType = type
         
-        do {
-            session = try HKWorkoutSession(healthStore: healthStore, configuration: configuration)
-            builder = session?.associatedWorkoutBuilder()
-            
-            builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: configuration)
-            
-            session?.delegate = self
-            builder?.delegate = self
-            
-            session?.startActivity(with: Date())
-            try await builder?.beginCollection(at: Date())
-            
-            await MainActor.run {
-                self.isWorkoutActive = true
-                self.startDate = Date()
-                self.startTimer()
-            }
-        } catch {
-            print("Failed to start workout: \(error.localizedDescription)")
-            throw error
+        await MainActor.run {
+            self.isWorkoutActive = true
+            self.startDate = Date()
+            self.startSimulationTimer()
+            print("SIMULATION: Started workout of type \(type.rawValue)")
         }
     }
     
     func endWorkout() {
-        session?.end()
-        builder?.endCollection(withEnd: Date()) { (success, error) in
-            self.builder?.finishWorkout { (workout, error) in
-                DispatchQueue.main.async {
-                    self.isWorkoutActive = false
-                    self.stopTimer()
-                    self.resetMetrics()
-                    print("Workout finished and saved: \(String(describing: workout))")
-                }
-            }
+        stopSimulationTimer()
+        
+        DispatchQueue.main.async {
+            self.isWorkoutActive = false
+            self.resetMetrics()
+            print("SIMULATION: Ended workout")
         }
     }
     
     func pauseWorkout() {
-        session?.pause()
-        stopTimer()
+        stopSimulationTimer()
     }
     
     func resumeWorkout() {
-        session?.resume()
-        startTimer()
+        startSimulationTimer()
     }
     
-    private func startTimer() {
+    private func startSimulationTimer() {
+        timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self, let startDate = self.startDate else { return }
+            
+            // Update time
             self.elapsedTime = Date().timeIntervalSince(startDate)
+            
+            // Simulate Metrics
+            self.simulateHeartRate()
+            self.simulateCalories()
+            self.simulateDistance()
         }
     }
     
-    private func stopTimer() {
+    private func stopSimulationTimer() {
         timer?.invalidate()
         timer = nil
     }
@@ -100,52 +81,33 @@ class WorkoutManager: NSObject, ObservableObject {
         distance = 0
         elapsedTime = 0
     }
-}
-
-// MARK: - HKWorkoutSessionDelegate
-extension WorkoutManager: HKWorkoutSessionDelegate {
-    func workoutSession(_ session: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState, from fromState: HKWorkoutSessionState, date: Date) {
-        // Handle state changes if needed
-        DispatchQueue.main.async {
-            self.isWorkoutActive = (toState == .running)
-        }
+    
+    // MARK: - Simulation Logic
+    
+    private func simulateHeartRate() {
+        // Random variance between 90 and 150 bpm
+        let variance = Double.random(in: -2...2)
+        let baseHeartRate: Double = 110
+        let newHeartRate = baseHeartRate + variance
+        self.heartRate = newHeartRate
     }
     
-    func workoutSession(_ session: HKWorkoutSession, didFailWithError error: Error) {
-        print("Workout session failed: \(error.localizedDescription)")
-    }
-}
-
-// MARK: - HKLiveWorkoutBuilderDelegate
-extension WorkoutManager: HKLiveWorkoutBuilderDelegate {
-    func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
-        for type in collectedTypes {
-            guard let quantityType = type as? HKQuantityType else { continue }
-            guard let statistics = workoutBuilder.statistics(for: quantityType) else { continue }
-            
-            DispatchQueue.main.async {
-                switch quantityType {
-                case HKQuantityType.quantityType(forIdentifier: .heartRate):
-                    let heartRateUnit = HKUnit.count().unitDivided(by: HKUnit.minute())
-                    self.heartRate = statistics.mostRecentQuantity()?.doubleValue(for: heartRateUnit) ?? 0
-                    
-                case HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned):
-                    let energyUnit = HKUnit.kilocalorie()
-                    self.activeEnergy = statistics.sumQuantity()?.doubleValue(for: energyUnit) ?? 0
-                    
-                case HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning),
-                     HKQuantityType.quantityType(forIdentifier: .distanceCycling):
-                    let meterUnit = HKUnit.meter()
-                    self.distance = statistics.sumQuantity()?.doubleValue(for: meterUnit) ?? 0
-                    
-                default:
-                    break
-                }
-            }
-        }
+    private func simulateCalories() {
+        // Approx 10 calories per minute (0.16 per second)
+        self.activeEnergy += 0.16
     }
     
-    func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
-        // Handle workout events
+    private func simulateDistance() {
+        // Approx 3 meters per second (running speed)
+        // Adjust based on type if needed
+        var speed: Double = 0
+        switch currentType {
+        case .running: speed = 3.0
+        case .walking: speed = 1.4
+        case .cycling: speed = 7.0
+        default: speed = 0.5
+        }
+        
+        self.distance += speed
     }
 }

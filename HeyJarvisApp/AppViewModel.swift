@@ -440,11 +440,11 @@ class AppViewModel: ObservableObject {
                     else if lower.contains("strength") { type = .functionalStrengthTraining }
                     
                     try await WorkoutManager.shared.startWorkout(type: type)
-                    response = commandType.responseText
+                    response = "Simulating \(type.name) workout protocol. Metric tracking active."
                     
                 case .endWorkout:
                     WorkoutManager.shared.endWorkout()
-                    response = commandType.responseText
+                    response = "Ending simulated workout session."
                     
                 case .openApp:
                     // Open third-party apps
